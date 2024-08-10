@@ -23,16 +23,25 @@ public class CIM {
 
     private static square[] calculations(int L, int M){
         float step = (float) L /M;
-        float start = 0.0F;
-        float finish = step;
+        int total = M*M;
+        square[] squares = new square[total];
+        float y_start = 0.0F;
+        float y_finish = step;
         int counter = 0;
-        square[] squares = new square[M];
-        while(finish <= 20){
-            square aux = new square(start,finish,start,finish,counter +1);
-            start += step;
-            finish += step;
-            squares[counter] = aux;
-            counter++;
+        for(int i = 0; i < 25 ; i++){
+            float x_start = 0.0F;
+            float x_finish = step;
+            int ctr = 1;
+            while(ctr <= 25){
+                square aux = new square(x_start,x_finish,y_start,y_finish,i + 1);
+                ctr ++;
+                x_start += step;
+                x_finish += step;
+                squares[counter] = aux;
+                counter ++;
+            }
+            y_start += step;
+            y_finish += step;
         }
         return squares;
     }

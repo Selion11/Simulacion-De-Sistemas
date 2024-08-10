@@ -3,6 +3,8 @@ package TP1;
 public class particle {
     private float x,y,r,rc;
     int id;
+    int idx_vecinas = 0;
+    int[] vecinas = null;
 
     public particle(){
     }
@@ -27,6 +29,17 @@ public class particle {
         this.rc = rc;
     }
 
+    public int checkVecina(particle p){
+        return 1;
+    }
+    public void add_vecina(int id){
+        int new_idx = idx_vecinas + 1;
+        int[] aux = new int[new_idx];
+        System.arraycopy(vecinas, 0, aux, 0, vecinas.length);
+        aux[new_idx] = id;
+        idx_vecinas = new_idx;
+        vecinas = aux;
+    }
     public float getRc() {
         return rc;
     }

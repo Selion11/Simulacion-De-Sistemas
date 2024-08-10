@@ -33,7 +33,7 @@ public class square{
     }
 
     private boolean checkParticle(particle p){
-        return (p.getX() <= x_stop && p.getY() <= y_stop);
+        return (p.getX() <= x_stop && p.getY() <= y_stop && p.getX() >= x_start && p.getY() >= y_start );
     }
 
     private particle[] expand_array(){
@@ -42,7 +42,15 @@ public class square{
         System.arraycopy(particles, 0, aux, 0, particles.length);
         return aux;
     }
+    public void square_check(){
+        for(particle p: particles){
+            for(particle q: particles){
+                if(p.getId() != q.getId()){
 
+                }
+            }
+        }
+    }
     public void setX_stop(float x_stop) {
         this.x_stop = x_stop;
     }
