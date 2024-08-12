@@ -1,56 +1,52 @@
 package TP1;
 
-public class square{
-    private float x_stop,y_stop,x_start,y_start;
-    private int id;
-    private int array_size = 5;
-    particle[] particles = new particle[array_size];
-    int particle_index = 0;
+import java.util.ArrayList;
 
-    public square(float x_start, float x_stop, float y_start, float y_stop, int id){
+public class square {
+    private float x_stop,y_stop,x_start,y_start;
+    private int i,j,m;
+    private ArrayList<particle> particles = new ArrayList<particle>();
+
+    public square(float x_start, float x_stop, float y_start, float y_stop, int i, int j, int m){
         this.x_stop = x_stop;
         this.y_stop = y_stop;
         this.x_start = x_start;
         this.y_start = y_start;
-        this.id = id;
+        this.i = i;
+        this.j = j;
+        this.m = m;
     }
 
-    public int add_particle(particle p){
-        if(!checkParticle(p)){
-            return 0;
-        }
-        int retVal = 0;
-        while(retVal != 1){
-            if(particle_index < array_size){
-                particles[particle_index] = p;
-                particle_index++;
-                retVal = 1;
-            }else{
-                particles = expand_array();
-            }
-        }
-        return retVal;
+    public void add_particle(particle p){
+        particles.add(p);
     }
 
-    private boolean checkParticle(particle p){
+    public boolean checkParticle(particle p){
         return (p.getX() <= x_stop && p.getY() <= y_stop && p.getX() >= x_start && p.getY() >= y_start );
     }
 
-    private particle[] expand_array(){
-        array_size += 5;
-        particle[] aux = new particle[array_size];
-        System.arraycopy(particles, 0, aux, 0, particles.length);
-        return aux;
-    }
-    public void square_check(){
-        for(particle p: particles){
-            for(particle q: particles){
-                if(p.getId() != q.getId()){
-                    q.checkVecina(p);
-                }
+    public ArrayList<square> get_invertedL(square[][] squares, boolean with_reflection) {
+        ArrayList<square> toReturn = new ArrayList<>();
+        if (i == 0) {
+            toReturn.add(squares[m-1][j]);
+            if (j == m-1) {
+                toReturn.add(squares[m-1][0]);
+                toReturn.add(squares[0][0]);
+                toReturn.add(squares[0][m-1]);
+            }else{
+                toReturn.add(squares[m-1][j+1]);
+                toReturn.add(squares[i][j+1]);
+                toReturn.add(squares[i+1][j+1]);
             }
+            
         }
+
+        if(with_reflection) {
+            return get_invertedL_with_reflection();
+        }
+        return get_invertedL_without_reflection();
     }
+
 
     public void setX_stop(float x_stop) {
         this.x_stop = x_stop;

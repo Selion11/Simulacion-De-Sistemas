@@ -3,46 +3,49 @@ package TP1;
 import java.io.IOException;
 
 public class CIM {
-    public static void main(String[] args) throws IOException {
+    private square[][] squares = null;
+
+    public CIM(String[] args) throws IOException {
         FileProcess fileProcessor = new FileProcess();
         int L = 20;
         particle[] particles = fileProcessor.readFile("TP1/dynamic_CIM_input.txt", "TP1/static_CIM_input.txt", 1.0F);
         int M = 25;
-        square[] squares = calculations(L,M);
+        calculations(L,M);
+
 
         for(particle p : particles) {
-            int check = 0;
-            int s = 0;
-            while(check == 0){
-                check = squares[s].add_particle(p);
-                s++;
+            for (int i = 0; i < M; i++) {
+                for (int j = 0; j < M; j++) {
+                    if(squares[i][j].checkParticle(p)){
+                        squares[i][j].add_particle(p);
+                        break;
+                    }                   
+                }    
             }
         }
+
         System.out.println("Check Finished");
     }
 
-    private static square[] calculations(int L, int M){
+    private void calculations(int L, int M){
         float step = (float) L /M;
-        int total = M*M;
-        square[] squares = new square[total];
-        float y_start = 0.0F;
-        float y_finish = step;
-        int counter = 0;
-        for(int i = 0; i < 25 ; i++){
-            float x_start = 0.0F;
-            float x_finish = step;
-            int ctr = 1;
-            while(ctr <= 25){
-                square aux = new square(x_start,x_finish,y_start,y_finish,i + 1);
-                ctr ++;
-                x_start += step;
-                x_finish += step;
-                squares[counter] = aux;
-                counter ++;
+        this.squares = new square[M][M];
+        float y_start;
+        float y_finish;
+        float x_start;
+        float x_finish;
+
+        for(int i = 0; i < M ; i++){
+            y_finish = L - i *step;
+            y_start = y_finish - step;
+
+            for (int j = 0; j < M; j++) {
+                x_start = j*step;
+                x_finish = x_start + step;
+
+                square aux = new square(x_start,x_finish,y_start,y_finish,i,j,M);
+                squares[i][j] = aux;
             }
-            y_start += step;
-            y_finish += step;
         }
-        return squares;
     }
 }
