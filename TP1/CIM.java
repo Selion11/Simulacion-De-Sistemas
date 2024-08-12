@@ -20,7 +20,7 @@ public class CIM {
                         squares[i][j].add_particle(p);
                         break;
                     }                   
-                }    
+                }
             }
         }
 
