@@ -1,61 +1,46 @@
 package TP1;
 
 
+import java.util.ArrayList;
+
 public class particle {
     private float x,y,r,rc;
-    int id;
-    int idx_vecinas = 0;
-    int[] vecinas = null;
+    private ArrayList<particle> vecinas = new ArrayList<>();
+    private square square;
 
-    public particle(){
-    }
-
-    public void setX(float x) {
+    public particle(float x, float y, float r, float rc) {
         this.x = x;
-    }
-
-    public void setY(float y) {
         this.y = y;
-    }
-
-    public void setR(float r) {
         this.r = r;
+        this.rc = rc;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void set_square(square s) {
+        this.square = s;
+    }
+    private void checkVecinas() {
+        for(square s : square.getInvertedL()) {
+            for(particle p : s.getParticles()) {
+                if(p != this) {
+                    checkVecina(p);
+                }
+            }
+        }
     }
 
-    public void setRc(float rc) { this.rc = rc; }
-
-    public boolean checkVecina(particle p){
+    public void checkVecina(particle p){
         double x_diff = Math.pow(this.x - p.getX(),2);
         double y_diff = Math.pow(this.y - p.getY(),2);
         double ans = Math.sqrt(x_diff+y_diff) - (r+p.getR()) - rc;
+        //TODO CONTEMPLAR AJUSTE DE COORDENADAS PARA LOS CASOS DE PARTICULAS VIRTUALES
         if(ans <= 0){
-            add_vecina(p.id);
-            p.add_vecina(this.id);
-            return true;
+            add_vecina(p);
         }
-        return false;
     }
 
-    public void add_vecina(int id){
-        for(int vecina: vecinas){
-            if(vecina == id){
-                return;
-            }
-        }
-        int new_idx = idx_vecinas + 1;
-        int[] aux = new int[new_idx];
-        System.arraycopy(vecinas, 0, aux, 0, vecinas.length);
-        aux[new_idx] = id;
-        idx_vecinas = new_idx;
-        vecinas = aux;
-    }
-
-    public int getId() {
-        return id;
+    public void add_vecina(particle p){
+        vecinas.add(p);
+        p.add_vecina(this);
     }
 
     public float getX(){
@@ -70,8 +55,12 @@ public class particle {
         return y;
     }
 
+    public ArrayList<particle> getVecinas() {
+        return vecinas;
+    }
+
     @Override
     public String toString() {
-        return String.format("TP1.particle " + id +"{ "+ "x=" + x + ", y=" + y + ", r=" + r + '}');
+        return String.format("TP1.particle "+"{ "+ "x=" + x + ", y=" + y + ", r=" + r + '}');
     }
 }

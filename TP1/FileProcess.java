@@ -3,10 +3,11 @@ package TP1;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 
 
 public class FileProcess {
-    public particle[] readFile(String dynamicFile, String staticFile, Float rc) throws IOException {
+    public ArrayList<particle> readFile(String dynamicFile, String staticFile, Float rc) throws IOException {
         BufferedReader dynamicReader = new BufferedReader(new FileReader(dynamicFile));
         BufferedReader staticReader = new BufferedReader(new FileReader(staticFile));
         String staticLine;
@@ -17,14 +18,12 @@ public class FileProcess {
             System.out.println(N);
         }
 
-        particle[] ans = new particle[N];
+        ArrayList<particle> particles = new ArrayList<>();
 
         dynamicReader.readLine();
         staticReader.readLine();
 
-        int counter = 0;
         while (((dynamicLine = dynamicReader.readLine()) != null) &&((staticLine = staticReader.readLine()) != null)) {
-            counter += 1;
             String[] tokens = dynamicLine.split(" ");
 
             float aux = Float.parseFloat(tokens[0]);
@@ -38,15 +37,10 @@ public class FileProcess {
             aux2 = String.format("%.2f", aux);
 
             float y = Float.parseFloat(aux2);
-            particle part = new particle();
-            part.setId(counter);
-            part.setX(x);
-            part.setY(y);
-            part.setR(Float.parseFloat(staticLine));
-            part.setRc(rc);
-            ans[counter -1]  = part;
+            particle part = new particle(x,y,Float.parseFloat(staticLine),rc);
+            particles.add(part);
         }
-        return ans;
+        return particles;
     }
 }
 
