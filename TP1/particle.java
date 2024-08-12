@@ -1,5 +1,6 @@
 package TP1;
 
+
 public class particle {
     private float x,y,r,rc;
     int id;
@@ -29,12 +30,26 @@ public class particle {
         this.rc = rc;
     }
 
-    public int checkVecina(particle p){
-        return 1;
+    public boolean checkVecina(particle p){
+        double x_diff = Math.pow(this.x - p.getX(),2);
+        double y_diff = Math.pow(this.y - p.getY(),2);
+        double ans = Math.sqrt(x_diff+y_diff) - 2*rc;
+        if(ans <= 0){
+            add_vecina(p.id);
+            p.add_vecina(this.id);
+            return true;
+        }
+        return false;
     }
+
     public void add_vecina(int id){
+        for(int vecina: vecinas){
+            if(vecina == id){
+                return;
+            }
+        }
         int new_idx = idx_vecinas + 1;
-        int[] aux = new int[new_idx];
+        int[] aux = new int[new_idx ];
         System.arraycopy(vecinas, 0, aux, 0, vecinas.length);
         aux[new_idx] = id;
         idx_vecinas = new_idx;
