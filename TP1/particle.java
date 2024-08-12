@@ -26,14 +26,12 @@ public class particle {
         this.id = id;
     }
 
-    public void setRc(float rc) {
-        this.rc = rc;
-    }
+    public void setRc(float rc) { this.rc = rc; }
 
     public boolean checkVecina(particle p){
         double x_diff = Math.pow(this.x - p.getX(),2);
         double y_diff = Math.pow(this.y - p.getY(),2);
-        double ans = Math.sqrt(x_diff+y_diff) - 2*rc;
+        double ans = Math.sqrt(x_diff+y_diff) - (r+p.getR()) - rc;
         if(ans <= 0){
             add_vecina(p.id);
             p.add_vecina(this.id);
