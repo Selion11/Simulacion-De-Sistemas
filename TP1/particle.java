@@ -53,9 +53,6 @@ public class particle {
         idx_vecinas = new_idx;
         vecinas = aux;
     }
-    public float getRc() {
-        return rc;
-    }
 
     public int getId() {
         return id;
