@@ -47,7 +47,7 @@ public class particle {
             }
         }
         int new_idx = idx_vecinas + 1;
-        int[] aux = new int[new_idx ];
+        int[] aux = new int[new_idx];
         System.arraycopy(vecinas, 0, aux, 0, vecinas.length);
         aux[new_idx] = id;
         idx_vecinas = new_idx;
