@@ -46,11 +46,12 @@ public class square{
         for(particle p: particles){
             for(particle q: particles){
                 if(p.getId() != q.getId()){
-
+                    q.checkVecina(p);
                 }
             }
         }
     }
+
     public void setX_stop(float x_stop) {
         this.x_stop = x_stop;
     }
