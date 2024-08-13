@@ -32,6 +32,7 @@ public class CIM {
 
         HashMap<particle,ArrayList<particle>> vecinas = new HashMap<>();
         for(particle p : particles) {
+            p.checkVecinas();
             vecinas.put(p,p.getVecinas());
         }
 

@@ -18,13 +18,20 @@ public class particle {
     public void set_square(square s) {
         this.square = s;
     }
-    private void checkVecinas() {
+    public void checkVecinas() {
         for(square s : square.getInvertedL()) {
-            for(particle p : s.getParticles()) {
-                if(p != this) {
+            if (s == this.square) {
+                for(particle p : s.getParticles()) {
+                    if(p != this) {
+                        checkVecina(p);
+                    }
+                }
+            }else{
+                for(particle p : s.getParticles()) {
                     checkVecina(p);
                 }
             }
+            
         }
     }
 
@@ -52,6 +59,10 @@ public class particle {
 
     public float getY() {
         return y;
+    }
+
+    public float getRC() {
+        return rc;
     }
 
     public ArrayList<particle> getVecinas() {

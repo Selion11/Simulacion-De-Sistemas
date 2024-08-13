@@ -2,7 +2,17 @@ package TP1;
 
 import java.util.ArrayList;
 
+// Enum para saber hacia donde quiero mover mi cuadrado virtual
+enum squareType{
+    TOP_BORDER,
+    RIGHT_BORDER,
+    BOTTOM_BORDER,
+    TOP_RIGHT,
+    BOTTOM_RIGHT
+}
+
 public class square {
+    
     private float x_stop,y_stop,x_start,y_start;
     protected int i,j,m,l;
     private ArrayList<square> invertedL = new ArrayList<>();
@@ -31,29 +41,84 @@ public class square {
         return particles;
     }
 
+    public void setParticles(ArrayList<particle> particles,squareType type){
+        switch (type) {
+            case TOP_BORDER:
+                for (particle particle : particles) {
+                    this.particles.add(new particle(particle.getX(), particle.getY()+l,particle.getR(),particle.getRC()));
+                }
+                break;
+
+            case RIGHT_BORDER:
+                for (particle particle : particles) {
+                    this.particles.add(new particle(particle.getX()+l, particle.getY(),particle.getR(),particle.getRC()));
+                }
+                break;
+
+            case BOTTOM_BORDER:
+                for (particle particle : particles) {
+                    this.particles.add(new particle(particle.getX(), particle.getY()-l,particle.getR(),particle.getRC()));
+                }
+                break;
+
+            case TOP_RIGHT:
+                for (particle particle : particles) {
+                    this.particles.add(new particle(particle.getX()+l, particle.getY()+l,particle.getR(),particle.getRC()));
+                }
+                break;
+
+            case BOTTOM_RIGHT:
+                for (particle particle : particles) {
+                    this.particles.add(new particle(particle.getX() + l, particle.getY() - l,particle.getR(),particle.getRC()));
+                }
+                break;
+
+            default:
+                break;
+        }
+
+    }
+
     public void get_invertedL(square[][] squares, boolean with_reflection) {
         invertedL.add(this); //voy a querer chequear vecinas dentro del mismo cuadrado
+        square auxSquare;
         if (i == 0) { //borde superior
             if(with_reflection) {
-                invertedL.add(new square(squares[m-1][j].getX_start(),squares[m-1][j].getX_stop(),
-                        squares[m-1][j].getY_start()+l,squares[m-1][j].getY_stop()+l,
-                        i,j,m,l));
+                // cuadrados virtuales
+                auxSquare = new square(squares[m-1][j].getX_start(),squares[m-1][j].getX_stop(),
+                squares[m-1][j].getY_start()+l,squares[m-1][j].getY_stop()+l,
+                i,j,m,l);
+                auxSquare.setParticles(squares[m-1][j].getParticles(),squareType.TOP_BORDER);
+                invertedL.add(auxSquare);
             }
             if (j == m-1 && with_reflection) {
-                invertedL.add(new square(squares[m-1][0].getX_start()+l,squares[m-1][0].getX_stop()+l,
-                        squares[m-1][0].getY_start()+l,squares[m-1][0].getY_stop()+l,
-                        i,j,m,l));
-                invertedL.add(new square(squares[0][0].getX_start()+l,squares[0][0].getX_stop()+l,
-                        squares[0][0].getY_start(),squares[0][0].getY_stop(),
-                        i,j,m,l));
-                invertedL.add(new square(squares[1][0].getX_start()+l,squares[1][0].getX_stop()+l,
-                        squares[1][0].getY_start(),squares[1][0].getY_stop(),
-                        i,j,m,l));
+                // cuadrados virtuales
+                auxSquare = new square(squares[m-1][0].getX_start()+l,squares[m-1][0].getX_stop()+l,
+                squares[m-1][0].getY_start()+l,squares[m-1][0].getY_stop()+l,
+                i,j,m,l);
+                auxSquare.setParticles(squares[m-1][0].getParticles(),squareType.TOP_RIGHT);
+                invertedL.add(auxSquare);
+
+                auxSquare = new square(squares[1][0].getX_start()+l,squares[1][0].getX_stop()+l,
+                squares[1][0].getY_start(),squares[1][0].getY_stop(),
+                i,j,m,l);
+                auxSquare.setParticles(squares[0][0].getParticles(),squareType.RIGHT_BORDER);
+                invertedL.add(auxSquare);
+
+                auxSquare = new square(squares[1][0].getX_start()+l,squares[1][0].getX_stop()+l,
+                squares[1][0].getY_start(),squares[1][0].getY_stop(),
+                i,j,m,l);
+                auxSquare.setParticles(squares[1][0].getParticles(),squareType.RIGHT_BORDER);
+                invertedL.add(auxSquare);              
+
             } else{
                 if(with_reflection) {
-                    invertedL.add(new square(squares[m-1][j+1].getX_start(),squares[m-1][j+1].getX_stop(),
-                            squares[m-1][j+1].getY_start()+l,squares[m-1][j+1].getY_stop()+l,
-                            i,j,m,l));
+                    // cuadrados virtuales
+                    auxSquare = new square(squares[m-1][j+1].getX_start(),squares[m-1][j+1].getX_stop(),
+                    squares[m-1][j+1].getY_start()+l,squares[m-1][j+1].getY_stop()+l,
+                    i,j,m,l);
+                    auxSquare.setParticles(squares[m-1][j+1].getParticles(),squareType.RIGHT_BORDER);
+                    invertedL.add(auxSquare);
                 }
                 invertedL.add(squares[i][j+1]);
                 invertedL.add(squares[i+1][j+1]);
@@ -63,35 +128,48 @@ public class square {
         if(j == m-1) { //borde derecho (sin esquina derecha superior)
             invertedL.add(squares[i-1][m-1]);
             if(with_reflection) {
-                invertedL.add(new square(squares[i][0].getX_start()+l,squares[i][0].getX_stop()+l,
-                        squares[i][0].getY_start(),squares[i][0].getY_stop(),
-                        i,j,m,l));
-                invertedL.add(new square(squares[i-1][0].getX_start()+l,squares[i-1][0].getX_stop()+l,
-                        squares[i-1][0].getY_start(),squares[i-1][0].getY_stop(),
-                        i,j,m,l));
+                // cuadrados virtuales
+                auxSquare = new square(squares[i][0].getX_start()+l,squares[i][0].getX_stop()+l,
+                squares[i][0].getY_start(),squares[i][0].getY_stop(),
+                i,j,m,l);
+                auxSquare.setParticles(squares[i][0].getParticles(),squareType.RIGHT_BORDER);
+                invertedL.add(auxSquare);
+
+                auxSquare = new square(squares[i-1][0].getX_start()+l,squares[i-1][0].getX_stop()+l,
+                squares[i-1][0].getY_start(),squares[i-1][0].getY_stop(),
+                i,j,m,l);
+                auxSquare.setParticles(squares[i-1][0].getParticles(),squareType.RIGHT_BORDER);
+                invertedL.add(auxSquare);
+
                 if(i != m-1) {
-                    invertedL.add(new square(squares[i+1][0].getX_start()+l,squares[i+1][0].getX_stop()+l,
-                            squares[i+1][0].getY_start(),squares[i+1][0].getY_stop(),
-                            i,j,m,l));
+                    auxSquare = new square(squares[i+1][0].getX_start()+l,squares[i+1][0].getX_stop()+l,
+                    squares[i+1][0].getY_start(),squares[i+1][0].getY_stop(),
+                    i,j,m,l);
+                    auxSquare.setParticles(squares[i+1][0].getParticles(),squareType.RIGHT_BORDER);
+                    invertedL.add(auxSquare);
                 } else {
-                    invertedL.add(new square(squares[0][0].getX_start()+l,squares[0][0].getX_stop()+l,
-                            squares[0][0].getY_start()-l,squares[0][0].getY_stop()-l,
-                            i,j,m,l));
+                    auxSquare = new square(squares[0][0].getX_start()+l,squares[0][0].getX_stop()+l,
+                    squares[0][0].getY_start()-l,squares[0][0].getY_stop()-l,
+                    i,j,m,l);
+                    auxSquare.setParticles(squares[0][0].getParticles(),squareType.BOTTOM_RIGHT);
+                    invertedL.add(auxSquare);
                 }
             }
             return;
         }
+
         //celdas restantes
         invertedL.add(squares[i-1][j]);
         invertedL.add(squares[i][j+1]);
         invertedL.add(squares[i-1][j+1]);
         if(i == m-1 && with_reflection) {
-            invertedL.add(new square(squares[0][j+1].getX_start(),squares[0][j+1].getX_stop(),
-                    squares[0][j+1].getY_start()-l,squares[0][j+1].getY_stop()-l,
-                    i,j,m,l));
-        } else {
-            invertedL.add(squares[i+1][j+1]);
-        }
+            // cuadrados virtuales
+            auxSquare = new square(squares[0][j+1].getX_start(),squares[0][j+1].getX_stop(),
+            squares[0][j+1].getY_start()-l,squares[0][j+1].getY_stop()-l,
+            i,j,m,l);
+            auxSquare.setParticles(squares[0][j+1].getParticles(),squareType.BOTTOM_BORDER);
+            invertedL.add(auxSquare);
+        } 
     }
 
     public ArrayList<square> getInvertedL() {
