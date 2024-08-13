@@ -54,7 +54,7 @@ public class CIM {
             for (int j = 0; j < M; j++) {
                 x_start = j*step;
                 x_finish = x_start + step;
-                square aux = new square(x_start,x_finish,y_start,y_finish,i,j,M);
+                square aux = new square(x_start,x_finish,y_start,y_finish,i,j,M,L);
                 squares[i][j] = aux;
             }
         }

@@ -32,7 +32,6 @@ public class particle {
         double x_diff = Math.pow(this.x - p.getX(),2);
         double y_diff = Math.pow(this.y - p.getY(),2);
         double ans = Math.sqrt(x_diff+y_diff) - (r+p.getR()) - rc;
-        //TODO CONTEMPLAR AJUSTE DE COORDENADAS PARA LOS CASOS DE PARTICULAS VIRTUALES
         if(ans <= 0){
             add_vecina(p);
         }
