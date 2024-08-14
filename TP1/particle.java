@@ -70,6 +70,27 @@ public class particle {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final particle other = (particle) obj;
+        if (this.x != other.x) {
+            return false;
+        }
+        if (this.y != other.y) {
+            return false;
+        }
+        if (this.r != other.r) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
     public String toString() {
         return String.format("TP1.particle "+"{ "+ "x=" + x + ", y=" + y + ", r=" + r + '}');
     }
