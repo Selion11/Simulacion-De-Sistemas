@@ -2,6 +2,7 @@ package TP1;
 
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class particle {
     private float x,y,r,rc;
@@ -84,11 +85,14 @@ public class particle {
         if (this.y != other.y) {
             return false;
         }
-        if (this.r != other.r) {
-            return false;
-        }
-        return true;
+        return this.r == other.r;
     }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(x, y, r);
+    }
+
 
     @Override
     public String toString() {
