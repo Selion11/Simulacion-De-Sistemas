@@ -3,11 +3,10 @@ package TP1;
 
 import java.util.ArrayList;
 import java.util.Objects;
-import TP1.Square;
 
 
 public class Particle {
-    private int id;
+    private Integer id;
     private float x,y,r,rc;
     private ArrayList<Particle> vecinas = new ArrayList<>();
     private Square square;
@@ -107,7 +106,7 @@ public class Particle {
 
     @Override
     public String toString() {
-        return String.format("TP1.particle "+"{ "+ "x=" + x + ", y=" + y + ", r=" + r + '}');
+        return id.toString();
     }
 
     public int getId() {

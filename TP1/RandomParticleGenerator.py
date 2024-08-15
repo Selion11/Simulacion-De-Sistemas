@@ -12,7 +12,7 @@ dynamic_file = open("dynamic_CIM_input.txt", "w")
 dynamic_file.write("t0" + "\n")
 
 for i in range(N):
-    static_file.write(str(rc) + "\n")
+    static_file.write(str(r) + "\n")
     x = random.uniform(0,L)
     y = random.uniform(0,L)
     dynamic_file.write(str(x) + " " + str(y) + " " + "\n")

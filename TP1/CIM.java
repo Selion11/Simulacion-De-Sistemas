@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 
 
 public class CIM {
@@ -14,16 +16,28 @@ public class CIM {
         CIM cim = new CIM();
         HashMap<Particle,ArrayList<Particle>> rta = cim.CIM(false);
         AtomicInteger cantVecinas = new AtomicInteger();
-        rta.forEach((k,v) -> {
-                System.out.println("Particle: " + k.getId());
-                System.out.println("Vecinas: ");
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("TP1/vecinas.txt"))) {
+            rta.forEach((k, v) -> {
                 for (Particle p : v) {
-                    cantVecinas.addAndGet(1);
-                    System.out.println(p.getId());
+                    try {
+                        writer.write(p.toString());
+                        writer.write(" ");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
-        });
-        System.out.println("Cantidad de vecinas: "+ cantVecinas);
+                try {
+                    writer.newLine();  // Add a newline after writing all particles in v
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+        }
+            //System.out.println("Cantidad de vecinas: "+ cantVecinas);*/
     }
+
+
 
     private HashMap<Particle,ArrayList<Particle>> CIM(boolean with_reflection) throws IOException {
         this.with_reflection = with_reflection;
