@@ -3,35 +3,39 @@ package TP1;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.atomic.AtomicInteger;
+
 
 public class CIM {
-    private square[][] squares = null;
+    private Square[][] squares = null;
     private boolean with_reflection;
 
     public static void main(String[] args) throws IOException {
         CIM cim = new CIM();
-        HashMap<particle,ArrayList<particle>> rta = cim.CIM(true);
+        HashMap<Particle,ArrayList<Particle>> rta = cim.CIM(false);
+        AtomicInteger cantVecinas = new AtomicInteger();
         rta.forEach((k,v) -> {
-            System.out.println("Particle: " + k.getId());
-            System.out.println("Vecinas: ");
-            for(particle p : v) {
-                System.out.println(p.getId());
-            }
+                System.out.println("Particle: " + k.getId());
+                System.out.println("Vecinas: ");
+                for (Particle p : v) {
+                    cantVecinas.addAndGet(1);
+                    System.out.println(p.getId());
+                }
         });
-        return;
+        System.out.println("Cantidad de vecinas: "+ cantVecinas);
     }
 
-    private HashMap<particle,ArrayList<particle>> CIM(boolean with_reflection) throws IOException {
+    private HashMap<Particle,ArrayList<Particle>> CIM(boolean with_reflection) throws IOException {
         this.with_reflection = with_reflection;
         FileProcess fileProcessor = new FileProcess();
-        int L = 10;
-        ArrayList<particle> particles;
-        particles = fileProcessor.readFile("TP1/dynamic_CIM_input.txt", "TP1/static_CIM_input.txt", 0.5F);
-        int M = 5;
+        int L = 20;
+        ArrayList<Particle> particles;
+        particles = fileProcessor.readFile("TP1/dynamic_CIM_input.txt", "TP1/static_CIM_input.txt", 10F);
+        int M = 10;
         calculations(L,M);
 
 
-        for(particle p : particles) {
+        for(Particle p : particles) {
             for (int i = 0; i < M; i++) {
                 for (int j = 0; j < M; j++) {
                     if(squares[i][j].checkParticle(p)){
@@ -43,8 +47,14 @@ public class CIM {
             }
         }
 
-        HashMap<particle,ArrayList<particle>> vecinas = new HashMap<>();
-        for(particle p : particles) {
+        for(int i = 0; i < M; i++) {
+            for (int j = 0; j < M; j++) {
+                squares[i][j].get_invertedL(squares, with_reflection);
+            }
+        }
+
+        HashMap<Particle,ArrayList<Particle>> vecinas = new HashMap<>();
+        for(Particle p : particles) {
             p.checkVecinas();
             vecinas.put(p,p.getVecinas());
         }
@@ -55,7 +65,7 @@ public class CIM {
 
     private void calculations(int L, int M){
         float step = (float) L /M;
-        this.squares = new square[M][M];
+        this.squares = new Square[M][M];
         float y_start;
         float y_finish;
         float x_start;
@@ -69,17 +79,13 @@ public class CIM {
             for (int j = 0; j < M; j++) {
                 x_start = j*step;
                 x_finish = x_start + step;
-                square aux = new square(squareId, x_start,x_finish,y_start,y_finish,i,j,M,L);
+                Square aux = new Square(squareId, x_start,x_finish,y_start,y_finish,i,j,M,L);
                 squareId++;
                 squares[i][j] = aux;
             }
         }
 
-        for(int i = 0; i < M; i++) {
-            for (int j = 0; j < M; j++) {
-                squares[i][j].get_invertedL(squares, with_reflection);
-            }
-        }
+
     }
 
 }

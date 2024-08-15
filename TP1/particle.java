@@ -3,14 +3,16 @@ package TP1;
 
 import java.util.ArrayList;
 import java.util.Objects;
+import TP1.Square;
 
-public class particle {
+
+public class Particle {
     private int id;
     private float x,y,r,rc;
-    private ArrayList<particle> vecinas = new ArrayList<>();
-    private square square;
+    private ArrayList<Particle> vecinas = new ArrayList<>();
+    private Square square;
 
-    public particle(int id, float x, float y, float r, float rc) {
+    public Particle(int id, float x, float y, float r, float rc) {
         this.id = id;
         this.x = x;
         this.y = y;
@@ -18,27 +20,28 @@ public class particle {
         this.rc = rc;
     }
 
-    public void set_square(square s) {
+    public void set_square(Square s) {
         this.square = s;
     }
     public void checkVecinas() {
-        for(square s : square.getInvertedL()) {
-            if (s == this.square) {
-                for(particle p : s.getParticles()) {
+        for(Square s : square.getInvertedL()) {
+//            if (s == this.square) {
+                for(Particle p : s.getParticles()) {
+
                     if(p != this) {
                         checkVecina(p);
                     }
                 }
-            }else{
-                for(particle p : s.getParticles()) {
-                    checkVecina(p);
-                }
-            }
+//            }else{
+//                for(Particle p : s.getParticles()) {
+//                    checkVecina(p);
+//                }
+//            }
             
         }
     }
 
-    public void checkVecina(particle p){
+    public void checkVecina(Particle p){
         double x_diff = Math.pow(this.x - p.getX(),2);
         double y_diff = Math.pow(this.y - p.getY(),2);
         double ans = Math.sqrt(x_diff+y_diff) - (r+p.getR()) - rc;
@@ -47,9 +50,15 @@ public class particle {
         }
     }
 
-    public void add_vecina(particle p){
-        vecinas.add(p);
-        p.add_vecina(this);
+    public void add_vecina(Particle p){
+        if (!vecinas.contains(p)) {
+            vecinas.add(p);
+            p.add_vecina(this);
+        }
+    }
+
+    public int getSquareId() {
+        return square.getId();
     }
 
     public float getX(){
@@ -68,7 +77,7 @@ public class particle {
         return rc;
     }
 
-    public ArrayList<particle> getVecinas() {
+    public ArrayList<Particle> getVecinas() {
         return vecinas;
     }
 
@@ -80,7 +89,7 @@ public class particle {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final particle other = (particle) obj;
+        final Particle other = (Particle) obj;
         if (this.x != other.x) {
             return false;
         }

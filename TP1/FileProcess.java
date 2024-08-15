@@ -4,10 +4,11 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import TP1.Particle;
 
 
 public class FileProcess {
-    public ArrayList<particle> readFile(String dynamicFile, String staticFile, Float rc) throws IOException {
+    public ArrayList<Particle> readFile(String dynamicFile, String staticFile, Float rc) throws IOException {
         BufferedReader dynamicReader = new BufferedReader(new FileReader(dynamicFile));
         BufferedReader staticReader = new BufferedReader(new FileReader(staticFile));
         String staticLine;
@@ -19,7 +20,7 @@ public class FileProcess {
             System.out.println(N);
         }
 
-        ArrayList<particle> particles = new ArrayList<>();
+        ArrayList<Particle> particles = new ArrayList<>();
 
         dynamicReader.readLine();
         staticReader.readLine();
@@ -38,7 +39,7 @@ public class FileProcess {
             aux2 = String.format("%.2f", aux);
 
             float y = Float.parseFloat(aux2);
-            particle part = new particle(particleId, x,y,Float.parseFloat(staticLine),rc);
+            Particle part = new Particle(particleId, x,y,Float.parseFloat(staticLine),rc);
             particleId++;
             particles.add(part);
         }
