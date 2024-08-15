@@ -8,13 +8,26 @@ public class CIM {
     private square[][] squares = null;
     private boolean with_reflection;
 
-    public HashMap<particle,ArrayList<particle>> CIM(boolean with_reflection) throws IOException {
+    public static void main(String[] args) throws IOException {
+        CIM cim = new CIM();
+        HashMap<particle,ArrayList<particle>> rta = cim.CIM(true);
+        rta.forEach((k,v) -> {
+            System.out.println("Particle: " + k.getId());
+            System.out.println("Vecinas: ");
+            for(particle p : v) {
+                System.out.println(p.getId());
+            }
+        });
+        return;
+    }
+
+    private HashMap<particle,ArrayList<particle>> CIM(boolean with_reflection) throws IOException {
         this.with_reflection = with_reflection;
         FileProcess fileProcessor = new FileProcess();
-        int L = 20;
+        int L = 10;
         ArrayList<particle> particles;
-        particles = fileProcessor.readFile("TP1/dynamic_CIM_input.txt", "TP1/static_CIM_input.txt", 1.0F);
-        int M = 25;
+        particles = fileProcessor.readFile("TP1/dynamic_CIM_input.txt", "TP1/static_CIM_input.txt", 0.5F);
+        int M = 5;
         calculations(L,M);
 
 
@@ -47,6 +60,7 @@ public class CIM {
         float y_finish;
         float x_start;
         float x_finish;
+        int squareId = 1;
 
         for(int i = 0; i < M ; i++){
             y_finish = L - i *step;
@@ -55,7 +69,8 @@ public class CIM {
             for (int j = 0; j < M; j++) {
                 x_start = j*step;
                 x_finish = x_start + step;
-                square aux = new square(x_start,x_finish,y_start,y_finish,i,j,M,L);
+                square aux = new square(squareId, x_start,x_finish,y_start,y_finish,i,j,M,L);
+                squareId++;
                 squares[i][j] = aux;
             }
         }

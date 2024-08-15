@@ -12,6 +12,7 @@ public class FileProcess {
         BufferedReader staticReader = new BufferedReader(new FileReader(staticFile));
         String staticLine;
         String dynamicLine;
+        int particleId = 1;
         int N = 0;
         if((staticLine = staticReader.readLine()) != null) {
             N = Integer.parseInt(staticLine);
@@ -37,7 +38,8 @@ public class FileProcess {
             aux2 = String.format("%.2f", aux);
 
             float y = Float.parseFloat(aux2);
-            particle part = new particle(x,y,Float.parseFloat(staticLine),rc);
+            particle part = new particle(particleId, x,y,Float.parseFloat(staticLine),rc);
+            particleId++;
             particles.add(part);
         }
         return particles;

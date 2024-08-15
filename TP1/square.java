@@ -14,11 +14,12 @@ enum squareType{
 public class square {
     
     private float x_stop,y_stop,x_start,y_start;
-    protected int i,j,m,l;
+    protected int id, i,j,m,l;
     private ArrayList<square> invertedL = new ArrayList<>();
     private ArrayList<particle> particles = new ArrayList<>();
 
-    public square(float x_start, float x_stop, float y_start, float y_stop, int i, int j, int m, int l){
+    public square(int id, float x_start, float x_stop, float y_start, float y_stop, int i, int j, int m, int l){
+        this.id = id;
         this.x_stop = x_stop;
         this.y_stop = y_stop;
         this.x_start = x_start;

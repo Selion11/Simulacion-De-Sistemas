@@ -1,8 +1,8 @@
 import random
-N = 100
-L = 20
-M = 10
-r = 1
+N = 10
+L = 10
+M = 5
+r = 0.5
 rc = 0.25
 
 static_file = open("static_CIM_input.txt", "w")

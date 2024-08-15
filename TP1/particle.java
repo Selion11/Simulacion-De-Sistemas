@@ -5,11 +5,13 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class particle {
+    private int id;
     private float x,y,r,rc;
     private ArrayList<particle> vecinas = new ArrayList<>();
     private square square;
 
-    public particle(float x, float y, float r, float rc) {
+    public particle(int id, float x, float y, float r, float rc) {
+        this.id = id;
         this.x = x;
         this.y = y;
         this.r = r;
@@ -97,5 +99,9 @@ public class particle {
     @Override
     public String toString() {
         return String.format("TP1.particle "+"{ "+ "x=" + x + ", y=" + y + ", r=" + r + '}');
+    }
+
+    public int getId() {
+        return id;
     }
 }
