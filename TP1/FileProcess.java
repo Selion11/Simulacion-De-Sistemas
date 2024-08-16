@@ -39,7 +39,7 @@ public class FileProcess {
             aux2 = String.format("%.2f", aux);
 
             float y = Float.parseFloat(aux2);
-            Particle part = new Particle(particleId, x,y,Float.parseFloat(staticLine),rc);
+            Particle part = new Particle(particleId, x,y,Float.parseFloat(staticLine),rc,0,0);
             particleId++;
             particles.add(part);
         }

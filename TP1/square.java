@@ -46,31 +46,31 @@ public class Square {
         switch (type) {
             case TOP_BORDER:
                 for (Particle particle : particles) {
-                    this.particles.add(new Particle(particle.getId(),particle.getX(), particle.getY()+l,particle.getR(),particle.getRC()));
+                    this.particles.add(new Particle(particle.getId(),particle.getX(), particle.getY()+l,particle.getR(),particle.getRC(),0, l));
                 }
                 break;
 
             case RIGHT_BORDER:
                 for (Particle particle : particles) {
-                    this.particles.add(new Particle(particle.getId(),particle.getX()+l, particle.getY(),particle.getR(),particle.getRC()));
+                    this.particles.add(new Particle(particle.getId(),particle.getX()+l, particle.getY(),particle.getR(),particle.getRC(),l,0));
                 }
                 break;
 
             case BOTTOM_BORDER:
                 for (Particle particle : particles) {
-                    this.particles.add(new Particle(particle.getId(),particle.getX(), particle.getY()-l,particle.getR(),particle.getRC()));
+                    this.particles.add(new Particle(particle.getId(),particle.getX(), particle.getY()-l,particle.getR(),particle.getRC(),0,-l));
                 }
                 break;
 
             case TOP_RIGHT:
                 for (Particle particle : particles) {
-                    this.particles.add(new Particle(particle.getId(), particle.getX()+l, particle.getY()+l,particle.getR(),particle.getRC()));
+                    this.particles.add(new Particle(particle.getId(), particle.getX()+l, particle.getY()+l,particle.getR(),particle.getRC(),l,l));
                 }
                 break;
 
             case BOTTOM_RIGHT:
                 for (Particle particle : particles) {
-                    this.particles.add(new Particle(particle.getId(),particle.getX() + l, particle.getY() - l,particle.getR(),particle.getRC()));
+                    this.particles.add(new Particle(particle.getId(),particle.getX() + l, particle.getY() - l,particle.getR(),particle.getRC(),l,-l));
                 }
                 break;
 
@@ -172,7 +172,9 @@ public class Square {
             i,j,m,l);
             auxSquare.setParticles(squares[0][j+1].getParticles(),squareType.BOTTOM_BORDER);
             invertedL.add(auxSquare);
-        } 
+        }else{
+            invertedL.add(squares[i+1][j+1]);
+        }
     }
 
     public ArrayList<Square> getInvertedL() {

@@ -1,11 +1,11 @@
 package TP1;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
 
 
 public class CIM {
@@ -14,13 +14,20 @@ public class CIM {
 
     public static void main(String[] args) throws IOException {
         CIM cim = new CIM();
-        HashMap<Particle,ArrayList<Particle>> rta = cim.CIM(false);
+        HashMap<Particle,ArrayList<Particle>> rta = cim.CIM(true);
         AtomicInteger cantVecinas = new AtomicInteger();
-
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("TP1/vecinas.txt"))) {
             rta.forEach((k, v) -> {
+                try {
+                    writer.write(k.toString());
+                    writer.write(":");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 for (Particle p : v) {
                     try {
+                        p.setXDifference();
+                        p.setYDifference();
                         writer.write(p.toString());
                         writer.write(" ");
                     } catch (IOException e) {
@@ -34,20 +41,27 @@ public class CIM {
                 }
             });
         }
-            //System.out.println("Cantidad de vecinas: "+ cantVecinas);*/
+//            rta.forEach((k,v) -> {
+//            System.out.println("Particle: " + k.getId() + " X:" + k.getX() + " Y:"+k.getY() );
+//                for (Particle p : v) {
+//                    cantVecinas.addAndGet(1);
+//                    p.setXDifference();
+//                    p.setYDifference();
+//                    System.out.println("Vecina:"+ p.getId()+ " X:" + p.getX() + " Y:"+ p.getY() );
+//                }
+//            System.out.println("---------------");
+//        });
+//        System.out.println("Cantidad de vecinas: "+ cantVecinas);
     }
-
-
 
     private HashMap<Particle,ArrayList<Particle>> CIM(boolean with_reflection) throws IOException {
         this.with_reflection = with_reflection;
         FileProcess fileProcessor = new FileProcess();
         int L = 20;
         ArrayList<Particle> particles;
-        particles = fileProcessor.readFile("TP1/dynamic_CIM_input.txt", "TP1/static_CIM_input.txt", 10F);
+        particles = fileProcessor.readFile("TP1/dynamic_CIM_input.txt", "TP1/static_CIM_input.txt", 5F);
         int M = 10;
         calculations(L,M);
-
 
         for(Particle p : particles) {
             for (int i = 0; i < M; i++) {
@@ -56,7 +70,7 @@ public class CIM {
                         squares[i][j].add_particle(p);
                         p.set_square(squares[i][j]);
                         break;
-                    }                   
+                    }
                 }
             }
         }

@@ -7,16 +7,18 @@ import java.util.Objects;
 
 public class Particle {
     private Integer id;
-    private float x,y,r,rc;
+    private float x,y,r,rc,x_diff,y_diff;
     private ArrayList<Particle> vecinas = new ArrayList<>();
     private Square square;
 
-    public Particle(int id, float x, float y, float r, float rc) {
+    public Particle(int id, float x, float y, float r, float rc,float x_diff, float y_diff) {
         this.id = id;
         this.x = x;
         this.y = y;
         this.r = r;
         this.rc = rc;
+        this.x_diff = x_diff;
+        this.y_diff = y_diff;
     }
 
     public void set_square(Square s) {
@@ -24,19 +26,14 @@ public class Particle {
     }
     public void checkVecinas() {
         for(Square s : square.getInvertedL()) {
-//            if (s == this.square) {
                 for(Particle p : s.getParticles()) {
-
+                    if (id == 20 ){
+                        System.out.println("chequeando 20 con: " + p.getId());
+                    }
                     if(p != this) {
                         checkVecina(p);
                     }
                 }
-//            }else{
-//                for(Particle p : s.getParticles()) {
-//                    checkVecina(p);
-//                }
-//            }
-            
         }
     }
 
@@ -111,5 +108,15 @@ public class Particle {
 
     public int getId() {
         return id;
+    }
+
+    public void setXDifference() {
+        this.x -= x_diff;
+        x_diff = 0;
+    }
+
+    public void setYDifference() {
+        this.y -= y_diff;
+        y_diff = 0;
     }
 }
