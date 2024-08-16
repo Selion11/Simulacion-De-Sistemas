@@ -4,9 +4,6 @@ from matplotlib.widgets import Slider
 file_name = "./TP1/dynamic_CIM_input.txt"
 
 radius = 0.25
-
-# Create a plot
-fig, ax = plt.subplots()
 particles = []
 vecinas = []
 
@@ -31,21 +28,45 @@ with open("./TP1/vecinas.txt",'r') as file:
         
 file.close()
 
+def plot_particle_interactions(particle_data, interactions, target_id, ir, M, L):
+    # Create a figure and axis
+    fig, ax = plt.subplots()
 
-ax.add_patch(plt.Circle((particles[1][0], particles[1][1]), radius, color='r', alpha=0.7))
+    # Draw grid
+    for i in range(M + 1):
+        ax.axhline(i * (L / M), color='gray', linewidth=0.5)
+        ax.axvline(i * (L / M), color='gray', linewidth=0.5)
 
-for v in vecinas[1]:
-    ax.add_patch(plt.Circle((particles[int(v)-1][0], particles[int(v)-1][1]), radius, color='b', alpha=0.7))        
-        
-ax.set_xlim(0, 25)
-ax.set_ylim(0, 25)
 
-    # Set equal scaling 
-ax.set_aspect('equal')
+    for p in range(len(particle_data)):
+        if(p == target_id):
+            circle = plt.Circle((particle_data[target_id][0], particle_data[target_id][1]), radius, color='black', fill=True)
+            interaction_circle = plt.Circle((particle_data[target_id][0], particle_data[target_id][1]), ir, color='blue', alpha=0.5, fill=True)
+            ax.add_patch(interaction_circle)
+        elif p in interactions[target_id]:
+            circle = plt.Circle((particle_data[p][0], particle_data[p][1]), radius, color='yellow', fill=True)
+        else:
+            circle = plt.Circle((particle_data[p][0], particle_data[p][1]), radius, color='gray', fill=True)
+        ax.add_patch(circle)
+        ax.text(particle_data[p][0], particle_data[p][1], str(p), color='black', ha='center', va='center', fontsize=10)
+
+    # Customize the plot
+    plt.xlim(0, L)
+    plt.ylim(0, L)
+    plt.title("Particles and Neighbors")
+    plt.xlabel("X")
+    plt.ylabel("Y")
+    plt.gca().set_aspect('equal', adjustable='box')
+
+    # Show the plot
+    plt.show()
     
+# ID de la partícula objetivo
+ir = 8
+M = 5
+target_id = 12
 
-
-# Show the plot
-plt.show()
+# Llamar a la función para graficar
+plot_particle_interactions(particles, vecinas, target_id, ir, M, 20)
 
         
