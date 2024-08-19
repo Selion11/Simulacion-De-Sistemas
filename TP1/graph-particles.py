@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Slider
 
-file_name = "./TP1/dynamic_CIM_input.txt"
+file_name = "./dynamic_CIM_input.txt"
 
 radius = 0.25
 particles = []
@@ -21,7 +21,7 @@ with open(file_name,'r') as file:
 
 file.close()
 
-with open("./TP1/vecinas.txt",'r') as file:
+with open("./vecinas.txt",'r') as file:
     lines = file.readlines()
 
     for l in lines:
@@ -74,7 +74,7 @@ def plot_particle_interactions(particle_data, interactions, target_id, ir, M, L)
 # ID de la partícula objetivo
 ir = 5
 M = 10
-target_id = 27
+target_id = 85
 
 # Llamar a la función para graficar
 plot_particle_interactions(particles, vecinas, target_id, ir, M, 20)

@@ -7,18 +7,16 @@ import java.util.Objects;
 
 public class Particle {
     private Integer id;
-    private float x,y,r,rc,x_diff,y_diff;
+    private float x,y,r,rc;
     private ArrayList<Particle> vecinas = new ArrayList<>();
     private Square square;
 
-    public Particle(int id, float x, float y, float r, float rc,float x_diff, float y_diff) {
+    public Particle(int id, float x, float y, float r, float rc) {
         this.id = id;
         this.x = x;
         this.y = y;
         this.r = r;
         this.rc = rc;
-        this.x_diff = x_diff;
-        this.y_diff = y_diff;
     }
 
     public void set_square(Square s) {
@@ -26,20 +24,17 @@ public class Particle {
     }
     public void checkVecinas() {
         for(Square s : square.getInvertedL()) {
-                for(Particle p : s.getParticles()) {
-                    if (id == 20 ){
-                        System.out.println("chequeando 20 con: " + p.getId());
-                    }
-                    if(p != this) {
-                        checkVecina(p);
-                    }
+            for (Particle p : s.getParticles()) {
+                if (p != this) {
+                    checkVecina(p,s.getVirtualX(),s.getVirtualY());
                 }
+            }
         }
     }
 
-    public void checkVecina(Particle p){
-        double x_diff = Math.pow(this.x - p.getX(),2);
-        double y_diff = Math.pow(this.y - p.getY(),2);
+    public void checkVecina(Particle p, Integer virtualX, Integer virtualY){
+        double x_diff = Math.pow(this.x - (p.getX() + virtualX),2);
+        double y_diff = Math.pow(this.y - (p.getY() + virtualY),2);
         double ans = Math.sqrt(x_diff+y_diff) - (r+p.getR()) - rc;
         if(ans <= 0){
             add_vecina(p);
@@ -108,15 +103,5 @@ public class Particle {
 
     public int getId() {
         return id;
-    }
-
-    public void setXDifference() {
-        this.x -= x_diff;
-        x_diff = 0;
-    }
-
-    public void setYDifference() {
-        this.y -= y_diff;
-        y_diff = 0;
     }
 }

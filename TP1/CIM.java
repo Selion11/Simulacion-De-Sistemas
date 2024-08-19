@@ -26,8 +26,6 @@ public class CIM {
                 }
                 for (Particle p : v) {
                     try {
-                        p.setXDifference();
-                        p.setYDifference();
                         writer.write(p.toString());
                         writer.write(" ");
                     } catch (IOException e) {

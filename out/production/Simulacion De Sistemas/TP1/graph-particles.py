@@ -74,7 +74,7 @@ def plot_particle_interactions(particle_data, interactions, target_id, ir, M, L)
 # ID de la partícula objetivo
 ir = 5
 M = 10
-target_id = 97
+target_id = 75
 
 # Llamar a la función para graficar
 plot_particle_interactions(particles, vecinas, target_id, ir, M, 20)
