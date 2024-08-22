@@ -17,7 +17,7 @@ public class Square {
     private float x_stop,y_stop,x_start,y_start;
     protected int id, i,j,m,l;
     private ArrayList<Square> invertedL = new ArrayList<>();
-    private ArrayList<Particle> particles = new ArrayList<>();
+    private ArrayList<ParticleOffLattice> particles = new ArrayList<>();
     private Integer virtualX = 0;
     private Integer virtualY = 0;
 
@@ -35,19 +35,19 @@ public class Square {
         this.l = l;
     }
 
-    public boolean checkParticle(Particle p){
+    public boolean checkParticle(ParticleOffLattice p){
         return (p.getX() <= x_stop && p.getY() <= y_stop && p.getX() >= x_start && p.getY() >= y_start );
     }
 
-    public void add_particle(Particle p) {
+    public void add_particle(ParticleOffLattice p) {
         particles.add(p);
     }
 
-    public ArrayList<Particle> getParticles() {
+    public ArrayList<ParticleOffLattice> getParticles() {
         return this.particles;
     }
 
-    public void setVirtualParticles(ArrayList<Particle> particles,squareType type){
+    public void setVirtualParticles(ArrayList<ParticleOffLattice> particles,squareType type){
         //                    this.particles.add(new Particle(particle.getId(),particle.getX(), particle.getY()+l,particle.getR(),particle.getRC(),0, l));
         this.particles.addAll(particles);
         switch (type) {
@@ -213,7 +213,7 @@ public class Square {
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder("");
-        for (Particle p:
+        for (ParticleOffLattice p:
              particles) {
             stringBuilder.append(p.getId() + "-");
         }

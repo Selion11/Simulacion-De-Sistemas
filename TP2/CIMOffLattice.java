@@ -14,7 +14,7 @@ public class CIMOffLattice {
 
     public static void main(String[] args) throws IOException {
         CIMOffLattice cim = new CIMOffLattice();
-        HashMap<Particle,ArrayList<Particle>> rta = cim.CIM(true);
+        HashMap<ParticleOffLattice,ArrayList<ParticleOffLattice>> rta = cim.CIM(false);
         AtomicInteger cantVecinas = new AtomicInteger();
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("TP1/vecinas.txt"))) {
             rta.forEach((k, v) -> {
@@ -24,7 +24,7 @@ public class CIMOffLattice {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                for (Particle p : v) {
+                for (ParticleOffLattice p : v) {
                     try {
                         writer.write(p.toString());
                         writer.write(" ");
@@ -52,16 +52,16 @@ public class CIMOffLattice {
 //        System.out.println("Cantidad de vecinas: "+ cantVecinas);
     }
 
-    private HashMap<Particle,ArrayList<Particle>> CIM(boolean with_reflection) throws IOException {
+    private HashMap<ParticleOffLattice,ArrayList<ParticleOffLattice>> CIM(boolean with_reflection) throws IOException {
         this.with_reflection = with_reflection;
         FileProcessOffLatice fileProcessor = new FileProcessOffLatice();
         int L = 20;
-        ArrayList<Particle> particles;
+        ArrayList<ParticleOffLattice> particles;
         particles = fileProcessor.readFile("TP2/dynamic_CIM_input.txt", "TP2/static_CIM_input.txt", 5F);
         int M = 10;
         calculations(L,M);
 
-        for(Particle p : particles) {
+        for(ParticleOffLattice p : particles) {
             for (int i = 0; i < M; i++) {
                 for (int j = 0; j < M; j++) {
                     if(squares[i][j].checkParticle(p)){
@@ -79,8 +79,8 @@ public class CIMOffLattice {
             }
         }
 
-        HashMap<Particle,ArrayList<Particle>> vecinas = new HashMap<>();
-        for(Particle p : particles) {
+        HashMap<ParticleOffLattice,ArrayList<ParticleOffLattice>> vecinas = new HashMap<>();
+        for(ParticleOffLattice p : particles) {
             p.checkVecinas();
             vecinas.put(p,p.getVecinas());
         }

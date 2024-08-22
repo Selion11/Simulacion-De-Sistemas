@@ -1,5 +1,8 @@
 package TP1;
 
+import TP1.Particle;
+import TP1.Square;
+
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
