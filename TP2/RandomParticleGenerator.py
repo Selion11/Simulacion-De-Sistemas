@@ -15,7 +15,7 @@ for i in range(N):
     x = random.uniform(0,L)
     y = random.uniform(0,L)
     theta = random.uniform(0,2)
-    dynamic_file.write(str(x) + " " + str(y) + " " + str(theta) + " "+ "\n")
+    dynamic_file.write(str(x) + " " + str(y) + " " + str(theta) + " " +"\n")
 
 static_file.close()
 dynamic_file.close()

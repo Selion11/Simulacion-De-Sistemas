@@ -14,11 +14,11 @@ public class CIMOffLattice {
     public static void main(String[] args) throws IOException {
         CIMOffLattice cim = new CIMOffLattice();
         cim.CIM();
-        int times = 10;
+        int times = 250;
         int M = 10;
         File myFile;
         while(times >= 0){
-            myFile = new File("TP2/times/particles_time_" + (11-times)+".txt");
+            myFile = new File("TP2/times/particles_time_" + (251-times)+".txt");
             try{
                 myFile.createNewFile();
             } catch (IOException e) {
@@ -69,7 +69,7 @@ public class CIMOffLattice {
 
         for(int i = 0; i < M; i++) {
             for (int j = 0; j < M; j++) {
-                squares[i][j].get_invertedL(squares, false);
+                squares[i][j].get_invertedL(squares, true);
             }
         }
 

@@ -1,12 +1,36 @@
 import matplotlib.pyplot as plt
-from matplotlib.widgets import Slider
+import os
+from PIL import Image
 
-file_name = "./dynamic_CIM_input.txt"
+def plot_particle_interactions(particles, M, L,file_name):
+    # Create a figure and axis
+    fig, ax = plt.subplots()
+    stripped_name = file_name.replace('.txt', '')
+    # Draw grid
+    for i in range(M + 1):
+        ax.axhline(i * (L / M), color='gray', linewidth=0.5)
+        ax.axvline(i * (L / M), color='gray', linewidth=0.5)
+
+    x_coords = [p[0] for p in particles]
+    y_coords = [p[1] for p in particles]
+    
+    plt.scatter(x_coords, y_coords, color='blue')
+
+    # Customize the plot
+    plt.xlim(0, L)
+    plt.ylim(0, L)
+    plt.title("Particles and Neighbors")
+    plt.xlabel("X")
+    plt.ylabel("Y")
+    plt.gca().set_aspect('equal', adjustable='box')
+    plt.savefig(f'./TP2/graphs/{stripped_name}.png')
+    plt.close()
+
+file_name = "./TP2/dynamic_CIM_input.txt"
 
 radius = 0.25
 particles = []
-vecinas = []
-
+times = []
 with open(file_name,'r') as file:
     file.readline()
     lines = file.readlines()
@@ -18,66 +42,44 @@ with open(file_name,'r') as file:
         part = [x,y,id]
         id += 1
         particles.append(part)
-
 file.close()
 
-with open("./vecinas.txt",'r') as file:
-    lines = file.readlines()
+plot_particle_interactions(particles, 10, 10, "particles_time_0.txt")
 
-    for l in lines:
-        vec = l.split(":")
-        vec_num = []
-        aux = vec[1].split()
-        for v in aux:
-            vec_num.append(int(v))
-        vecinas.append((int(vec[0]),vec_num))
-file.close()
+directory_path = './TP2/times'
+file_names = os.listdir(directory_path)
 
-def plot_particle_interactions(particle_data, interactions, target_id, ir, M, L):
-    # Create a figure and axis
-    fig, ax = plt.subplots()
+for file_name in file_names:
+    with open("./TP2/times/"+file_name,'r') as file:
+        particles = []
+        lines = file.readlines()
+        id = 1
+        t = 0
+        for l in lines:
+            pos = l.split(":")
+            x = float(pos[1])
+            y = float(pos[2])
+            part = [x,y]
+            particles.append(part)
+        times.append(particles)
+        t+= 1;
+        file.close()
 
-    # Draw grid
-    for i in range(M + 1):
-        ax.axhline(i * (L / M), color='gray', linewidth=0.5)
-        ax.axvline(i * (L / M), color='gray', linewidth=0.5)
+# for i in range(len(times)):
+#     plot_particle_interactions(times[i], 10, 10, file_names[i])
 
-    aux_vec = []
-    for v in interactions:
-        if v[0] == target_id:
-            aux_vec = v[1]
-            print(aux_vec)
 
-    for p in range(len(particle_data)):
-        if(p == target_id-1):
-            circle = plt.Circle((particle_data[p][0], particle_data[p][1]), radius, color='green', fill=True)
-            # interaction_circle = plt.Circle((particle_data[p][0], particle_data[p][1]), ir, color='blue', alpha=0.5, fill=True)
-            # ax.add_patch(interaction_circle)
-        elif p+1 in aux_vec:
-            circle = plt.Circle((particle_data[p][0], particle_data[p][1]), radius, color='red', fill=True)
-        else:
-            circle = plt.Circle((particle_data[p][0], particle_data[p][1]), radius, color='gray', fill=True)
-        ax.add_patch(circle)
-        ax.text(particle_data[p][0], particle_data[p][1], str(p+1), color='black', ha='center', va='center', fontsize=10)
 
-    # Customize the plot
-    plt.xlim(0, L)
-    plt.ylim(0, L)
-    plt.title("Particles and Neighbors")
-    plt.xlabel("X")
-    plt.ylabel("Y")
-    plt.gca().set_aspect('equal', adjustable='box')
+frames = []
+for i in range(252):
+    frames.append(f"./TP2/graphs/particles_time_{i}.png")
+images = [Image.open(frame) for frame in frames]
 
-    # Show the plot
-    plt.show()
-
-# ID de la partícula objetivo
-ir = 5
-M = 10
-target_id = 85
-
-# Llamar a la función para graficar
-plot_particle_interactions(particles, vecinas, target_id, ir, M, 20)
-# print("Original:",target_id, ":", particles[target_id-1])
-# for v in vecinas[target_id-1]:
-#     print("Vecina:",v, ":", particles[v-1])
+images[0].save(
+    'output.gif',
+    save_all=True,
+    append_images=images[1:],
+    duration=200,  # 200ms per frame
+    loop=0,
+    optimize=True  # Optional: reduces the file size
+)
