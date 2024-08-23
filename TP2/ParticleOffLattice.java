@@ -84,11 +84,13 @@ public class ParticleOffLattice {
     }
 
     private float getThetaAvg(){
-        float sum = 0;
+        float sumcos = (float) Math.cos(this.theta);
+        float sumsin = (float) Math.sin(this.theta);
         for (ParticleOffLattice p : vecinas) {
-            sum += p.getOldTheta();
+            sumcos += (float) Math.cos(p.getOldTheta());
+            sumsin += (float) Math.sin(p.getOldTheta());
         }
-        return sum/(vecinas.size()+1);
+        return (float) (Math.atan2(sumsin,sumcos));
     }
 
     public void updateTheta(){

@@ -65,8 +65,8 @@ for file_name in file_names:
         t+= 1;
         file.close()
 
-# for i in range(len(times)):
-#     plot_particle_interactions(times[i], 10, 10, file_names[i])
+for i in range(len(times)):
+    plot_particle_interactions(times[i], 10, 20, file_names[i])
 
 
 
