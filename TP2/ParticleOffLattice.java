@@ -81,7 +81,7 @@ public class ParticleOffLattice {
 
     public ArrayList<ParticleOffLattice> getVecinas() {
         return vecinas;
-    }`
+    }
 
     private float getThetaAvg(){
         float sum = 0;
