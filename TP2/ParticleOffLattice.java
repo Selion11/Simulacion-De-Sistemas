@@ -106,10 +106,16 @@ public class ParticleOffLattice {
 
     public void updateX(){
         this.x += (float) (Math.cos(theta) * speed);
+        if (this.x >= 20){
+            this.x -=20;
+        }
     }
 
     public void updateY(){
         this.y += (float) (Math.sin(theta) * speed);
+        if (this.y >= 20){
+            this.y -=20;
+        }
     }
 
     @Override
