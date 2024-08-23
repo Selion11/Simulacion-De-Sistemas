@@ -2,7 +2,6 @@ import random
 N = 100
 L = 20
 M = 10
-r = 0.25
 rc = 5
 
 static_file = open("static_CIM_input.txt", "w")
@@ -15,7 +14,8 @@ for i in range(N):
     static_file.write(str(rc) + "\n")
     x = random.uniform(0,L)
     y = random.uniform(0,L)
-    dynamic_file.write(str(x) + " " + str(y) + " " + "\n")
+    theta = random.uniform(0,2)
+    dynamic_file.write(str(x) + " " + str(y) + " " + str(theta) + " "+ "\n")
 
 static_file.close()
 dynamic_file.close()

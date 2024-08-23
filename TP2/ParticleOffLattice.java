@@ -15,7 +15,6 @@ public class ParticleOffLattice {
     private float min;
     private float max;
 
-    //private Velocity actualV, nextV;
     private ArrayList<ParticleOffLattice> vecinas = new ArrayList<>();
     private Square square;
 
@@ -82,23 +81,7 @@ public class ParticleOffLattice {
 
     public ArrayList<ParticleOffLattice> getVecinas() {
         return vecinas;
-    }
-
-//    private float getSinAvg() {
-//        float sum = 0;
-//        for (ParticleOffLattice p : vecinas) {
-//            sum += (float) Math.sin(p.getTheta());
-//        }
-//        return sum/vecinas.size();
-//    }
-//
-//    private float getCosAvg() {
-//        float sum = 0;
-//        for (ParticleOffLattice p : vecinas) {
-//            sum += (float) Math.cos(p.getTheta());
-//        }
-//        return sum/vecinas.size();
-//    }
+    }`
 
     private float getThetaAvg(){
         float sum = 0;
