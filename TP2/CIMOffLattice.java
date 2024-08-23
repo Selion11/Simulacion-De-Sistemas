@@ -1,5 +1,7 @@
 package TP2;
 
+import TP1.Particle;
+
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -14,31 +16,51 @@ public class CIMOffLattice {
 
     public static void main(String[] args) throws IOException {
         CIMOffLattice cim = new CIMOffLattice();
-        HashMap<ParticleOffLattice,ArrayList<ParticleOffLattice>> rta = cim.CIM(false);
-        AtomicInteger cantVecinas = new AtomicInteger();
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("TP1/vecinas.txt"))) {
-            rta.forEach((k, v) -> {
-                try {
-                    writer.write(k.toString());
-                    writer.write(":");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                for (ParticleOffLattice p : v) {
-                    try {
-                        writer.write(p.toString());
-                        writer.write(" ");
-                    } catch (IOException e) {
-                        e.printStackTrace();
+        cim.CIM();
+        int times = 10;
+        int M = 10;
+        while(times >= 0){
+            for(int i = 0; i < M; i++){
+                for(int j = 0; j < M; j++){
+                    cim.updates(cim.squares[i][j].getParticles());
+                    for(ParticleOffLattice p : cim.squares[i][j].getParticles()){
+                        try (BufferedWriter writer = new BufferedWriter(new FileWriter("TP2/times/particles_time_" + (11-times)+".txt"))) {
+                                try {
+                                    writer.write(p.toString());
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
                     }
                 }
-                try {
-                    writer.newLine();  // Add a newline after writing all particles in v
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            });
+            }
+            times -= 1;
         }
+//        HashMap<ParticleOffLattice,ArrayList<ParticleOffLattice>> rta = cim.CIM(false);
+//        AtomicInteger cantVecinas = new AtomicInteger();
+//        try (BufferedWriter writer = new BufferedWriter(new FileWriter("TP1/vecinas.txt"))) {
+//            rta.forEach((k, v) -> {
+//                try {
+//                    writer.write(k.toString());
+//                    writer.write(":");
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//                for (ParticleOffLattice p : v) {
+//                    try {
+//                        writer.write(p.toString());
+//                        writer.write(" ");
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//                try {
+//                    writer.newLine();  // Add a newline after writing all particles in v
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            });
+//        }
 //            rta.forEach((k,v) -> {
 //            System.out.println("Particle: " + k.getId() + " X:" + k.getX() + " Y:"+k.getY() );
 //                for (Particle p : v) {
@@ -50,10 +72,10 @@ public class CIMOffLattice {
 //            System.out.println("---------------");
 //        });
 //        System.out.println("Cantidad de vecinas: "+ cantVecinas);
+
     }
 
-    private HashMap<ParticleOffLattice,ArrayList<ParticleOffLattice>> CIM(boolean with_reflection) throws IOException {
-        this.with_reflection = with_reflection;
+    private void CIM() throws IOException {
         FileProcessOffLatice fileProcessor = new FileProcessOffLatice();
         int L = 20;
         ArrayList<ParticleOffLattice> particles;
@@ -75,18 +97,38 @@ public class CIMOffLattice {
 
         for(int i = 0; i < M; i++) {
             for (int j = 0; j < M; j++) {
-                squares[i][j].get_invertedL(squares, with_reflection);
+                squares[i][j].get_invertedL(squares, false);
             }
         }
 
-        HashMap<ParticleOffLattice,ArrayList<ParticleOffLattice>> vecinas = new HashMap<>();
-        for(ParticleOffLattice p : particles) {
-            p.checkVecinas();
-            vecinas.put(p,p.getVecinas());
-        }
+
+//        HashMap<ParticleOffLattice,ArrayList<ParticleOffLattice>> vecinas = new HashMap<>();
+//        for(ParticleOffLattice p : particles) {
+//            p.checkVecinas();
+////            vecinas.put(p,p.getVecinas());
+//        }
 
         System.out.println("Check Finished");
-        return vecinas;
+//
+//        for(ParticleOffLattice p : particles) {
+//            p.updateX();
+//            p.updateY();
+//            p.updateTheta();
+//        }
+        return;
+    }
+
+    public void updates(ArrayList<ParticleOffLattice> particles) {
+
+        for(ParticleOffLattice p : particles) {
+            p.checkVecinas();
+        }
+        for(ParticleOffLattice p : particles) {
+            p.updateX();
+            p.updateY();
+            p.updateTheta();
+        }
+
     }
 
     private void calculations(int L, int M){

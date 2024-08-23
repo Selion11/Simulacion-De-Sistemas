@@ -3,23 +3,32 @@ package TP2;
 
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.Random;
 
 
 public class ParticleOffLattice {
     private Integer id;
     private float x,y,rc;
+    private double speed;
+    private float theta;
+    private float oldTheta;
+    private float min;
+    private float max;
 
-    private Velocity actualV, nextV;
+    //private Velocity actualV, nextV;
     private ArrayList<ParticleOffLattice> vecinas = new ArrayList<>();
     private Square square;
 
-    public ParticleOffLattice(int id, float x, float y, float vx, float vy, float rc) {
+    public ParticleOffLattice(int id, float x, float y, float theta, float rc,int mu) {
         this.id = id;
         this.x = x;
         this.y = y;
-        this.actualV = new Velocity(vx, vy);
-        this.nextV = new Velocity(0,0);
+        this.speed = 0.03;
         this.rc = rc;
+        this.theta = theta;
+        this.min = (float) (-mu/2);
+        this.max = (float) (mu/2);
+        this.oldTheta = theta;
     }
 
     public void set_square(Square s) {
@@ -65,34 +74,7 @@ public class ParticleOffLattice {
     }
 
 
-
-    public void setX(float x) {
-        this.x = x;
-    }
-
-    public void setY(float y) {
-        this.y = y;
-    }
-
-    public Velocity getActualV() {
-        return actualV;
-    }
-
-    public Velocity getNextV() {
-        return nextV;
-    }
-
-    public void setNextV(Velocity v) {
-        this.nextV = v;
-    }
-
-    public void updateVel() {
-        this.actualV = this.nextV;
-    }
-
-    public double getTheta() {
-        return Math.atan(actualV.getVy()/actualV.getVx());
-    }
+    public float getOldTheta() { return this.oldTheta; }
 
     public float getRC() {
         return rc;
@@ -102,24 +84,49 @@ public class ParticleOffLattice {
         return vecinas;
     }
 
-    private float getSinAvg() {
+//    private float getSinAvg() {
+//        float sum = 0;
+//        for (ParticleOffLattice p : vecinas) {
+//            sum += (float) Math.sin(p.getTheta());
+//        }
+//        return sum/vecinas.size();
+//    }
+//
+//    private float getCosAvg() {
+//        float sum = 0;
+//        for (ParticleOffLattice p : vecinas) {
+//            sum += (float) Math.cos(p.getTheta());
+//        }
+//        return sum/vecinas.size();
+//    }
+
+    private float getThetaAvg(){
         float sum = 0;
         for (ParticleOffLattice p : vecinas) {
-            sum += (float) Math.sin(p.getTheta());
+            sum += p.getOldTheta();
         }
-        return sum/vecinas.size();
+        return sum/(vecinas.size()+1);
     }
 
-    private float getCosAvg() {
-        float sum = 0;
-        for (ParticleOffLattice p : vecinas) {
-            sum += (float) Math.cos(p.getTheta());
+    public void updateTheta(){
+        this.oldTheta = theta;
+        float aux = getThetaAvg();
+        Random rand = new Random();
+        float randomFloat = (float) (min + rand.nextFloat() * (max - min));
+        aux += randomFloat;
+        if(aux > 2){
+            this.theta = aux - 2;
+        }else{
+            this.theta = aux;
         }
-        return sum/vecinas.size();
     }
 
-    public double getThetaAvg() {
-        return Math.atan(getSinAvg()/getCosAvg());
+    public void updateX(){
+        this.x += (float) (Math.cos(theta) * speed);
+    }
+
+    public void updateY(){
+        this.y += (float) (Math.sin(theta) * speed);
     }
 
     @Override
@@ -145,7 +152,7 @@ public class ParticleOffLattice {
 
     @Override
     public String toString() {
-        return id.toString();
+        return String.format(id +":" + x + ":" + y + ":" + theta + ":" + rc );
     }
 
     public int getId() {
