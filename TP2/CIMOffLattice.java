@@ -3,6 +3,7 @@ package TP2;
 import TP1.Particle;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -12,27 +13,37 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class CIMOffLattice {
     private Square[][] squares = null;
-    private boolean with_reflection;
 
     public static void main(String[] args) throws IOException {
         CIMOffLattice cim = new CIMOffLattice();
         cim.CIM();
         int times = 10;
         int M = 10;
+        File myFile;
         while(times >= 0){
+            myFile = new File("TP2/times/particles_time_" + (11-times)+".txt");
+            try{
+                myFile.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(myFile))) {
             for(int i = 0; i < M; i++){
                 for(int j = 0; j < M; j++){
                     cim.updates(cim.squares[i][j].getParticles());
                     for(ParticleOffLattice p : cim.squares[i][j].getParticles()){
-                        try (BufferedWriter writer = new BufferedWriter(new FileWriter("TP2/times/particles_time_" + (11-times)+".txt"))) {
-                                try {
-                                    writer.write(p.toString());
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-                            }
+                        try {
+                            writer.write(p.toString());
+                            writer.newLine();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
+
                 }
+            }
+            }catch (IOException e) {
+                e.printStackTrace();
             }
             times -= 1;
         }

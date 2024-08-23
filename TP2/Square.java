@@ -165,13 +165,15 @@ public class Square {
         invertedL.add(squares[i-1][j]);
         invertedL.add(squares[i][j+1]);
         invertedL.add(squares[i-1][j+1]);
-        if(i == m-1 && with_reflection) {
-            // cuadrados virtuales
-            auxSquare = new Square(squares[0][j+1].getId(),squares[0][j+1].getX_start(),squares[0][j+1].getX_stop(),
-            squares[0][j+1].getY_start()-l,squares[0][j+1].getY_stop()-l,
-            i,j,m,l);
-            auxSquare.setVirtualParticles(squares[0][j+1].getParticles(),squareType.BOTTOM_BORDER);
-            invertedL.add(auxSquare);
+        if(i == m-1 ) {
+            if(with_reflection) {
+                // cuadrados virtuales
+                auxSquare = new Square(squares[0][j + 1].getId(), squares[0][j + 1].getX_start(), squares[0][j + 1].getX_stop(),
+                        squares[0][j + 1].getY_start() - l, squares[0][j + 1].getY_stop() - l,
+                        i, j, m, l);
+                auxSquare.setVirtualParticles(squares[0][j + 1].getParticles(), squareType.BOTTOM_BORDER);
+                invertedL.add(auxSquare);
+            }
         }else{
             invertedL.add(squares[i+1][j+1]);
         }
