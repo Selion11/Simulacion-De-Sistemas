@@ -49,9 +49,10 @@ public class CIMOffLattice {
 
     private void CIM() throws IOException {
         FileProcessOffLatice fileProcessor = new FileProcessOffLatice();
-        int L = 20;
         ArrayList<ParticleOffLattice> particles;
         particles = fileProcessor.readFile("TP2/dynamic_CIM_input.txt", "TP2/static_CIM_input.txt", 5F);
+
+        int L = 20;
         int M = 10;
         calculations(L,M);
 

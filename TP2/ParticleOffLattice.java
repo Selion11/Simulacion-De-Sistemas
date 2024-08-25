@@ -106,17 +106,18 @@ public class ParticleOffLattice {
         }
     }
 
+    // TODO: Poner en funcion de L
     public void updateX(){
         this.x += (float) (Math.cos(theta) * speed);
-        if (this.x >= 20){
-            this.x -=20;
+        if (this.x >= square.getL()){
+            this.x -= square.getL();
         }
     }
 
     public void updateY(){
         this.y += (float) (Math.sin(theta) * speed);
-        if (this.y >= 20){
-            this.y -=20;
+        if (this.y >= square.getL()){
+            this.y -= square.getL();
         }
     }
 

@@ -221,4 +221,8 @@ public class Square {
         }
         return stringBuilder.toString();
     }
+
+    public float getL() {
+        return l;
+    }
 }
