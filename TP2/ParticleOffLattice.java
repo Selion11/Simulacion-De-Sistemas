@@ -97,7 +97,7 @@ public class ParticleOffLattice {
         this.oldTheta = theta;
         float aux = getThetaAvg();
         Random rand = new Random();
-        float randomFloat = (float) (min + rand.nextFloat() * (max - min));
+        float randomFloat = min + rand.nextFloat() * (max - min);
         aux += randomFloat;
         if(aux > 2){
             this.theta = aux - 2;
