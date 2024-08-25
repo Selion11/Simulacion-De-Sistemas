@@ -10,12 +10,13 @@ import java.util.ArrayList;
 
 public class CIMOffLattice {
     private Square[][] squares = null;
+    private int L = 20;
+    private int M = 10;
 
     public static void main(String[] args) throws IOException {
         CIMOffLattice cim = new CIMOffLattice();
-        cim.CIM();
+        ArrayList<ParticleOffLattice> particles = cim.CIM();
         int times = 250;
-        int M = 10;
         File myFile;
         while(times >= 0){
             myFile = new File("TP2/times/particles_time_" + (251-times)+".txt");
@@ -25,20 +26,15 @@ public class CIMOffLattice {
                 e.printStackTrace();
             }
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(myFile))) {
-            for(int i = 0; i < M; i++){
-                for(int j = 0; j < M; j++){
-                    cim.updates(cim.squares[i][j].getParticles());
-                    for(ParticleOffLattice p : cim.squares[i][j].getParticles()){
-                        try {
-                            writer.write(p.toString());
-                            writer.newLine();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                for(ParticleOffLattice p : particles){
+                    try {
+                        writer.write(p.toString());
+                        writer.newLine();
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-
                 }
-            }
+                cim.updates(particles);
             }catch (IOException e) {
                 e.printStackTrace();
             }
@@ -47,15 +43,35 @@ public class CIMOffLattice {
 
     }
 
-    private void CIM() throws IOException {
+    private ArrayList<ParticleOffLattice> CIM() throws IOException {
         FileProcessOffLatice fileProcessor = new FileProcessOffLatice();
         ArrayList<ParticleOffLattice> particles;
         particles = fileProcessor.readFile("TP2/dynamic_CIM_input.txt", "TP2/static_CIM_input.txt", 5F);
 
-        int L = 20;
-        int M = 10;
+
         calculations(L,M);
 
+        regenerateSquares(particles);
+
+        System.out.println("Check Finished");
+        return particles;
+    }
+
+    public void updates(ArrayList<ParticleOffLattice> particles) {
+
+        for(ParticleOffLattice p : particles) {
+            p.checkVecinas();
+        }
+        for(ParticleOffLattice p : particles) {
+            p.updateX();
+            p.updateY();
+            p.updateTheta();
+        }
+
+        regenerateSquares(particles);
+    }
+
+    private void regenerateSquares(ArrayList<ParticleOffLattice> particles){
         for(ParticleOffLattice p : particles) {
             for (int i = 0; i < M; i++) {
                 for (int j = 0; j < M; j++) {
@@ -73,21 +89,6 @@ public class CIMOffLattice {
                 squares[i][j].get_invertedL(squares, true);
             }
         }
-
-        System.out.println("Check Finished");
-    }
-
-    public void updates(ArrayList<ParticleOffLattice> particles) {
-
-        for(ParticleOffLattice p : particles) {
-            p.checkVecinas();
-        }
-        for(ParticleOffLattice p : particles) {
-            p.updateX();
-            p.updateY();
-            p.updateTheta();
-        }
-
     }
 
     private void calculations(int L, int M){
