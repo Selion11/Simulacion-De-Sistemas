@@ -1,7 +1,5 @@
 import matplotlib.pyplot as plt
 
-file_names = ['Va_values_100.txt', 'Va_values_200.txt', 'Va_values_300.txt', 'Va_values_400.txt', 'Va_values_500.txt']
-
 # Leer los valores de Va desde el archivo
 va_values = []
 with open('TP2/Va_values_100.txt', 'r') as file:
