@@ -30,38 +30,27 @@ def plot_particle_interactions(particles, M, L,file_name):
     plt.xlabel("X")
     plt.ylabel("Y")
     plt.gca().set_aspect('equal', adjustable='box')
-    plt.savefig(f'./graphs/{stripped_name}.png')
-    plt.close()
+    #plt.savefig('./TP2/graphs/eta1/Density_100/'+stripped_name+'.png')
+    #plt.close()
+    plt.savefig("simulation.png")
+    plt.show()
 
-file_name = "./dynamic_CIM_input.txt"
 
 radius = 0.25
 particles = []
 times = []
-with open(file_name,'r') as file:
-    file.readline()
-    lines = file.readlines()
-    id = 1
-    for l in lines:
-        pos = l.split()
-        x = float(pos[0])
-        y = float(pos[1])
-        part = [x,y,id]
-        id += 1
-        particles.append(part)
-file.close()
+
 
 # plot_particle_interactions(particles, 10, 10, "particles_time_0.txt")
 
-directory_path = './times'
+directory_path = './TP2/times/eta1/Density_100'
 file_names = os.listdir(directory_path)
 
+
 for file_name in file_names:
-    with open("./times/"+file_name,'r') as file:
+    with open("./TP2/times/eta1/Density_100/"+file_name,'r') as file:
         particles = []
         lines = file.readlines()
-        id = 1
-        t = 0
         for l in lines:
             pos = l.split(":")
             x = float(pos[1])
@@ -71,24 +60,23 @@ for file_name in file_names:
             part = [x,y,theta]
             particles.append(part)
         times.append(particles)
-        t+= 1
         file.close()
 
 for i in range(len(times)):
-    plot_particle_interactions(times[i], 10, 20, file_names[i])
+    plot_particle_interactions(times[i], 100, 20, file_names[i])
 
 
 
-frames = []
-for i in range(1,252):
-    frames.append(f"./graphs/particles_time_{i}.png")
-images = [Image.open(frame) for frame in frames]
+# frames = []
+# for i in range(1,252):
+#     frames.append(f"./graphs/eta1/Density_100/particles_time_{i}.png")
+# images = [Image.open(frame) for frame in frames]
 
-images[0].save(
-    'output.gif',
-    save_all=True,
-    append_images=images[1:],
-    duration=200,  # 200ms per frame
-    loop=0,
-    optimize=True  # Optional: reduces the file size
-)
+# images[0].save(
+#     'output.gif',
+#     save_all=True,
+#     append_images=images[1:],
+#     duration=200,  # 200ms per frame
+#     loop=0,
+#     optimize=True  # Optional: reduces the file size
+# )
