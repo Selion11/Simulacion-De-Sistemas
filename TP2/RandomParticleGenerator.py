@@ -1,5 +1,5 @@
 import random
-N = 100
+N = 400
 L = 20
 M = 10
 rc = 5

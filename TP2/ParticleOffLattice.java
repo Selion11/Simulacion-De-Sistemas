@@ -18,7 +18,7 @@ public class ParticleOffLattice {
     private ArrayList<ParticleOffLattice> vecinas = new ArrayList<>();
     private Square square;
 
-    public ParticleOffLattice(int id, float x, float y, float theta, float rc,int mu) {
+    public ParticleOffLattice(int id, float x, float y, float theta, float rc,float mu) {
         this.id = id;
         this.x = x;
         this.y = y;

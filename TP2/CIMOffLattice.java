@@ -12,7 +12,7 @@ public class CIMOffLattice {
     private static Square[][] squares = null;
     private int L = 20;
     private static int M = 10;
-    private static int N = 100;
+    private static int N = 400;
 
 
     public static void main(String[] args) throws IOException {
@@ -22,9 +22,11 @@ public class CIMOffLattice {
         float Va_values[] = new float[times];
         float cos_theta_sum = 0, sin_theta_sum = 0;
 
+        String density = "400";
+
         File myFile;
         while(times > 0){
-            myFile = new File("TP2/times/particles_time_" + (251-times)+".txt");
+            myFile = new File("TP2/times/eta2/particles_time_" + (251-times)+".txt");
             try{
                 myFile.createNewFile();
             } catch (IOException e) {
@@ -50,7 +52,7 @@ public class CIMOffLattice {
             sin_theta_sum = 0;
             times -= 1;
         }
-        File Va_values_file = new File("TP2/Va_values.txt");
+        File Va_values_file = new File("TP2/times/eta2/Va_values_" + density +".txt");
         try{
             Va_values_file.createNewFile();
         } catch (IOException e) {

@@ -43,7 +43,7 @@ public class FileProcessOffLatice {
             aux = Float.parseFloat(tokens[2]);
             aux2 = String.format("%.2f", aux);
             float theta = Float.parseFloat(aux2);
-            int mu = 1;
+            float mu = 0.1F;
 
             ParticleOffLattice part = new ParticleOffLattice(particleId, x,y,theta,rc,mu); //TODO: VER BIEN ESTO
             particleId++;
