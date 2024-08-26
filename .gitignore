@@ -2,3 +2,5 @@
 /.idea
 /out
 /TP2/graphs/*
+/dynamic_CIM_input.txt
+/static_CIM_input.txt
