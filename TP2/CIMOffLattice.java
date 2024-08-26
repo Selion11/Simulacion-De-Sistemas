@@ -12,7 +12,7 @@ public class CIMOffLattice {
     private static Square[][] squares = null;
     private int L = 20;
     private static int M = 10;
-    private static int N = 300;
+    private static int N = 400;
 
 
     public static void main(String[] args) throws IOException {
@@ -22,7 +22,7 @@ public class CIMOffLattice {
         float Va_values[] = new float[times];
         float cos_theta_sum = 0, sin_theta_sum = 0;
 
-        String density = "300";
+        String density = "400";
 
         File myFile;
         while(times > 0){
