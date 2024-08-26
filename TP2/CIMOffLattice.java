@@ -22,11 +22,11 @@ public class CIMOffLattice {
         float Va_values[] = new float[times];
         float cos_theta_sum = 0, sin_theta_sum = 0;
 
-        String density = "100";
+        String density = "200";
 
         File myFile;
         while(times > 0){
-            myFile = new File("TP2/times/eta7/Desity_"+density+"/particles_time_" + (251-times)+".txt");
+            myFile = new File("TP2/times/eta5/Desity_"+density+"/particles_time_" + (251-times)+".txt");
             try{
                 myFile.createNewFile();
             } catch (IOException e) {
@@ -52,7 +52,7 @@ public class CIMOffLattice {
             sin_theta_sum = 0;
             times -= 1;
         }
-        File Va_values_file = new File("TP2/times/eta7/va/Va_values_" + density +".txt");
+        File Va_values_file = new File("TP2/times/eta5/va/Va_values_" + density +".txt");
         try{
             Va_values_file.createNewFile();
         } catch (IOException e) {

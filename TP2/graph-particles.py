@@ -26,15 +26,14 @@ def plot_particle_interactions(particles, M, L,file_name):
     # Customize the plot
     plt.xlim(0, L)
     plt.ylim(0, L)
-    plt.title("Particles and Neighbors")
+    #plt.title("Particles and Neighbors")
     plt.xlabel("X")
     plt.ylabel("Y")
     plt.gca().set_aspect('equal', adjustable='box')
     #plt.savefig('./TP2/graphs/eta1/Density_100/'+stripped_name+'.png')
     #plt.close()
     plt.savefig("simulation.png")
-    plt.show()
-
+    plt.close()
 
 radius = 0.25
 particles = []
