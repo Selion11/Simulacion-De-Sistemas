@@ -47,7 +47,6 @@ for N in Ns:
 
 plt.xlabel('η (ruido)')
 plt.ylabel('Promedio de Va')
-plt.title('Gráfico de Va vs η para diferentes densidades')
 plt.legend()
 plt.grid(True)
 plt.show()
