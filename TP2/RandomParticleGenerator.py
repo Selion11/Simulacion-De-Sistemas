@@ -1,4 +1,5 @@
 import random
+import math 
 N = 400
 L = 20
 M = 10
@@ -14,7 +15,7 @@ for i in range(N):
     static_file.write(str(rc) + "\n")
     x = random.uniform(0,L)
     y = random.uniform(0,L)
-    theta = random.uniform(0,2*(3.14159265359))
+    theta = random.uniform(0,2*(math.pi))
     dynamic_file.write(str(x) + " " + str(y) + " " + str(theta) + " " +"\n")
 
 static_file.close()
