@@ -1,18 +1,21 @@
 package TP3;
 
+import static java.lang.Math.cos;
+import static java.lang.Math.sin;
+
 public class Particle {
 
-    private float x, y, vx, vy, r, m;
+    private float x, y, vx, vy;
     private int id;
+    private double r;
 
-    public Particle(int id, float x, float y, float vx, float vy, float r, float m) {
+    public Particle(int id, float x, float y,float theta, double r) {
         this.x = x;
         this.y = y;
         this.id = id;
-        this.vx = vx;
-        this.vy = vy;
         this.r = r;
-        this.m = m;
+        this.vx = (float) cos(theta);
+        this.vy = (float) sin(theta);
     }
 
     public void move(float t) {
@@ -23,7 +26,6 @@ public class Particle {
     public int getId() {
         return id;
     }
-
 
     public float getX() {
         return x;
@@ -41,12 +43,8 @@ public class Particle {
         return vy;
     }
 
-    public float getR() {
+    public double getR() {
         return r;
-    }
-
-    public float getM() {
-        return m;
     }
 
     public void setVx(float x) {

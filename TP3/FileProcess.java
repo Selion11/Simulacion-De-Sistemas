@@ -1,7 +1,7 @@
 package TP3;
 
-import TP2.ParticleOffLattice;
 
+import TP3.Particle;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -9,7 +9,8 @@ import java.util.ArrayList;
 
 
 public class FileProcess {
-    public ArrayList<ParticleOffLattice> readFile(String dynamicFile, String staticFile, Float rc) throws IOException {
+    public ArrayList<Particle> readFile(String dynamicFile, String staticFile) throws IOException {
+        double r = 0.001;
         BufferedReader dynamicReader = new BufferedReader(new FileReader(dynamicFile));
         BufferedReader staticReader = new BufferedReader(new FileReader(staticFile));
         String staticLine;
@@ -21,7 +22,7 @@ public class FileProcess {
             java.lang.System.out.println(N);
         }
 
-        ArrayList<ParticleOffLattice> particles = new ArrayList<>();
+        ArrayList<Particle> particles = new ArrayList<>();
 
         dynamicReader.readLine();
         staticReader.readLine();
@@ -44,9 +45,8 @@ public class FileProcess {
             aux = Float.parseFloat(tokens[2]);
             aux2 = String.format("%.2f", aux);
             float theta = Float.parseFloat(aux2);
-            float mu = 0.7F;
 
-            ParticleOffLattice part = new ParticleOffLattice(particleId, x,y,theta,rc,mu); //TODO: VER BIEN ESTO
+            Particle part = new Particle(particleId, x,y,theta,r); //TODO: VER BIEN ESTO
             particleId++;
             particles.add(part);
         }

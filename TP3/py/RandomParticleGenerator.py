@@ -1,9 +1,8 @@
 import random
 import math 
-N = 400
+N = 200
 L = 20
 M = 10
-rc = 5
 
 static_file = open("static_CIM_input.txt", "w")
 static_file.write(str(N) + "\n")
