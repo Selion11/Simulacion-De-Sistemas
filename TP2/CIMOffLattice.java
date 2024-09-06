@@ -70,6 +70,8 @@ public class CIMOffLattice {
         }
     }
 
+
+
     private ArrayList<ParticleOffLattice> CIM() throws IOException {
         FileProcessOffLatice fileProcessor = new FileProcessOffLatice();
         ArrayList<ParticleOffLattice> particles;
