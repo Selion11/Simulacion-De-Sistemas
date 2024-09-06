@@ -9,13 +9,13 @@ public class Particle {
     private int id;
     private double r;
 
-    public Particle(int id, float x, float y,float theta, double r) {
+    public Particle(int id, float x, float y,float theta, double r,int v0) {
         this.x = x;
         this.y = y;
         this.id = id;
         this.r = r;
-        this.vx = (float) cos(theta);
-        this.vy = (float) sin(theta);
+        this.vx = (float) cos(theta) * v0;
+        this.vy = (float) sin(theta) * v0;
     }
 
     public void move(float t) {
