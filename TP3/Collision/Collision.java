@@ -13,7 +13,8 @@ public abstract class Collision implements Comparable<Collision> {
 
     public enum CollisionType {
         PARTICLE_PARTICLE,
-        PARTICLE_WALL
+        PARTICLE_WALL,
+        PARTICLE_OBSTACLE
     }
 
     public Collision(CollisionType type, float tc, float l) {
@@ -28,7 +29,16 @@ public abstract class Collision implements Comparable<Collision> {
 
     @Override
     public int compareTo(Collision o) {
-        return Float.compare(tc, o.getTc());
+        if (this.tc == -1 && o.getTc() >= 0) {
+            return 1;
+        }
+        if (o.getTc() == -1 && this.tc >= 0) {
+            return -1;
+        }
+        if (this.tc == -1 && o.getTc() == -1) {
+            return 0;
+        }
+        return Float.compare(this.tc, o.getTc());
     }
 
     public CollisionType getType() {
