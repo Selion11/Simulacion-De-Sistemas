@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class FileProcess {
     public ArrayList<Particle> readFile(String dynamicFile, String staticFile,int v0) throws IOException {
-        double r = 0.001;
+        float r = 0.001F;
         BufferedReader dynamicReader = new BufferedReader(new FileReader(dynamicFile));
         BufferedReader staticReader = new BufferedReader(new FileReader(staticFile));
         String staticLine;
@@ -27,7 +27,7 @@ public class FileProcess {
         dynamicReader.readLine();
         staticReader.readLine();
 
-        while (((dynamicLine = dynamicReader.readLine()) != null) &&((staticLine = staticReader.readLine()) != null)) {
+        while (((dynamicLine = dynamicReader.readLine()) != null)) {
             String[] tokens = dynamicLine.split(" ");
 
             float aux = Float.parseFloat(tokens[0]);
@@ -45,8 +45,9 @@ public class FileProcess {
             aux = Float.parseFloat(tokens[2]);
             aux2 = String.format("%.2f", aux);
             float theta = Float.parseFloat(aux2);
+            float m = 1F;
 
-            Particle part = new Particle(particleId, x,y,theta,r,v0); //TODO: VER BIEN ESTO
+            Particle part = new Particle(particleId, x,y,theta,r,v0,m); //TODO: VER BIEN ESTO
             particleId++;
             particles.add(part);
         }
