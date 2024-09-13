@@ -31,11 +31,10 @@ public class ParticleSystem {
             e.printStackTrace();
         }
 
-        while(times >0){
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(myFile))) {
+            while(times >0){
+                particleSystem.updateSystem();
 
-            particleSystem.updateSystem();
-
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(myFile))) {
                 for(Particle p : particles){
                     try {
                         writer.write(p.toString());
@@ -50,11 +49,11 @@ public class ParticleSystem {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            }catch (IOException e) {
-                e.printStackTrace();
-            }
 
-            times-=1;
+                times-=1;
+            }
+        }catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

@@ -51,7 +51,7 @@ public class CollisionUtils {
 
     public Collision getTcParticles(Particle p1, Particle p2) {
         if(getDeltaMultiplication(p1,p2) >= 0 || getD(p1,p2) < 0) {
-            return null;
+            return new ParticleWithParticleCollision(p1,p2,-1,l);
         }
         float tc = (float) ((-getDeltaMultiplication(p1,p2) - Math.sqrt(getD(p1,p2))) / getDeltaVSquared(p1,p2));
         return new ParticleWithParticleCollision(p1, p2, tc, l);

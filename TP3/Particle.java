@@ -58,5 +58,10 @@ public class Particle {
     public float getM() {
         return m;
     }
+
+    @Override
+    public String toString() {
+        return String.format(id +":" + x + ":" + y + ":" + m );
+    }
 }
 
