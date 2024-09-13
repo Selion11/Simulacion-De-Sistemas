@@ -28,15 +28,6 @@ public abstract class Collision implements Comparable<Collision> {
 
     @Override
     public int compareTo(Collision o) {
-        if (this.tc == -1 && o.getTc() >= 0) {
-            return 1;
-        }
-        if (o.getTc() == -1 && this.tc >= 0) {
-            return -1;
-        }
-        if (this.tc == -1 && o.getTc() == -1) {
-            return 0;
-        }
         return Float.compare(this.tc, o.getTc());
     }
 

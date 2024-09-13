@@ -61,7 +61,7 @@ public class Particle {
 
     @Override
     public String toString() {
-        return String.format(id +":" + x + ":" + y + ":" + m );
+        return String.format(id +":" + x + ":" + y );
     }
 }
 

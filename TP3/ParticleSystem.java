@@ -32,8 +32,7 @@ public class ParticleSystem {
         }
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(myFile))) {
-            while(times >0){
-                particleSystem.updateSystem();
+            while(times > 0){
 
                 for(Particle p : particles){
                     try {
@@ -49,6 +48,7 @@ public class ParticleSystem {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                particleSystem.updateSystem();
 
                 times-=1;
             }
@@ -71,22 +71,40 @@ public class ParticleSystem {
 
     public void updateSystem() {
         TreeSet<Collision> possibleCollisions = new TreeSet<>();
+        Collision auxWalls, auxObstacle, auxParticles;
 
-        for (Particle p : particles) {
-            possibleCollisions.add(collisionUtils.getTcWalls(p));
-            possibleCollisions.add(collisionUtils.getTcObstacle(p, obstacle));
-            for (Particle p2 : particles) {
+        for (Particle p : this.particles) {
+
+            auxWalls = collisionUtils.getTcWalls(p);
+            if (auxWalls != null){
+                possibleCollisions.add(auxWalls);
+            }
+
+            auxObstacle = collisionUtils.getTcObstacle(p, obstacle);
+            if (auxObstacle != null) {
+                possibleCollisions.add(auxObstacle);
+            }
+
+            for (Particle p2 : this.particles) {
                 if (!p.equals(p2)) {
-                    possibleCollisions.add(collisionUtils.getTcParticles(p, p2));
+                    auxParticles = collisionUtils.getTcParticles(p, p2);
+                    if (auxParticles != null){
+                        possibleCollisions.add(auxParticles);
+                    }
                 }
             }
         }
 
+
         Collision nextCollision = possibleCollisions.pollFirst();
-        assert nextCollision != null;
-        for(Particle p : particles) {
-                p.move(nextCollision.getTc());
+        float tc = nextCollision.getTc();
+
+        for(Particle p : this.particles) {
+
+            p.move(tc);
         }
+
+        System.out.println(nextCollision);
         nextCollision.collide();
     }
 

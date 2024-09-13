@@ -27,4 +27,8 @@ public class ParticleWithParticleCollision extends Collision {
         p2.setVy(p2.getVy() - Jy / p2.getM());
     }
 
+    @Override
+    public String toString() {
+        return String.format( "particle:" +p1.getId() + " with particle:" + p2.getId()+ "with tc:" + super.getTc());
+    }
 }

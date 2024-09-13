@@ -32,18 +32,18 @@ public class FileProcess {
 
             float aux = Float.parseFloat(tokens[0]);
 
-            String aux2 = String.format("%.2f", aux);
+            String aux2 = String.format("%.10f", aux);
 
             float x = Float.parseFloat(aux2);
 
             aux = Float.parseFloat(tokens[1]);
 
-            aux2 = String.format("%.2f", aux);
+            aux2 = String.format("%.10f", aux);
 
             float y = Float.parseFloat(aux2);
 
             aux = Float.parseFloat(tokens[2]);
-            aux2 = String.format("%.2f", aux);
+            aux2 = String.format("%.10f", aux);
             float theta = Float.parseFloat(aux2);
             float m = 1F;
 

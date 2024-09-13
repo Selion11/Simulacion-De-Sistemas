@@ -28,4 +28,9 @@ public class ParticleWithObstacleCollision extends Collision {
         particle.setVy(newVy);
     }
 
+    @Override
+    public String toString() {
+        return String.format( "particle:" + particle.getId() + " with obstacle" + "with tc:" + super.getTc());
+    }
+
 }

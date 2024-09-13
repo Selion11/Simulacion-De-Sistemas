@@ -51,8 +51,11 @@ public class CollisionUtils {
 
     public Collision getTcParticles(Particle p1, Particle p2) {
         if(getDeltaMultiplication(p1,p2) >= 0 || getD(p1,p2) < 0) {
-            return new ParticleWithParticleCollision(p1,p2,-1,l);
+            return null;
         }
+        float deltam =getDeltaMultiplication(p1,p2);
+        float d = (float) Math.sqrt(getD(p1,p2));
+        float vSquared =getDeltaVSquared(p1,p2);
         float tc = (float) ((-getDeltaMultiplication(p1,p2) - Math.sqrt(getD(p1,p2))) / getDeltaVSquared(p1,p2));
         return new ParticleWithParticleCollision(p1, p2, tc, l);
     }
@@ -62,23 +65,27 @@ public class CollisionUtils {
         WallType wallType = null;
         if(p.getVx() > 0) {
             tc = (l - p.getR() - p.getX()) / p.getVx();
-            wallType = WallType.HORIZONTAL;
+            wallType = WallType.VERTICAL;
         } else if(p.getVx() < 0) {
             tc = (p.getR() - p.getX()) / p.getVx();
-            wallType = WallType.HORIZONTAL;
+            wallType = WallType.VERTICAL;
         }
         if(p.getVy() > 0) {
             float aux = (l - p.getR() - p.getY()) / p.getVy();
             if(tc == -1 || aux < tc) {
                 tc = aux;
-                wallType = WallType.VERTICAL;
+                wallType = WallType.HORIZONTAL;
             }
         } else if(p.getVy() < 0) {
             if(tc == -1 || (p.getR() - p.getY()) / p.getVy() < tc) {
                 tc = (p.getR() - p.getY()) / p.getVy();
-                wallType = WallType.VERTICAL;
+                wallType = WallType.HORIZONTAL;
             }
         }
+        if (tc == -1){
+            return null;
+        }
+
         return new ParticleWithWallCollision(p, wallType, tc, l);
     }
 
@@ -123,7 +130,7 @@ public class CollisionUtils {
 
         // Si el discriminante es negativo, no hay colisión
         if (discriminant < 0) {
-            return new ParticleWithObstacleCollision(p, obstacle, -1, l);
+            return null;
         }
 
         // Calcular los tiempos de colisión
@@ -137,7 +144,7 @@ public class CollisionUtils {
             tc = Math.max(t1, t2);  // Si t1 es negativo, probamos con t2
         }
         if (tc < 0) {
-            return new ParticleWithObstacleCollision(p, obstacle, -1, l);  // No hay colisión con obstaculo
+            return null;  // No hay colisión con obstaculo
         }
 
         // Si llegamos aquí, significa que hay colisión con el obstáculo
