@@ -2,8 +2,6 @@ package TP3;
 
 import TP3.Collision.Collision;
 import TP3.Collision.CollisionUtils;
-import TP3.Collision.ParticleWithWallCollision;
-import TP3.py.Obstacle;
 
 import java.util.List;
 import java.util.TreeSet;
@@ -36,9 +34,7 @@ public class System {
         Collision nextCollision = possibleCollisions.pollFirst();
         assert nextCollision != null;
         for(Particle p : particles) {
-            if(!nextCollision.getParticlesInvolved().contains(p)) {
-                p.move(nextCollision.getTc());
-            }
+            p.move(nextCollision.getTc());
         }
         nextCollision.collide();
     }

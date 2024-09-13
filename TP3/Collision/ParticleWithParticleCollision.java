@@ -16,13 +16,6 @@ public class ParticleWithParticleCollision extends Collision {
         this.p2 = p2;
     }
 
-    @Override
-    public List<Particle> getParticlesInvolved() {
-        List<Particle> particles = new ArrayList<>();
-        particles.add(p1);
-        particles.add(p2);
-        return particles;
-    }
 
     @Override
     public void collide() {

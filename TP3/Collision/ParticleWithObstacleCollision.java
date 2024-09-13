@@ -1,7 +1,7 @@
 package TP3.Collision;
 
 import TP3.Particle;
-import TP3.py.Obstacle;
+import TP3.Obstacle;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,10 +28,4 @@ public class ParticleWithObstacleCollision extends Collision {
         particle.setVy(newVy);
     }
 
-    @Override
-    public List<Particle> getParticlesInvolved() {
-        List<Particle> particles = new ArrayList<>();
-        particles.add(particle);
-        return particles;
-    }
 }

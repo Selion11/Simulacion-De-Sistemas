@@ -2,7 +2,7 @@ package TP3.Collision;
 
 import TP3.Particle;
 import TP3.WallType;
-import TP3.py.Obstacle;
+import TP3.Obstacle;
 
 public class CollisionUtils {
 

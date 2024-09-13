@@ -16,13 +16,7 @@ public class ParticleWithWallCollision extends Collision {
         this.particle = particle;
         this.wall = wall;
     }
-
-    @Override
-    public List<Particle> getParticlesInvolved() {
-        List<Particle> particles = new ArrayList<>();
-        particles.add(particle);
-        return particles;
-    }
+    
 
     @Override
     public void collide() {
