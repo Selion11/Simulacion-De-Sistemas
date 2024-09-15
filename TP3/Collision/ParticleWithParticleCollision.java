@@ -28,6 +28,14 @@ public class ParticleWithParticleCollision extends Collision {
     }
 
     @Override
+    public List<Particle> particlesInvolved() {
+        List<Particle> involved = new ArrayList<>();
+        involved.add(p1);
+        involved.add(p2);
+        return involved;
+    }
+
+    @Override
     public String toString() {
         return String.format( "particle:" +p1.getId() + " with particle:" + p2.getId()+ "with tc:" + super.getTc());
     }

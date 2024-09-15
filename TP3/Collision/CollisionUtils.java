@@ -102,7 +102,9 @@ public class CollisionUtils {
     }
 
     public float getAlpha(Particle p1, Obstacle obstacle) {
-        return (float) Math.asin(Math.abs(p1.getY() - obstacle.getY()) / (obstacle.getR()+p1.getR()));
+        float dx = p1.getX() - obstacle.getX();
+        float dy = p1.getY() - obstacle.getY();
+        return (float) Math.atan2(dy,dx);
     }
 
     public Collision getTcObstacle(Particle p, Obstacle obstacle) {

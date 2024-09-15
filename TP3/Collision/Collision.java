@@ -25,6 +25,8 @@ public abstract class Collision implements Comparable<Collision> {
 
     public abstract void collide();
 
+    public abstract List<Particle> particlesInvolved();
+
 
     @Override
     public int compareTo(Collision o) {

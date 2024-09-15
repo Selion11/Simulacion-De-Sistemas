@@ -26,6 +26,13 @@ public class ParticleWithWallCollision extends Collision {
             particle.setVx(-particle.getVx());
         }
     }
+
+    @Override
+    public List<Particle> particlesInvolved() {
+        List<Particle> involved = new ArrayList<>();
+        involved.add(particle);
+        return involved;
+    }
     @Override
     public String toString() {
         return String.format( "particle:" +particle.getId() + " with wall:" + wall+ "with tc:" + super.getTc());

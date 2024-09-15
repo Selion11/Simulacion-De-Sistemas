@@ -19,13 +19,32 @@ public class ParticleWithObstacleCollision extends Collision {
 
     @Override
     public void collide() {
-        float alpha = collisionUtils.getAlpha(particle, obstacle);
-        float Vn = particle.getVx() * (float) Math.cos(alpha) + particle.getVy() * (float) Math.sin(alpha);
-        float Vt = particle.getVx() * (float) Math.sin(alpha) - particle.getVy() * (float) Math.cos(alpha);
-        float newVx = (float) ((-Vn) * Math.cos(alpha) - Vt * Math.sin(alpha));
-        float newVy = (float) ((-Vn) * Math.sin(alpha) + Vt * Math.cos(alpha));
-        particle.setVx(newVx);
-        particle.setVy(newVy);
+
+        float dist = particle.getR() + obstacle.getR();
+
+        float nx = (particle.getX()- obstacle.getX())/dist;
+        float ny = (particle.getY()- obstacle.getY())/dist;
+
+        float tx = -ny;
+        float ty = nx;
+
+        float vn = particle.getVx()*nx + particle.getVy()*ny;
+        float vt = particle.getVx()*tx + particle.getVy()*ty;
+
+        float vn_after = -vn;
+
+        float vfx = vn_after*nx +vt*tx;
+        float vfy = vn_after*ny + vt*ty;
+
+        particle.setVx(vfx);
+        particle.setVy(vfy);
+    }
+
+    @Override
+    public List<Particle> particlesInvolved() {
+        List<Particle> involved = new ArrayList<>();
+        involved.add(particle);
+        return involved;
     }
 
     @Override
