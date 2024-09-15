@@ -18,7 +18,13 @@ public class ParticleSystem {
         particles = fileProcessor.readFile("TP3/dynamic_input.txt", "TP3/static_input.txt", 1);
 
         float l = 0.1F;
-        Obstacle obstacle = new Obstacle(l/2,l/2,0.005F);
+
+        // Para correr como obstaculo fijo
+//        Obstacle obstacle = new Obstacle(l/2,l/2,0.005F);
+//        ParticleSystem particleSystem =  new ParticleSystem(particles, obstacle,l);
+
+        // Para correr como particula mas grande
+        Particle obstacle = new Particle(100000, l/2,l/2,0,0.005F,0,3F );
         ParticleSystem particleSystem =  new ParticleSystem(particles, obstacle,l);
 
         int times = 2000;
@@ -63,9 +69,10 @@ public class ParticleSystem {
     private float l;
     private Collision lastCollision;
 
-    public ParticleSystem(List<Particle> particles, Obstacle obstacle, float l) {
+    public ParticleSystem(List<Particle> particles, Particle obstacle, float l) {
         this.particles = particles;
-        this.obstacle = obstacle;
+        this.particles.add(obstacle);
+//        this.obstacle = obstacle;
         this.l = l;
         this.collisionUtils = new CollisionUtils(l);
     }
@@ -82,11 +89,11 @@ public class ParticleSystem {
                 possibleCollisions.add(auxWalls);
             }
 
-            auxObstacle = collisionUtils.getTcObstacle(p, obstacle);
-            if (auxObstacle != null &&
-                    !(lastCollision != null && lastCollision.getType() == auxObstacle.getType() && lastCollision.particlesInvolved().contains(p))) {
-                possibleCollisions.add(auxObstacle);
-            }
+//            auxObstacle = collisionUtils.getTcObstacle(p, obstacle);
+//            if (auxObstacle != null &&
+//                    !(lastCollision != null && lastCollision.getType() == auxObstacle.getType() && lastCollision.particlesInvolved().contains(p))) {
+//                possibleCollisions.add(auxObstacle);
+//            }
 
             for (Particle p2 : this.particles) {
                 if (!p.equals(p2)) {
