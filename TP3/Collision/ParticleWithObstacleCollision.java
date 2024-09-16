@@ -2,6 +2,7 @@ package TP3.Collision;
 
 import TP3.Particle;
 import TP3.Obstacle;
+import TP3.Wall;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +16,18 @@ public class ParticleWithObstacleCollision extends Collision {
         super(CollisionType.PARTICLE_OBSTACLE, tc, l);
         this.particle = particle;
         this.obstacle = obstacle;
+    }
+
+    @Override
+    public float getPressure() {
+        float dist = particle.getR() + obstacle.getR();
+
+        float nx = (particle.getX()- obstacle.getX())/dist;
+        float ny = (particle.getY()- obstacle.getY())/dist;
+
+        float vn = particle.getVx()*nx + particle.getVy()*ny;
+
+        return 2*vn*particle.getM();
     }
 
     @Override
@@ -41,6 +54,8 @@ public class ParticleWithObstacleCollision extends Collision {
 
         obstacle.addCollision(particle);
     }
+
+
 
     @Override
     public List<Particle> particlesInvolved() {

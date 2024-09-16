@@ -1,6 +1,5 @@
 package TP3.Collision;
 
-import TP3.Collision.Collision;
 import TP3.Particle;
 
 import java.util.ArrayList;
@@ -16,6 +15,11 @@ public class ParticleWithParticleCollision extends Collision {
         this.p2 = p2;
     }
 
+
+    @Override
+    public float getPressure() {
+        return -1F;
+    }
 
     @Override
     public void collide() {

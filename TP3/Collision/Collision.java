@@ -10,6 +10,8 @@ public abstract class Collision implements Comparable<Collision> {
     private float tc;
     protected CollisionUtils collisionUtils;
 
+    public abstract float getPressure() ;
+
 
     public enum CollisionType {
         PARTICLE_PARTICLE,

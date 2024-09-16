@@ -1,8 +1,11 @@
 package TP3.Collision;
 
 import TP3.Particle;
+import TP3.Wall;
 import TP3.WallType;
 import TP3.Obstacle;
+
+import java.util.List;
 
 public class CollisionUtils {
 
@@ -60,33 +63,33 @@ public class CollisionUtils {
         return new ParticleWithParticleCollision(p1, p2, tc, l);
     }
 
-    public Collision getTcWalls(Particle p) {
+    public Collision getTcWalls(Particle p, List<Wall> walls) {
         float tc = -1;
-        WallType wallType = null;
+        Wall wall = null;
         if(p.getVx() > 0) {
             tc = (l - p.getR() - p.getX()) / p.getVx();
-            wallType = WallType.VERTICAL;
+            wall = walls.get(0);
         } else if(p.getVx() < 0) {
             tc = (p.getR() - p.getX()) / p.getVx();
-            wallType = WallType.VERTICAL;
+            wall = walls.get(1);
         }
         if(p.getVy() > 0) {
             float aux = (l - p.getR() - p.getY()) / p.getVy();
             if(tc == -1 || aux < tc) {
                 tc = aux;
-                wallType = WallType.HORIZONTAL;
+                wall = walls.get(2);
             }
         } else if(p.getVy() < 0) {
             if(tc == -1 || (p.getR() - p.getY()) / p.getVy() < tc) {
                 tc = (p.getR() - p.getY()) / p.getVy();
-                wallType = WallType.HORIZONTAL;
+                wall = walls.get(3);
             }
         }
         if (tc == -1){
             return null;
         }
 
-        return new ParticleWithWallCollision(p, wallType, tc, l);
+        return new ParticleWithWallCollision(p, wall, tc, l);
     }
 
     private float getJ(Particle p1, Particle p2) {
