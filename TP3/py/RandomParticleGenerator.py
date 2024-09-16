@@ -3,10 +3,10 @@ import math
 N = 200
 L = 0.1
 
-static_file = open("../TP3/static_input.txt", "w")
+static_file = open("..\static_input.txt", "w")
 static_file.write(str(N) + "\n")
 static_file.write(str(L) + "\n")
-dynamic_file = open("../TP3/dynamic_input.txt", "w")
+dynamic_file = open("..\dynamic_input.txt", "w")
 dynamic_file.write("t0" + "\n")
 
 radius = 0.001

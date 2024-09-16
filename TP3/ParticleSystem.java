@@ -15,29 +15,33 @@ public class ParticleSystem {
     public static void main(String[] args) throws IOException {
         FileProcess fileProcessor = new FileProcess();
         ArrayList<Particle> particles;
-        particles = fileProcessor.readFile("TP3/dynamic_input.txt", "TP3/static_input.txt", 1);
+        int v0 = 15;
+        particles = fileProcessor.readFile("TP3/dynamic_input.txt", "TP3/static_input.txt", v0);
 
         float l = 0.1F;
 
         // Para correr como obstaculo fijo
-//        Obstacle obstacle = new Obstacle(l/2,l/2,0.005F);
-//        ParticleSystem particleSystem =  new ParticleSystem(particles, obstacle,l);
-
-        // Para correr como particula mas grande
-        Particle obstacle = new Particle(100000, l/2,l/2,0,0.005F,0,3F );
+        Obstacle obstacle = new Obstacle(l/2,l/2,0.005F);
         ParticleSystem particleSystem =  new ParticleSystem(particles, obstacle,l);
 
-        int times = 2000;
+//        Para correr como particula mas grande
+//        Particle obstacle = new Particle(100000, l/2,l/2,0,0.005F,0,3F );
+//        ParticleSystem particleSystem =  new ParticleSystem(particles, obstacle,l);
+
+        int times = 13000;
 
         File myFile = new File("TP3/Times/system_with_obstacle.txt");
+        File obstacleCollisionsCount = new File("TP3/Times/obstacle_collision_count_v0_"+v0+".txt");
 
         try{
             myFile.createNewFile();
+            obstacleCollisionsCount.createNewFile();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(myFile))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(myFile));
+        BufferedWriter writer2 = new BufferedWriter(new FileWriter(obstacleCollisionsCount))) {
             while(times > 0){
 
                 for(Particle p : particles){
@@ -54,6 +58,12 @@ public class ParticleSystem {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                try {
+                    writer2.write(obstacle.getTotalCollisions() + "," + obstacle.getOnlyFirstCollisions() + "," + particleSystem.tcsum);
+                    writer2.newLine();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 particleSystem.updateSystem();
 
                 times-=1;
@@ -61,18 +71,23 @@ public class ParticleSystem {
         }catch (IOException e) {
             e.printStackTrace();
         }
+
+
+
+
     }
 
     private List<Particle> particles;
     private Obstacle obstacle;
     private CollisionUtils collisionUtils;
     private float l;
+    private float tcsum = 0;
     private Collision lastCollision;
 
-    public ParticleSystem(List<Particle> particles, Particle obstacle, float l) {
+    public ParticleSystem(List<Particle> particles, Obstacle obstacle, float l) {
         this.particles = particles;
-        this.particles.add(obstacle);
-//        this.obstacle = obstacle;
+//        this.particles.add(obstacle);
+        this.obstacle = obstacle;
         this.l = l;
         this.collisionUtils = new CollisionUtils(l);
     }
@@ -89,11 +104,11 @@ public class ParticleSystem {
                 possibleCollisions.add(auxWalls);
             }
 
-//            auxObstacle = collisionUtils.getTcObstacle(p, obstacle);
-//            if (auxObstacle != null &&
-//                    !(lastCollision != null && lastCollision.getType() == auxObstacle.getType() && lastCollision.particlesInvolved().contains(p))) {
-//                possibleCollisions.add(auxObstacle);
-//            }
+            auxObstacle = collisionUtils.getTcObstacle(p, obstacle);
+            if (auxObstacle != null &&
+                    !(lastCollision != null && lastCollision.getType() == auxObstacle.getType() && lastCollision.particlesInvolved().contains(p))) {
+                possibleCollisions.add(auxObstacle);
+            }
 
             for (Particle p2 : this.particles) {
                 if (!p.equals(p2)) {
@@ -109,14 +124,15 @@ public class ParticleSystem {
 
         Collision nextCollision = possibleCollisions.pollFirst();
         float tc = nextCollision.getTc();
+        tcsum += tc;
 
         for(Particle p : this.particles) {
             p.move(tc);
         }
 
-        System.out.println(nextCollision);
         nextCollision.collide();
         lastCollision = nextCollision;
+
     }
 
 }

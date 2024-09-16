@@ -38,6 +38,8 @@ public class ParticleWithObstacleCollision extends Collision {
 
         particle.setVx(vfx);
         particle.setVy(vfy);
+
+        obstacle.addCollision(particle);
     }
 
     @Override
