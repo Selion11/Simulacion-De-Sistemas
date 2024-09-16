@@ -22,4 +22,8 @@ public class Obstacle {
         return r;
     }
 
+    public float getDCM(double L){
+        return (float) Math.sqrt(Math.pow(x-L/2,2) + Math.pow(y-L/2, 2));
+    }
+
 }
