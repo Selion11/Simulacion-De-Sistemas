@@ -22,7 +22,6 @@ public class ParticleSystem {
         }
         int v0 = Integer.parseInt(properties.getProperty("v0"));
         float l = Float.parseFloat(properties.getProperty("l"));
-        int collisionAmount = 30000;
 
 
         particles = fileProcessor.readFile("TP3/dynamic_input.txt", "TP3/static_input.txt", v0);
@@ -34,32 +33,32 @@ public class ParticleSystem {
         ParticleSystem particleSystem =  new ParticleSystem(particles, obstacle,l);
 
         // Para correr como particula mas grande
-        float objectMass = Float.parseFloat(properties.getProperty("objectMass"));
+//        float objectMass = Float.parseFloat(properties.getProperty("objectMass"));
 //        Particle obstacle = new Particle(100000, l/2,l/2,0,objectRadius,0,objectMass );
 //        ParticleSystem particleSystem =  new ParticleSystem(particles, obstacle,l);
 
+        float interval = 0.05F;
+        float lastTime = 0F;
+        Float pressureOnWalls = 0F;
+        Float pressureOnObject = 0F;
+        float timeLimit = 1.5F;
 
 //        File myFile = new File("TP3/Times/system_with_big_particle.txt");
         File myFile = new File("TP3/Times/system_with_obstacle.txt");
-//        File pressuresOnWallsFile = new File("TP3/Times/pressuresOnWalls_10.txt");
-//        File obstacleCollisions = new File("TP3/Times/obstacle_collision_count_v0_"+v0+".txt");
-//        File pressuresOnObjectFile = new File("TP3/Times/pressuresOnObject_10.txt");
+        File pressuresOnWallsFile = new File("TP3/Times/pressuresOnWalls_"+ timeLimit +"s.txt");
+        File obstacleCollisions = new File("TP3/Times/obstacle_collision_count_v0_"+v0+".txt");
+        File pressuresOnObjectFile = new File("TP3/Times/pressuresOnObject_"+ timeLimit +"s.txt");
         File particlesOnObstacleFile = new File("TP3/Times/particlesCrashedOnObstacle.txt");
 
 
 
 
-        float interval = 0.0F; // 0.1 seconds (1000 milliseconds)
-        float lastTime = 0F;
-        Float pressureOnWalls = 0F;
-        Float pressureOnObject = 0F;
-        float timeLimit = 1F;
 
         try{
             myFile.createNewFile();
-//            pressuresOnWallsFile.createNewFile();
-//            obstacleCollisions.createNewFile();
-//            pressuresOnObjectFile.createNewFile();
+            pressuresOnWallsFile.createNewFile();
+            obstacleCollisions.createNewFile();
+            pressuresOnObjectFile.createNewFile();
             particlesOnObstacleFile.createNewFile();
         } catch (IOException e) {
             e.printStackTrace();
@@ -68,13 +67,19 @@ public class ParticleSystem {
 
         try (
                 BufferedWriter writer = new BufferedWriter(new FileWriter(myFile));
-//             BufferedWriter pressureOnWallsWriter = new BufferedWriter(new FileWriter(pressuresOnWallsFile));
-//             BufferedWriter writer2 = new BufferedWriter(new FileWriter(obstacleCollisions));
-//             BufferedWriter pressureOnObjectWriter = new BufferedWriter(new FileWriter(pressuresOnObjectFile));
+             BufferedWriter pressureOnWallsWriter = new BufferedWriter(new FileWriter(pressuresOnWallsFile));
+             BufferedWriter writer2 = new BufferedWriter(new FileWriter(obstacleCollisions));
+             BufferedWriter pressureOnObjectWriter = new BufferedWriter(new FileWriter(pressuresOnObjectFile));
              BufferedWriter particlesOnObstacleWriter = new BufferedWriter(new FileWriter(particlesOnObstacleFile))
         ) {
 
+            pressureOnWallsWriter.write(pressureOnWalls.toString());
+            pressureOnWallsWriter.newLine();
+            pressureOnObjectWriter.write(pressureOnWalls.toString());
+            pressureOnObjectWriter.newLine();
+
             while(timeLimit > particleSystem.tcsum){
+
 
                 for(Particle p : particles){
                     try {
@@ -95,33 +100,32 @@ public class ParticleSystem {
                 particleSystem.updateSystem();
 
 
-                // Check if the interval (t) has passed
-//                if (particleSystem.tcsum - lastTime >= interval) {
-//                    // Perform the action
-//                    pressureOnWalls = pressureOnWalls /(4F*l*(interval));
-//                    pressureOnWallsWriter.write(pressureOnWalls.toString());
-//                    pressureOnWallsWriter.newLine();
-//
-//                    pressureOnObject =  pressureOnObject /((float)(2F*Math.PI*obstacle.getR())*(interval));
-//                    pressureOnObjectWriter.write(pressureOnObject.toString());
-//                    pressureOnObjectWriter.newLine();
-//
-//                    // Reset the lastTime to the current time
-////                    timePassed += interval;
-//                    lastTime = particleSystem.tcsum ;
-//                    pressureOnWalls = 0F;
-//                    pressureOnObject = 0F;
-//                }else {
-//                    if (particleSystem.lastCollision.getType() == Collision.CollisionType.PARTICLE_WALL) {
-//                        pressureOnWalls += particleSystem.lastCollision.getPressure();
-//                    }else if (particleSystem.lastCollision.getType() == Collision.CollisionType.PARTICLE_OBSTACLE){
-//                        pressureOnObject += particleSystem.lastCollision.getPressure();
-//                    }
-//                }
+//                 Check if the interval (t) has passed
+                if (particleSystem.tcsum - lastTime >= interval) {
+                    // Perform the action
+                    pressureOnWalls = pressureOnWalls /(4F*l*(interval));
+                    pressureOnWallsWriter.write(pressureOnWalls.toString());
+                    pressureOnWallsWriter.newLine();
+
+                    pressureOnObject =  pressureOnObject /((float)(2F*Math.PI*obstacle.getR())*(interval));
+                    pressureOnObjectWriter.write(pressureOnObject.toString());
+                    pressureOnObjectWriter.newLine();
+
+                    // Reset the lastTime to the current time
+                    lastTime = particleSystem.tcsum ;
+                    pressureOnWalls = 0F;
+                    pressureOnObject = 0F;
+                }else {
+                    if (particleSystem.lastCollision.getType() == Collision.CollisionType.PARTICLE_WALL) {
+                        pressureOnWalls += particleSystem.lastCollision.getPressure();
+                    }else if (particleSystem.lastCollision.getType() == Collision.CollisionType.PARTICLE_OBSTACLE){
+                        pressureOnObject += particleSystem.lastCollision.getPressure();
+                    }
+                }
 
                 try {
-//                    writer2.write(obstacle.getTotalCollisions() + "," + obstacle.getOnlyFirstCollisions() + "," + particleSystem.tcsum);
-//                    writer2.newLine();
+                    writer2.write(obstacle.getTotalCollisions() + "," + obstacle.getOnlyFirstCollisions() + "," + particleSystem.tcsum);
+                    writer2.newLine();
 
                     for (Integer id:
                          obstacle.getAlreadyCollided()) {
@@ -135,7 +139,6 @@ public class ParticleSystem {
                     e.printStackTrace();
                 }
 
-                collisionAmount -= 1;
             }
         }catch (IOException e) {
             e.printStackTrace();

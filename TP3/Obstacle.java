@@ -36,6 +36,10 @@ public class Obstacle {
         return alreadyCollided.size();
     }
 
+    public List<Integer> getAlreadyCollided() {
+        return alreadyCollided;
+    }
+
     public void addCollision(Particle p) {
         if (!alreadyCollided.contains(p.getId())) {
             alreadyCollided.add(p.getId());

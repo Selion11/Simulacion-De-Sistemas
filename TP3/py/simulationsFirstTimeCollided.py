@@ -8,7 +8,7 @@ from matplotlib.patches import Circle
 
 
 
-def plot_particle_interactions(particles, L, ax):
+def plot_particle_interactions(particles,idsPerTime, L, ax):
 
     ax.clear()
 
@@ -17,38 +17,40 @@ def plot_particle_interactions(particles, L, ax):
     ax.add_patch(circle) 
     radius = 0.001
     for p in particles:
-        circle = Circle((p[0], p[1]), radius, edgecolor='blue', facecolor='lightblue')  # Create a circle
-        ax.add_patch(circle)  # Add the circle to the plot
+        if  p[2] not in idsPerTime:
+            circle = Circle((p[0], p[1]), radius, edgecolor='blue', facecolor='lightblue')  # Create a circle
+            ax.add_patch(circle)  # Add the circle to the plot
+        else:
+            circle = Circle((p[0], p[1]), radius, edgecolor='green', facecolor='green')  # Create a circle
+            ax.add_patch(circle)  # Add the circle to the plot
 
     # Obstaculo es una particula
-    # radius = 0.001
+    # radius = 0.1
     # for p in particles:
     #     if p[2] != 100000:
-    #         circle = Circle((p[0], p[1]), radius, edgecolor='blue', facecolor='lightblue')  # Create a circle
+    #         circle = Circle((p[0]*100, p[1]*100), radius, edgecolor='blue', facecolor='lightblue')  # Create a circle
     #         ax.add_patch(circle)  # Add the circle to the plot
     #     else:
-    #         circle = Circle((p[0], p[1]), 0.005, edgecolor='red', facecolor='red')  # Create a circle
+    #         circle = Circle((p[0]*100, p[1]*100), 0.5, edgecolor='red', facecolor='red')  # Create a circle
     #         ax.add_patch(circle) 
     
 
     # Customize the plot
     ax.set_xlim(0, L)
     ax.set_ylim(0, L)
-    ax.set_xlabel("X (m)")
-    ax.set_ylabel("Y (m)")
+    ax.set_xlabel("X")
+    ax.set_ylabel("Y")
     ax.set_aspect('equal', adjustable='box')
 
 def animate(i, times, L, ax):
     print(i)
-    plot_particle_interactions(times[i], L, ax)
-    ax.text(0.5, 1.05, f'Cantidad de colisiones: {collision_count[i]}', 
-        horizontalalignment='center', verticalalignment='center', 
-        transform=ax.transAxes, fontsize=12)
+    plot_particle_interactions(times[i],idsPerTimes[i], L, ax)
 
 # Parámetros de simulación
 L = 0.1
 
 # Lee los datos
+v0 = 1
 directory_path = "../times/system_with_obstacle.txt"
 # directory_path = "../times/system_with_big_particle.txt"
 
@@ -67,17 +69,21 @@ with open(directory_path, 'r') as file:
             particles.append(part)
         else:
             times.append(particles)
-            particles = []    
+            particles = []  
 
-collision_count_path = "../times/obstacle_collision_count_v0_6.txt"
-collision_count = []
-with open(collision_count_path, 'r') as file:
+
+directory_path = "../times/particlesCrashedOnObstacle.txt"
+idsThatAlreadyCrashedOnObstacle = []
+idsPerTimes = []
+
+with open(directory_path, 'r') as file:
     lines = file.readlines()
     for l in lines:
-            pos = l.split(",")
-            
-            collision_count.append(pos[0])
-       
+        if l != '-\n':
+            idsThatAlreadyCrashedOnObstacle.append(float(l))
+        else:
+            idsPerTimes.append(idsThatAlreadyCrashedOnObstacle)
+            idsThatAlreadyCrashedOnObstacle = []    
 
 # Crear la figura y el eje
 fig, ax = plt.subplots()
@@ -93,8 +99,7 @@ anim = fa(fig, animate, frames=len(times), fargs=(times, L, ax), interval=1, bli
 # plt.show()
 
 # Guardar la animación como GIF (opcional)
-# anim.save('./output_animation_system_with_obstacle.mp4', writer=writers)
-anim.save('./output_animation_system_with_obstacle_with_counter_6.mp4', writer=writers)
+anim.save('./output_animation_system_with_obstacle.mp4', writer=writers)
 
 # anim.save('./output_animation_system_with_big_particle.mp4', writer=writers)
 
