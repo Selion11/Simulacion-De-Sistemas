@@ -37,11 +37,11 @@ public class ParticleSystem {
         Particle obstacle = new Particle(100000, l/2,l/2,0,objectRadius,0,objectMass );
         ParticleSystem particleSystem =  new ParticleSystem(particles, obstacle,l);
 
-        float interval = 0.05F;
+        float interval = 0.1F;
         float lastTime = 0F;
         Float pressureOnWalls = 0F;
         Float pressureOnObject = 0F;
-        float timeLimit = 1.5F;
+        float timeLimit = 2F;
 
 //        File myFile = new File("TP3/Times/system_with_big_particle.txt");
         File myFile = new File("TP3/Times/system_with_obstacle.txt");
@@ -49,7 +49,7 @@ public class ParticleSystem {
         File obstacleCollisions = new File("TP3/Times/obstacle_collision_count_v0_"+v0+".txt");
         File pressuresOnObjectFile = new File("TP3/Times/pressuresOnObject_"+ timeLimit +"s.txt");
         File particlesOnObstacleFile = new File("TP3/Times/particlesCrashedOnObstacle.txt");
-        File DCM = new File("TP3/Times/DCM.txt");
+        File DCM = new File("TP3/Times/DCM5.txt");
 
 
 
@@ -114,7 +114,7 @@ public class ParticleSystem {
 //                    pressureOnObjectWriter.newLine();
 //
 //                    // Reset the lastTime to the current time
-//                    lastTime = particleSystem.tcsum ;
+                    lastTime = particleSystem.tcsum ;
 //                    pressureOnWalls = 0F;
 //                    pressureOnObject = 0F;
 //                }else {
@@ -123,6 +123,9 @@ public class ParticleSystem {
 //                    }else if (particleSystem.lastCollision.getType() == Collision.CollisionType.PARTICLE_OBSTACLE){
 //                        pressureOnObject += particleSystem.lastCollision.getPressure();
 //                    }
+                    double DCM_value = Math.sqrt(Math.pow(obstacle.getX()-(l/2),2)+Math.pow(obstacle.getY()-(l/2),2));
+                    writer.write(Double.toString(DCM_value) + '\n');
+                    System.out.println(particleSystem.tcsum);
                 }
 //
 //                try {
@@ -157,10 +160,10 @@ public class ParticleSystem {
     private Collision lastCollision;
     private List<Wall> walls;
 
-    public ParticleSystem(List<Particle> particles, Obstacle obstacle, float l) {
+    public ParticleSystem(List<Particle> particles, Particle obstacle, float l) {
         this.particles = particles;
-//        this.particles.add(obstacle);
-        this.obstacle = obstacle;
+        this.particles.add(obstacle);
+//        this.obstacle = obstacle;
         this.l = l;
         this.collisionUtils = new CollisionUtils(l);
 
@@ -215,7 +218,7 @@ public class ParticleSystem {
             p.move(tc);
         }
 
-        System.out.println(nextCollision);
+//        System.out.println(nextCollision);
         nextCollision.collide();
         lastCollision = nextCollision;
 
