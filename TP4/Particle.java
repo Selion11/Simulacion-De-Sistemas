@@ -7,16 +7,19 @@ import static java.lang.Math.sin;
 
 public class Particle {
     private float y,a,v;
-    private final float m;
+    private final float m,k,gamma;
 
-    public Particle(float y, int v0, float m,float a0) {
+    public Particle(float y, int v0, float m,float k,float gamma) {
         this.y = y;
         this.m = m;
-        this.a = a0;
         this.v = v0;
+        this.k = k;
+        this.gamma = gamma;
     }
 
+    public void calculateA(){
 
+    }
 
     public float getY() {
         return y;
