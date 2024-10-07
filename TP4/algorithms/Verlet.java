@@ -7,11 +7,11 @@ public class Verlet {
     private float k;  // Constante del resorte
     private float gamma;  // Coeficiente de amortiguamiento
 
-    public Verlet(Particle particle, float timeStep, float k, float gamma) {
+    public Verlet(Particle particle, float timeStep) {
         this.particle = particle;
-        this.timeStep = timeStep;
-        this.k = k;
-        this.gamma = gamma;
+        this.timeStep = particle.getTimeStep();
+        this.k = particle.getK();
+        this.gamma = particle.getGamma();
     }
 
     // Método que calcula la fuerza en función de la posición y la velocidad actuales

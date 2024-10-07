@@ -7,15 +7,16 @@ import static java.lang.Math.sin;
 
 public class Particle {
     private float position,a,v,prevPosition;
-    private final float m,k,gamma;
+    private final float m,k,gamma,timeStep;
 
-    public Particle(float position, int v0, float m,float k,float gamma) {
+    public Particle(float position, int v0, float m,float k,float gamma,float timeStep) {
         this.position = position;
         this.prevPosition = position;
         this.m = m;
         this.v = v0;
         this.k = k;
         this.gamma = gamma;
+        this.timeStep = timeStep;
     }
 
     public void calculateA(){
@@ -48,6 +49,17 @@ public class Particle {
         this.position = position;
     }
 
+    public float getK() {
+        return k;
+    }
+
+    public float getGamma() {
+        return gamma;
+    }
+
+    public float getTimeStep() {
+        return timeStep;
+    }
 
     @Override
     public String toString() {
