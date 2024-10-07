@@ -6,11 +6,12 @@ import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 
 public class Particle {
-    private float y,a,v;
+    private float position,a,v,prevPosition;
     private final float m,k,gamma;
 
-    public Particle(float y, int v0, float m,float k,float gamma) {
-        this.y = y;
+    public Particle(float position, int v0, float m,float k,float gamma) {
+        this.position = position;
+        this.prevPosition = position;
         this.m = m;
         this.v = v0;
         this.k = k;
@@ -21,24 +22,35 @@ public class Particle {
 
     }
 
-    public float getY() {
-        return y;
+    public float getPosition() {
+        return position;
     }
 
     public float getM() {
         return m;
     }
 
-    public void calculateVelocity(float deltaT){
-        v += a * deltaT;
+    public void setV(float v) {
+        this.v = v;
     }
 
-    public void calculatePosition(float deltaT){
-        y += v * deltaT;
+
+    public float getV() {
+        return v;
     }
+
+    public float getPrevPosition() {
+        return prevPosition;
+    }
+
+    public void setPosition(float position) {
+        this.prevPosition = this.position;
+        this.position = position;
+    }
+
 
     @Override
     public String toString() {
-        return String.format("Position: " + y );
+        return String.format("Position: " + position );
     }
 }
