@@ -51,4 +51,8 @@ public class Verlet {
         updateVelocity();
     }
 
+    public float getParticlePosition(){
+        return particle.getPosition();
+    }
+
 }

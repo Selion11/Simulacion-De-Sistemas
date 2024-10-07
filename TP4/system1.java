@@ -3,8 +3,7 @@ package TP4;
 import TP4.algorithms.Beeman;
 import TP4.algorithms.Verlet;
 
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.Properties;
 
 public class system1 {
@@ -49,6 +48,20 @@ public class system1 {
         Beeman beeman = new Beeman(beemanParticle);
         Verlet verlet = new Verlet(verletParticle);
 
+        //PREPARE OUTPUT FILE
+        File myFile = new File("TP4/outuput.txt");
+        BufferedWriter writer;
+
+        try{
+            myFile.createNewFile();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+
+        try{
+            writer = new BufferedWriter(new FileWriter(myFile));
+            writer.write("Time Beeman Verlet Gear5 Analitycal");
+
         while(totalTime < tf){
             beeman.runAlgorithm();
             verlet.runAlgorithm();
@@ -57,10 +70,19 @@ public class system1 {
             totalTime += timeStep;
 
             if(accumTime >= printStep){
-                //Print in file
-                System.out.printf("Solución Analítica: %.5f%n \n",verlet.analyticalSolution(accumTime));
+                writer.write(Float.toString(totalTime) + ' ');
+                writer.write(Float.toString(beeman.getParticlePosition())+' ');
+                writer.write(Float.toString(verlet.getParticlePosition())+' ');
+                writer.write(Float.toString(0.00000F) +' ');//Cambiar como haga falta
+                writer.write(Float.toString(verlet.analyticalSolution(totalTime))+'\n');
+                System.out.printf("Solucion BEEMAN: %.5f%n \n", beemanParticle.getPosition());
+                System.out.printf("Solucion VERLET: %.5f%n \n", verletParticle.getPosition());
+                System.out.printf("Solucion GEAR5: %.5f%n \n",0.00000); //Cambiar como haga falta
+                System.out.printf("Solución ANALITICA: %.5f%n \n",verlet.analyticalSolution(accumTime));
                 accumTime = 0;
             }
+        }}catch (IOException e){
+            e.printStackTrace();
         }
 
     }
