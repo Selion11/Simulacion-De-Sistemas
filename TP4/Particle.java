@@ -1,60 +1,41 @@
 package TP4;
 
+import java.awt.*;
+
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 
 public class Particle {
-    private float x, y, vx, vy, m;
-    private int id;
+    private float y,a,v;
+    private final float m;
 
-    public Particle(int id, float x, float y,float theta, int v0, float m) {
-        this.x = x;
+    public Particle(float y, int v0, float m,float a0) {
         this.y = y;
-        this.id = id;
-        this.vx = (float) cos(theta) * v0;
-        this.vy = (float) sin(theta) * v0;
         this.m = m;
+        this.a = a0;
+        this.v = v0;
     }
 
-    public void move(float t) {
-        x += vx * t;
-        y += vy * t;
-    }
 
-    public int getId() {
-        return id;
-    }
-
-    public float getX() {
-        return x;
-    }
 
     public float getY() {
         return y;
-    }
-
-    public float getVx() {
-        return vx;
-    }
-
-    public float getVy() {
-        return vy;
-    }
-
-    public void setVx(float vx) {
-        this.vx = vx;
-    }
-
-    public void setVy(float vy) {
-        this.vy = vy;
     }
 
     public float getM() {
         return m;
     }
 
+    public void calculateVelocity(float deltaT){
+        v += a * deltaT;
+    }
+
+    public void calculatePosition(float deltaT){
+        y += v * deltaT;
+    }
+
     @Override
     public String toString() {
-        return String.format(id +":" + x + ":" + y );
+        return String.format("Position: " + y );
     }
 }

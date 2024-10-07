@@ -15,6 +15,6 @@ public class system1 {
     *
     * r = A exp(-(gamma/2m)*t) * cos((k/m - gamma^2/4m^2)^0.5 *t)*/
     public static void main(String[] args) throws IOException {
-        
+
     }
 }
