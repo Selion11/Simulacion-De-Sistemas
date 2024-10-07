@@ -2,7 +2,7 @@ package TP4;
 
 import java.io.IOException;
 
-public class systesm1 {
+public class system1 {
     /*Parametros:
     * Masa = 70kg
     * k = 10^4 N/m
