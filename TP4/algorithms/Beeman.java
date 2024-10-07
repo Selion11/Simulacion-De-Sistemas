@@ -27,7 +27,7 @@ public class Beeman {
         a = (-(p.getK()* p.getPosition()) - (p.getGamma()* p.getV()))/ p.getM();
     }
 
-    public float getParticlePositon() {
+    public float getParticlePosition() {
         return p.getPosition();
     }
 

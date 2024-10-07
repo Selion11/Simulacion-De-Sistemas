@@ -1,6 +1,7 @@
 package TP4;
 
 import TP4.algorithms.Beeman;
+import TP4.algorithms.Verlet;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -22,31 +23,42 @@ public class system1 {
         float k,v0,r0,m,gamma,tf,timeStep,printStep;
         float accumTime = 0;
         float totalTime = 0;
+
         Properties properties = new Properties();
+
         try{
-            FileInputStream config = new FileInputStream("TP3/configs/conf.config");
+            FileInputStream config = new FileInputStream("TP4/configs/conf.config");
             properties.load(config);
         }catch(IOException e){
             e.printStackTrace();
         }
-        v0 = Float.parseFloat(properties.getProperty("v0"));
+
         k = Float.parseFloat(properties.getProperty("k"));
         r0 = Float.parseFloat(properties.getProperty("r0"));
         m = Float.parseFloat(properties.getProperty("m"));
-        gamma = Float.parseFloat(properties.getProperty("k"));
+        gamma = Float.parseFloat(properties.getProperty("gamma"));
         tf = Float.parseFloat(properties.getProperty("tf"));
         timeStep = Float.parseFloat(properties.getProperty("timeStep"));
         printStep = Float.parseFloat(properties.getProperty("printStep"));
+        v0 = (-1*gamma)/2*m;
 
-        Particle p = new Particle(r0,v0,m,k,gamma,timeStep);
-        Beeman b = new Beeman(p);
+        Particle beemanParticle = new Particle(r0,v0,m,k,gamma,timeStep);
+        Particle verletParticle = new Particle(r0,v0,m,k,gamma,timeStep);
+        Particle gearParticle = new Particle(r0,v0,m,k,gamma,timeStep);
+
+        Beeman beeman = new Beeman(beemanParticle);
+        Verlet verlet = new Verlet(verletParticle);
 
         while(totalTime < tf){
-            b.runAlgorithm();
+            beeman.runAlgorithm();
+            verlet.runAlgorithm();
+
             accumTime += timeStep;
             totalTime += timeStep;
-            if(accumTime == printStep){
+
+            if(accumTime >= printStep){
                 //Print in file
+                System.out.printf("Solución Analítica: %.5f%n \n",verlet.analyticalSolution(accumTime));
                 accumTime = 0;
             }
         }
