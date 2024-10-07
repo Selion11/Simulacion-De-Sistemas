@@ -9,7 +9,7 @@ public class Particle {
     private float position,a,v,prevPosition;
     private final float m,k,gamma,timeStep;
 
-    public Particle(float position, int v0, float m,float k,float gamma,float timeStep) {
+    public Particle(float position, float v0, float m,float k,float gamma,float timeStep) {
         this.position = position;
         this.prevPosition = position;
         this.m = m;
