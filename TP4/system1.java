@@ -40,7 +40,7 @@ public class system1 {
         tf = Float.parseFloat(properties.getProperty("tf"));
         timeStep = Float.parseFloat(properties.getProperty("timeStep"));
         printStep = Float.parseFloat(properties.getProperty("printStep"));
-        v0 = (-1*gamma)/2*m;
+        v0 = (-1*gamma)/(2*m);
 
         Particle beemanParticle = new Particle(r0,v0,m,k,gamma,timeStep);
         Particle verletParticle = new Particle(r0,v0,m,k,gamma,timeStep);
@@ -52,7 +52,7 @@ public class system1 {
 
         Oscilador oscilador = new Oscilador();
 
-        File output = new File("TP4/outputs/output_0.01_0.02.txt");
+        File output = new File("TP4/outputs/output_"+timeStep+"_"+printStep+".txt");
 
         try{
             output.createNewFile();
@@ -79,7 +79,9 @@ public class system1 {
                     writer.write(':');
                     writer.write(String.valueOf(gearParticle.getPosition()));
                     writer.write(':');
-                    writer.write(String.valueOf(oscilador.analyticalSolution(totalTime,r0,v0,k,gamma)));
+                    writer.write(String.valueOf(oscilador.analyticalSolution(m,k,gamma,totalTime)));
+                    writer.write(':');
+                    writer.write(String.valueOf(totalTime));
                     writer.write(':');
                     writer.newLine();
 
