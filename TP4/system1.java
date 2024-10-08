@@ -1,6 +1,7 @@
 package TP4;
 
 import TP4.algorithms.Beeman;
+import TP4.algorithms.GearPredictorCorrector;
 import TP4.algorithms.Verlet;
 
 import java.io.*;
@@ -8,16 +9,16 @@ import java.util.Properties;
 
 public class system1 {
     /*Parametros:
-    * Masa = 70kg
-    * k = 10^4 N/m
-    * gamma = 100 kg/s
-    * tfinal = 5 segundos
-    *
-    * Condiciones iniciales:
-    * r(t = 0) = 1 m
-    * v(t = 0) = - A * gamma/2m
-    *
-    * r = A exp(-(gamma/2m)*t) * cos((k/m - gamma^2/4m^2)^0.5 *t)*/
+     * Masa = 70kg
+     * k = 10^4 N/m
+     * gamma = 100 kg/s
+     * tfinal = 5 segundos
+     *
+     * Condiciones iniciales:
+     * r(t = 0) = 1 m
+     * v(t = 0) = - A * gamma/2m
+     *
+     * r = A exp(-(gamma/2m)*t) * cos((k/m - gamma^2/4m^2)^0.5 *t)*/
     public static void main(String[] args) throws IOException {
         float k,v0,r0,m,gamma,tf,timeStep,printStep;
         float accumTime = 0;
@@ -47,42 +48,47 @@ public class system1 {
 
         Beeman beeman = new Beeman(beemanParticle);
         Verlet verlet = new Verlet(verletParticle);
+        GearPredictorCorrector gear = new GearPredictorCorrector(gearParticle);
 
-        //PREPARE OUTPUT FILE
-        File myFile = new File("TP4/outuput.txt");
-        BufferedWriter writer;
+        Oscilador oscilador = new Oscilador();
+
+        File output = new File("TP4/outputs/output_0.01_0.02.txt");
 
         try{
-            myFile.createNewFile();
-        }catch (IOException e){
+            output.createNewFile();
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
-        try{
-            writer = new BufferedWriter(new FileWriter(myFile));
-            writer.write("Time Beeman Verlet Gear5 Analitycal");
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(output))){
+            while(totalTime < tf){
+                // Iteracion de algoritmos
+                beeman.runAlgorithm();
+                verlet.runAlgorithm();
+                gear.runAlgorithm();
 
-        while(totalTime < tf){
-            beeman.runAlgorithm();
-            verlet.runAlgorithm();
+                accumTime += timeStep;
+                totalTime += timeStep;
 
-            accumTime += timeStep;
-            totalTime += timeStep;
+                if(accumTime >= printStep){
 
-            if(accumTime >= printStep){
-                writer.write(Float.toString(totalTime) + ' ');
-                writer.write(Float.toString(beeman.getParticlePosition())+' ');
-                writer.write(Float.toString(verlet.getParticlePosition())+' ');
-                writer.write(Float.toString(0.00000F) +' ');//Cambiar como haga falta
-                writer.write(Float.toString(verlet.analyticalSolution(totalTime))+'\n');
-                System.out.printf("Solucion BEEMAN: %.5f%n \n", beemanParticle.getPosition());
-                System.out.printf("Solucion VERLET: %.5f%n \n", verletParticle.getPosition());
-                System.out.printf("Solucion GEAR5: %.5f%n \n",0.00000); //Cambiar como haga falta
-                System.out.printf("Solución ANALITICA: %.5f%n \n",verlet.analyticalSolution(accumTime));
-                accumTime = 0;
+                    //Print in file
+                    writer.write(String.valueOf(beemanParticle.getPosition()));
+                    writer.write(':');
+                    writer.write(String.valueOf(verletParticle.getPosition()));
+                    writer.write(':');
+                    writer.write(String.valueOf(gearParticle.getPosition()));
+                    writer.write(':');
+                    writer.write(String.valueOf(oscilador.analyticalSolution(totalTime,r0,v0,k,gamma)));
+                    writer.write(':');
+                    writer.newLine();
+
+                    accumTime = 0;
+                }
             }
-        }}catch (IOException e){
+        }catch (IOException e) {
             e.printStackTrace();
+
         }
 
     }
