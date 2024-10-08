@@ -13,4 +13,10 @@ public interface Algorithm {
     default float EulerVelocity(float v, float a, float dt) {
         return v + dt*a;
     }
+
+    default float GroupOscillatorForce(float k, float y, float prevY,float nextY){
+        return-k *(y-prevY) - k * (y-nextY);
+    }
+
+
 }

@@ -20,10 +20,6 @@ public class Particle {
         this.timeStep = timeStep;
     }
 
-    public void calculateA(){
-
-    }
-
     public float getPosition() {
         return position;
     }
@@ -36,7 +32,6 @@ public class Particle {
         this.prevV = this.v;
         this.v = v;
     }
-
 
     public float getV() {
         return v;
