@@ -2,8 +2,6 @@ package TP4.algorithms;
 
 public interface Algorithm {
     public void runAlgorithm();
-    public double getR();
-
     default double OscillatorForce(double r, double v, double m, double k, double gamma) {
         return (-k*r -gamma*v)/m;
     }
