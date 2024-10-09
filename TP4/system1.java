@@ -20,9 +20,8 @@ public class system1 {
      *
      * r = A exp(-(gamma/2m)*t) * cos((k/m - gamma^2/4m^2)^0.5 *t)*/
     public static void main(String[] args) throws IOException {
-        float k, v0, r0, m, gamma, tf, timeStep, printStep;
-        float accumTime = 0;
-        float totalTime = 0;
+        double k, v0, r0, m, gamma, tf, timeStep;
+        double totalTime = 0;
 
         Properties properties = new Properties();
 
@@ -33,17 +32,13 @@ public class system1 {
             e.printStackTrace();
         }
 
-        k = Float.parseFloat(properties.getProperty("k"));
-        r0 = Float.parseFloat(properties.getProperty("r0"));
-        m = Float.parseFloat(properties.getProperty("m"));
-        gamma = Float.parseFloat(properties.getProperty("gamma"));
-        tf = Float.parseFloat(properties.getProperty("tf"));
-        timeStep = Float.parseFloat(properties.getProperty("timeStep"));
-        printStep = Float.parseFloat(properties.getProperty("printStep"));
+        k = Double.parseDouble(properties.getProperty("k"));
+        r0 = Double.parseDouble(properties.getProperty("r0"));
+        m = Double.parseDouble(properties.getProperty("m"));
+        gamma = Double.parseDouble(properties.getProperty("gamma"));
+        tf = Double.parseDouble(properties.getProperty("tf"));
+        timeStep = Double.parseDouble(properties.getProperty("timeStep"));
         v0 = (-1 * gamma) / (2 * m);
-
-        Oscilador oscilador = new Oscilador();
-
 
 
         for (int i = 0; i < 5 ; i++) {
@@ -55,7 +50,7 @@ public class system1 {
             Verlet verlet = new Verlet(verletParticle);
             GearPredictorCorrector gear = new GearPredictorCorrector(gearParticle);
 
-            File output = new File("TP4/outputs/output_" + i + ".txt");
+            File output = new File("TP4/outputs/output_" + i + ".csv");
 
             try {
                 output.createNewFile();
@@ -64,32 +59,26 @@ public class system1 {
             }
 
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(output))) {
+                writer.write("beeman;verlet;gear;analytic;time\n");
                 while (totalTime < tf) {
                     // Iteracion de algoritmos
                     beeman.runAlgorithm();
                     verlet.runAlgorithm();
                     gear.runAlgorithm();
 
-                    accumTime += timeStep;
-                    totalTime += timeStep;
-
-//                    if (accumTime >= printStep) {
-
                     //Print in file
                     writer.write(String.valueOf(beemanParticle.getPosition()));
-                    writer.write(':');
+                    writer.write(';');
                     writer.write(String.valueOf(verletParticle.getPosition()));
-                    writer.write(':');
+                    writer.write(';');
                     writer.write(String.valueOf(gearParticle.getPosition()));
-                    writer.write(':');
-                    writer.write(String.valueOf(oscilador.analyticalSolution(m, k, gamma, totalTime)));
-                    writer.write(':');
+                    writer.write(';');
+                    writer.write(String.valueOf(analyticalSolution(m, k, gamma, totalTime)));
+                    writer.write(';');
                     writer.write(String.valueOf(totalTime));
-                    writer.write(':');
                     writer.newLine();
 
-                    accumTime = 0;
-//                    }
+                    totalTime += timeStep;
                 }
 
             } catch (IOException e) {
@@ -99,7 +88,10 @@ public class system1 {
 
             timeStep /= 10;
             totalTime = 0;
-            accumTime = 0;
         }
+    }
+
+    public static double analyticalSolution(double m, double k, double gamma, double t) {
+        return Math.exp(-t*gamma/(2*m)) * Math.cos(Math.pow(k/m - (Math.pow(gamma,2)/(4*Math.pow(m,2))), 0.5) * t);
     }
 }

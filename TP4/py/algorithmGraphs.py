@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # Directorio base
-outputFile = "../outputs/output_0.01_0.02.txt"
+outputFile = "../outputs/output_0.txt"
 
 beeman = np.array([])
 verlet = np.array([])
@@ -34,7 +34,7 @@ ax.scatter(times, analytical, color='red', label='Solución Analítica',s=10, zo
 
 # Set the axis labels
 ax.set_xlabel('Tiempo (s)', fontsize=12)
-ax.set_ylabel('Posición', fontsize=12)
+ax.set_ylabel('Posición (m)', fontsize=12)
 
 # Add a legend to differentiate between the methods
 ax.legend(loc='upper right')
