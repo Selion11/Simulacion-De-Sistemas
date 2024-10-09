@@ -8,17 +8,28 @@ import java.io.*;
 import java.util.Properties;
 
 public class system1 {
+    /*Parametros:
+     * Masa = 70kg
+     * k = 10^4 N/m
+     * gamma = 100 kg/s
+     * tfinal = 5 segundos
+     *
+     * Condiciones iniciales:
+     * r(t = 0) = 1 m
+     * v(t = 0) = - A * gamma/2m
+     *
+     * r = A exp(-(gamma/2m)*t) * cos((k/m - gamma^2/4m^2)^0.5 *t)*/
     public static void main(String[] args) throws IOException {
-        float k,v0,r0,m,gamma,tf,timeStep,printStep;
+        float k, v0, r0, m, gamma, tf, timeStep, printStep;
         float accumTime = 0;
         float totalTime = 0;
 
         Properties properties = new Properties();
 
-        try{
+        try {
             FileInputStream config = new FileInputStream("TP4/configs/conf.config");
             properties.load(config);
-        }catch(IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
@@ -29,37 +40,40 @@ public class system1 {
         tf = Float.parseFloat(properties.getProperty("tf"));
         timeStep = Float.parseFloat(properties.getProperty("timeStep"));
         printStep = Float.parseFloat(properties.getProperty("printStep"));
-        v0 = (-1*gamma)/(2*m);
-
-        Particle beemanParticle = new Particle(r0,v0,m,k,gamma,timeStep);
-        Particle verletParticle = new Particle(r0,v0,m,k,gamma,timeStep);
-        Particle gearParticle = new Particle(r0,v0,m,k,gamma,timeStep);
-
-        Beeman beeman = new Beeman(beemanParticle);
-        Verlet verlet = new Verlet(verletParticle);
-        GearPredictorCorrector gear = new GearPredictorCorrector(gearParticle);
+        v0 = (-1 * gamma) / (2 * m);
 
         Oscilador oscilador = new Oscilador();
 
-        File output = new File("TP4/outputs/output_"+timeStep+"_"+printStep+".txt");
 
-        try{
-            output.createNewFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(output))){
-            while(totalTime < tf){
-                // Iteracion de algoritmos
-                beeman.runAlgorithm();
-                verlet.runAlgorithm();
-                gear.runAlgorithm();
+        for (int i = 0; i < 5 ; i++) {
+            Particle beemanParticle = new Particle(r0, v0, m, k, gamma, timeStep);
+            Particle verletParticle = new Particle(r0, v0, m, k, gamma, timeStep);
+            Particle gearParticle = new Particle(r0, v0, m, k, gamma, timeStep);
 
-                accumTime += timeStep;
-                totalTime += timeStep;
+            Beeman beeman = new Beeman(beemanParticle);
+            Verlet verlet = new Verlet(verletParticle);
+            GearPredictorCorrector gear = new GearPredictorCorrector(gearParticle);
 
-                if(accumTime >= printStep){
+            File output = new File("TP4/outputs/output_" + i + ".txt");
+
+            try {
+                output.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(output))) {
+                while (totalTime < tf) {
+                    // Iteracion de algoritmos
+                    beeman.runAlgorithm();
+                    verlet.runAlgorithm();
+                    gear.runAlgorithm();
+
+                    accumTime += timeStep;
+                    totalTime += timeStep;
+
+//                    if (accumTime >= printStep) {
 
                     //Print in file
                     writer.write(String.valueOf(beemanParticle.getPosition()));
@@ -68,19 +82,24 @@ public class system1 {
                     writer.write(':');
                     writer.write(String.valueOf(gearParticle.getPosition()));
                     writer.write(':');
-                    writer.write(String.valueOf(oscilador.analyticalSolution(m,k,gamma,totalTime)));
+                    writer.write(String.valueOf(oscilador.analyticalSolution(m, k, gamma, totalTime)));
                     writer.write(':');
                     writer.write(String.valueOf(totalTime));
                     writer.write(':');
                     writer.newLine();
 
                     accumTime = 0;
+//                    }
                 }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+
             }
-        }catch (IOException e) {
-            e.printStackTrace();
 
+            timeStep /= 10;
+            totalTime = 0;
+            accumTime = 0;
         }
-
     }
 }
