@@ -34,21 +34,28 @@ for file in files:
             analytic = np.append(analytic,float(data[3]))
 
         # Calculate Mean Squared Error for each method (excluding last point)
-        mse_gear = ((np.array(gear[:-1]) - np.array(analytic[1:]))**2).mean(axis=0)
-        mse_beeman = ((np.array(beeman[:-1]) - np.array(analytic[1:]))**2).mean(axis=0)
-        mse_verlet = ((np.array(verlet[:-1]) - np.array(analytic[1:]))**2).mean(axis=0)
+        mse_gear = ((gear - analytic)**2).mean(axis=0)
+        mse_beeman = ((beeman - analytic)**2).mean(axis=0)
+        mse_verlet = ((verlet - analytic)**2).mean(axis=0)
 
         # Append the MSE values to the corresponding lists
         gear_ecm.append(mse_gear)
         beeman_ecm.append(mse_beeman)
         verlet_ecm.append(mse_verlet)
+        print(file)
     
 
 # Print ECM for one method to check
-print("Verlet ECM for largest timestep:", verlet_ecm[4])
+# print("Verlet ECM for largest timestep:", verlet_ecm[4])
 
 # Plotting the results
 fig, ax = plt.subplots()
+
+gear_ecm = gear_ecm[::-1]
+beeman_ecm = beeman_ecm[::-1]
+verlet = verlet[::-1]
+
+
 
 error = [1, 2, 3, 4, 5]
 ticks = ['$10^{-6}$', '$10^{-5}$', '$10^{-4}$', '$10^{-3}$', '$10^{-2}$']
@@ -64,7 +71,7 @@ ax.scatter(error, beeman_ecm, color='green', label='BEEMAN', zorder=1)
 ax.plot(error, beeman_ecm, color='green', zorder=1)
 
 # Set x and y scale to log
-ax.set_xscale('log')
+# ax.set_xscale('log')
 ax.set_yscale('log')
 
 # Set the axis labels
@@ -74,7 +81,7 @@ ax.set_ylabel('ECM (m^2)', fontsize=12)
 plt.xticks(error, labels=ticks)
 
 # Add a legend to differentiate between the methods
-ax.legend(loc='upper right')
+ax.legend(loc='upper center')
 
 # Add a grid for better visualization
 ax.grid(True)
