@@ -7,12 +7,12 @@ public class Verlet implements Algorithm{
     private ParticleSys2 particleSys2;
     private ParticleSys2 prevP;
     private ParticleSys2 nextP;
-    float m;
-    float k;
-    float gamma;
-    float dt;
+    double m;
+    double k;
+    double gamma;
+    double dt;
 
-    float a;
+    double a;
 
     public Verlet(Particle particle) {
         this.particle = particle;
@@ -44,7 +44,7 @@ public class Verlet implements Algorithm{
 
     @Override
     public void runAlgorithm() {
-        float rAfter = 2*particle.getPosition() - particle.getPrevPosition() + dt* dt*a;
+        double rAfter = 2*particle.getPosition() - particle.getPrevPosition() + dt* dt*a;
         particle.setV ((rAfter - particle.getPrevPosition())/(2* particle.getTimeStep()));
 
         this.particle.setPosition(rAfter);

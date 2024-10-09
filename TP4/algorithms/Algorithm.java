@@ -2,19 +2,19 @@ package TP4.algorithms;
 
 public interface Algorithm {
     public void runAlgorithm();
-    default float OscillatorForce(float r, float v, float m, float k, float gamma) {
+    default double OscillatorForce(double r, double v, double m, double k, double gamma) {
         return (-k*r -gamma*v)/m;
     }
 
-    default float EulerPosition(float r, float v, float a, float dt) {
+    default double EulerPosition(double r, double v, double a, double dt) {
         return r + dt*v + dt*dt*a/2;
     }
 
-    default float EulerVelocity(float v, float a, float dt) {
+    default double EulerVelocity(double v, double a, double dt) {
         return v + dt*a;
     }
 
-    default float GroupOscillatorForce(float k, float y, float prevY,float nextY){
+    default double GroupOscillatorForce(double k, double y, double prevY,double nextY){
         return-k *(y-prevY) - k * (y-nextY);
     }
 

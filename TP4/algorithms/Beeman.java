@@ -3,15 +3,15 @@ package TP4.algorithms;
 import TP4.Particle;
 
 public class Beeman implements Algorithm{
-    final float m;
-    final float k;
-    final float gamma;
-    final float dt;
+    final double m;
+    final double k;
+    final double gamma;
+    final double dt;
 
-    float a;
-    float rBefore;
-    float vBefore;
-    float aBefore;
+    double a;
+    double rBefore;
+    double vBefore;
+    double aBefore;
     private final Particle particle;
 
     public Beeman(Particle particle) {
@@ -29,9 +29,9 @@ public class Beeman implements Algorithm{
 
     @Override
     public void runAlgorithm() {
-        float rAfter = particle.getPosition() + particle.getV()*dt + a*dt*dt*2/3 - aBefore*dt*dt/6;
-        float vAfter = particle.getV() + 1.5f*a*dt - 0.5f*aBefore*dt;
-        float aAfter = OscillatorForce(rAfter, vAfter, m, k, gamma);
+        double rAfter = particle.getPosition() + particle.getV()*dt + a*dt*dt*2/3 - aBefore*dt*dt/6;
+        double vAfter = particle.getV() + 1.5f*a*dt - 0.5f*aBefore*dt;
+        double aAfter = OscillatorForce(rAfter, vAfter, m, k, gamma);
         vAfter = particle.getV() + aAfter*dt/3 + a*dt*5/6 - aBefore*dt/6;
 
         aBefore = a;

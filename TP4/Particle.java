@@ -6,10 +6,10 @@ import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 
 public class Particle {
-    private float position,a,v,prevPosition, prevV;
-    private final float m,k,gamma,timeStep;
+    private double position,a,v,prevPosition, prevV;
+    private final double m,k,gamma,timeStep;
 
-    public Particle(float position, float v0, float m,float k,float gamma,float timeStep) {
+    public Particle(double position, double v0, double m,double k,double gamma,double timeStep) {
         this.position = position;
         this.prevPosition = position;
         this.m = m;
@@ -20,48 +20,48 @@ public class Particle {
         this.timeStep = timeStep;
     }
 
-    public float getPosition() {
+    public double getPosition() {
         return position;
     }
 
-    public float getM() {
+    public double getM() {
         return m;
     }
 
-    public void setV(float v) {
+    public void setV(double v) {
         this.prevV = this.v;
         this.v = v;
     }
 
-    public float getV() {
+    public double getV() {
         return v;
     }
 
-    public float getPrevPosition() {
+    public double getPrevPosition() {
         return prevPosition;
     }
-    public float getPrevV(){
+    public double getPrevV(){
         return prevV;
     }
 
-    public void setPosition(float position) {
+    public void setPosition(double position) {
         this.prevPosition = this.position;
         this.position = position;
     }
 
-    public void setPrevPosition(float position){
+    public void setPrevPosition(double position){
         this.prevPosition = position;
     }
 
-    public float getK() {
+    public double getK() {
         return k;
     }
 
-    public float getGamma() {
+    public double getGamma() {
         return gamma;
     }
 
-    public float getTimeStep() {
+    public double getTimeStep() {
         return timeStep;
     }
 
