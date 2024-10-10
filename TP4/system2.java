@@ -1,7 +1,5 @@
 package TP4;
 
-import TP4.algorithms.Beeman;
-import TP4.algorithms.GearPredictorCorrector;
 import TP4.algorithms.Verlet;
 
 import java.io.*;
