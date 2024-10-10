@@ -9,7 +9,7 @@ import java.util.*;
 
 public class system2 {
     public static void main(String[] args) throws IOException {
-        double k,l0,m,tf,timeStep,printStep,omega,a;
+        double k,m,tf,timeStep,printStep,omega,a,k2,k3,k4,k5;
         int n;
         double accumTime = 0;
         double totalTime = 0;
@@ -24,7 +24,6 @@ public class system2 {
         }
 
         k = Double.parseDouble(properties.getProperty("k"));
-        l0 = Double.parseDouble(properties.getProperty("l0"));
         a = Double.parseDouble(properties.getProperty("a"));
         m = Double.parseDouble(properties.getProperty("m"));
         tf = Double.parseDouble(properties.getProperty("tf"));
@@ -40,7 +39,7 @@ public class system2 {
         File output = new File("TP4/outputs/output_"+omega+"_SYS2.csv");
 
         for(int i = 1;i <= n;i++){
-            ParticleSys2 p = new ParticleSys2(0,omega,m,k,0,timeStep,i,l0);
+            ParticleSys2 p = new ParticleSys2(0,omega,m,k,0,timeStep,i);
             particles.put(i,p);
         }
         verletSystems.put(1,null);
@@ -67,13 +66,16 @@ public class system2 {
             writer.write('\n');
             while(totalTime < tf){
                 for(int i = 1;i<=n;i++){
-                     if(i == 1 || i == n){
+                    if(i == 1){
+                        float aux_pos = (float) (Math.cos(omega*totalTime) * a);
+
+                    }else if(i == n){
                          ParticleSys2 aux = particles.get(i);
                          float aux_pos = (float) (Math.cos(omega*totalTime) * a);
                          aux.setPosition(aux_pos);
-                     }else{
-                         verletSystems.get(i).runAlgorithm();
-                     }
+                    }else{
+                        verletSystems.get(i).runAlgorithm();
+                    }
                 }
 
                 totalTime += timeStep;
