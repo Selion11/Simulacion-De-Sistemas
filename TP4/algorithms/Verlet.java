@@ -52,6 +52,7 @@ public class Verlet implements Algorithm{
     }
 
     public void runAlogrithmSys2(){
+        this.a = GroupOscillatorForce(k,particleSys2.getPosition(), prevP.getPosition(),nextP.getPosition());
         double rAfter = 2*particleSys2.getPosition() - particleSys2.getPrevPosition() + dt* dt*a;
         particleSys2.setV ((rAfter - particleSys2.getPrevPosition())/(2* particleSys2.getTimeStep()));
 
