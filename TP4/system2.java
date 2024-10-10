@@ -9,10 +9,11 @@ import java.util.*;
 
 public class system2 {
     public static void main(String[] args) throws IOException {
-        double k,m,tf,timeStep,printStep,omega,a,k2,k3,k4,k5;
+        double k,m,tf,timeStep,printStep,omega,omega2,omega3,omega4,omega5,a,k2,k3,k4,k5;
         int n;
-        double accumTime = 0;
-        double totalTime = 0;
+        List<Double> omegas = new ArrayList<>();
+        List<Double> ks = new ArrayList<>();
+
 
         Properties properties = new Properties();
 
@@ -24,19 +25,50 @@ public class system2 {
         }
 
         k = Double.parseDouble(properties.getProperty("k"));
+        k2 = Double.parseDouble(properties.getProperty("k2"));
+        k3 = Double.parseDouble(properties.getProperty("k3"));
+        k4 = Double.parseDouble(properties.getProperty("k4"));
+        k5 = Double.parseDouble(properties.getProperty("k5"));
         a = Double.parseDouble(properties.getProperty("a"));
         m = Double.parseDouble(properties.getProperty("m"));
         tf = Double.parseDouble(properties.getProperty("tf"));
         printStep = Double.parseDouble(properties.getProperty("printStep"));
         n = Integer.parseInt(properties.getProperty("n"));
         omega = Double.parseDouble(properties.getProperty("omega"));
-
+        omega2 = Double.parseDouble(properties.getProperty("omega2"));
+        omega3 = Double.parseDouble(properties.getProperty("omega3"));
+        omega4 = Double.parseDouble(properties.getProperty("omega4"));
+        omega5 = Double.parseDouble(properties.getProperty("omega5"));
         timeStep = 1/(100 * omega);
 
+        omegas.add(omega);
+        omegas.add(omega2);
+        omegas.add(omega3);
+        omegas.add(omega4);
+        omegas.add(omega5);
+
+        ks.add(k);
+        ks.add(k2);
+        ks.add(k3);
+        ks.add(k4);
+        ks.add(k5);
+
+        for(int i=0; i<5; i++){
+            runSystem(omegas.get(i),m, ks.get(0), timeStep,n,printStep,tf);
+        }
+
+        for(int i=0; i<5; i++){
+            runSystem(omegas.get(0),m, ks.get(i), timeStep,n,printStep,tf);
+        }
+
+    }
+
+    private static void runSystem(double omega,double m,double k,double timeStep,int n,double printStep,double tf){
+        double accumTime = 0;
+        double totalTime = 0;
         Map<Integer,ParticleSys2> particles = new HashMap<Integer,ParticleSys2>();
         Map<Integer,Verlet> verletSystems = new HashMap<Integer,Verlet>();
-
-        File output = new File("TP4/outputs/output_"+omega+"_SYS2.csv");
+        File output = new File("TP4/outputs/output_"+omega+"_"+k+"_SYS2.csv");
 
         for(int i = 1;i <= n;i++){
             ParticleSys2 p = new ParticleSys2(0,omega,m,k,0,timeStep,i);
@@ -70,9 +102,9 @@ public class system2 {
                         float aux_pos = (float) (Math.cos(omega*totalTime) * a);
 
                     }else if(i == n){
-                         ParticleSys2 aux = particles.get(i);
-                         float aux_pos = (float) (Math.cos(omega*totalTime) * a);
-                         aux.setPosition(aux_pos);
+                        ParticleSys2 aux = particles.get(i);
+                        float aux_pos = (float) (Math.cos(omega*totalTime) * a);
+                        aux.setPosition(aux_pos);
                     }else{
                         verletSystems.get(i).runAlgorithm();
                     }
@@ -95,6 +127,5 @@ public class system2 {
             e.printStackTrace();
 
         }
-
     }
 }
