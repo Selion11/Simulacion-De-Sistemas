@@ -9,10 +9,10 @@ import java.util.*;
 
 public class system2 {
     public static void main(String[] args) throws IOException {
-        float k,l0,m,tf,timeStep,printStep,omega,a;
+        double k,l0,m,tf,timeStep,printStep,omega,a;
         int n;
-        float accumTime = 0;
-        float totalTime = 0;
+        double accumTime = 0;
+        double totalTime = 0;
 
         Properties properties = new Properties();
 
@@ -23,21 +23,21 @@ public class system2 {
             e.printStackTrace();
         }
 
-        k = Float.parseFloat(properties.getProperty("k"));
-        l0 = Float.parseFloat(properties.getProperty("l0"));
-        a = Float.parseFloat(properties.getProperty("a"));
-        m = Float.parseFloat(properties.getProperty("m"));
-        tf = Float.parseFloat(properties.getProperty("tf"));
-        printStep = Float.parseFloat(properties.getProperty("printStep"));
+        k = Double.parseDouble(properties.getProperty("k"));
+        l0 = Double.parseDouble(properties.getProperty("l0"));
+        a = Double.parseDouble(properties.getProperty("a"));
+        m = Double.parseDouble(properties.getProperty("m"));
+        tf = Double.parseDouble(properties.getProperty("tf"));
+        printStep = Double.parseDouble(properties.getProperty("printStep"));
         n = Integer.parseInt(properties.getProperty("n"));
-        omega = Float.parseFloat(properties.getProperty("omega"));
+        omega = Double.parseDouble(properties.getProperty("omega"));
 
         timeStep = 1/(100 * omega);
 
         Map<Integer,ParticleSys2> particles = new HashMap<Integer,ParticleSys2>();
         Map<Integer,Verlet> verletSystems = new HashMap<Integer,Verlet>();
 
-        File output = new File("TP4/outputs/output_"+timeStep+"_"+printStep+"_SYS2.txt");
+        File output = new File("TP4/outputs/output_"+omega+"_SYS2.csv");
 
         for(int i = 1;i <= n;i++){
             ParticleSys2 p = new ParticleSys2(0,omega,m,k,0,timeStep,i,l0);
@@ -60,6 +60,11 @@ public class system2 {
         }
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(output))){
+            writer.write("time;");
+            for(int i = 1; i <= n;i++){
+                writer.write("p"+i+";");
+            }
+            writer.write('\n');
             while(totalTime < tf){
                 for(int i = 1;i<=n;i++){
                      if(i == 1 || i == n){
@@ -74,12 +79,12 @@ public class system2 {
                 totalTime += timeStep;
                 accumTime += timeStep;
                 if(accumTime >= printStep){
-                    writer.write(totalTime+"\n");
+                    writer.write(totalTime+";");
                     for(int i = 1;i<=n;i++){
                         ParticleSys2 aux = particles.get(i);
                         if(i == n){
                             writer.write(aux.getPosition()+"\n");
-                        }else {writer.write(aux.getPosition()+" ");}
+                        }else {writer.write(aux.getPosition()+";");}
                     }
                     accumTime = 0;
                 }
