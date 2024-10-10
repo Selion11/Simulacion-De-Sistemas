@@ -35,11 +35,13 @@ for file in files:
     beeman_mse.append(mse_beeman)
     verlet_mse.append(mse_verlet)
 
-print(gear_mse)
 
-plt.scatter(error, gear_mse, label="Gear Predict-Correct", marker='o')
-plt.scatter(error, beeman_mse, label="Beeman", marker='o')
-plt.scatter(error, verlet_mse, label="Verlet", marker='o')
+plt.scatter(error, gear_mse, color='red', label="Gear Predict-Correct", marker='o')
+plt.scatter(error, beeman_mse, color='blue', label="Beeman", marker='o')
+plt.scatter(error, verlet_mse, color='green',label="Verlet", marker='o')
+plt.plot(error, gear_mse,color='red')
+plt.plot(error, beeman_mse,color='blue')
+plt.plot(error, verlet_mse, color='green')
 
 # Agregar etiquetas de ejes y título
 plt.xlabel('Delta T [s]')

@@ -1,25 +1,26 @@
 import os
 import numpy as np
 import matplotlib.pyplot as plt
+import pandas as pd
+
 
 # Directorio base
-outputFile = "../outputs/output_0.txt"
+outputFile = "../outputs/output_0.csv"
 
-beeman = np.array([])
-verlet = np.array([])
-gear = np.array([])
-analytical = np.array([])
-times = np.array([])
+# beeman = np.array([])
+# verlet = np.array([])
+# gear = np.array([])
+# analytical = np.array([])
+# times = np.array([])
 
-with open(outputFile, 'r') as file:
-    lines = file.readlines()
-    for l in lines:
-        data = l.split(':')
-        beeman = np.append(beeman,float(data[0]))
-        verlet = np.append(verlet,float(data[1]))
-        gear = np.append(gear,float(data[2]))
-        analytical = np.append(analytical,float(data[3]))
-        times = np.append(times,float(data[4]))
+df = pd.read_csv(outputFile, delimiter=';')
+
+# Access each column as a Pandas Series
+times = df['time'].tolist()
+analytic = df['analytic'].tolist()
+gear = df['gear'].tolist()
+beeman = df['beeman'].tolist()
+verlet = df['verlet'].tolist()
 
 
 
@@ -30,7 +31,7 @@ fig, ax = plt.subplots()
 ax.scatter(times, gear, color='blue', label='GEAR_PREDICTOR_CORRECTOR', s=10, zorder=3)
 ax.scatter(times, verlet, color='orange', label='VERLET', s=10, zorder=2)
 ax.scatter(times, beeman, color='green', label='BEEMAN', s=10, zorder=1)
-ax.scatter(times, analytical, color='red', label='Solución Analítica',s=10, zorder=0)
+ax.scatter(times, analytic, color='red', label='Solución Analítica',s=10, zorder=0)
 
 # Set the axis labels
 ax.set_xlabel('Tiempo (s)', fontsize=12)
