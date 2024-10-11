@@ -58,22 +58,18 @@ public class system2 {
         ks.add(k3);
         ks.add(k4);
         ks.add(k5);
-        int run = 1;
 
-        for(int i=0; i<9; i++){
-            timeStep = 1/(100 * omegas.get(i));
-            runSystem(run,omegas.get(i),m, ks.get(0), timeStep,n,tf);
-            run += 1;
+        for(Double i: ks) {
+            for (Double j : omegas) {
+                timeStep = 1/(100 * j);
+                runSystem(j,m,i,timeStep,n,tf);
+            }
         }
-        timeStep = 1 /(100 * omegas.get(0));
-        for(int i=0; i<5; i++){
-            runSystem(run,omegas.get(0),m, ks.get(i), timeStep,n,tf);
-            run += 1;
-        }
+
 
     }
 
-    private static void runSystem(int run,double omega,double m,double k,double timeStep,int n,double tf){
+    private static void runSystem(double omega,double m,double k,double timeStep,int n,double tf){
         double totalTime = 0;
         Map<Integer,ParticleSys2> particles = new HashMap<Integer,ParticleSys2>();
         Map<Integer,Verlet> verletSystems = new HashMap<Integer,Verlet>();
