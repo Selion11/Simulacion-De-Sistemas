@@ -7,7 +7,7 @@ import java.util.*;
 
 public class system2 {
     public static void main(String[] args) throws IOException {
-        double k,m,tf,timeStep,printStep;
+        double k,m,tf,timeStep;
         double omega,omega2,omega3,omega4,omega5,omega6,omega7,omega8,omega9;
         double k2,k3,k4,k5;
         int n;
@@ -31,7 +31,6 @@ public class system2 {
         k5 = Double.parseDouble(properties.getProperty("k5"));
         m = Double.parseDouble(properties.getProperty("m"));
         tf = Double.parseDouble(properties.getProperty("tf"));
-        printStep = Double.parseDouble(properties.getProperty("printStep"));
         n = Integer.parseInt(properties.getProperty("n"));
         omega = Double.parseDouble(properties.getProperty("omega"));
         omega2 = Double.parseDouble(properties.getProperty("omega2"));
@@ -58,22 +57,23 @@ public class system2 {
         ks.add(k3);
         ks.add(k4);
         ks.add(k5);
-
+        int run = 0;
         for(Double i: ks) {
             for (Double j : omegas) {
                 timeStep = 1/(100 * j);
-                runSystem(j,m,i,timeStep,n,tf);
+                runSystem(run,j,m,i,timeStep,n,tf);
+                run++;
             }
         }
 
 
     }
 
-    private static void runSystem(double omega,double m,double k,double timeStep,int n,double tf){
+    private static void runSystem(int run,double omega,double m,double k,double timeStep,int n,double tf){
         double totalTime = 0;
         Map<Integer,ParticleSys2> particles = new HashMap<Integer,ParticleSys2>();
         Map<Integer,Verlet> verletSystems = new HashMap<Integer,Verlet>();
-        File output = new File("TP4/outputs/System2/"+omega+"_"+k+".csv");
+        File output = new File("TP4/outputs/System2/"+run+"_"+omega+"_"+k+".csv");
 
         for(int i = 1;i <=n;i++){
             ParticleSys2 p = new ParticleSys2(0,omega,m,k,0,timeStep,i);
@@ -112,9 +112,14 @@ public class system2 {
                 }
                 totalTime += timeStep;
                 double a = pn.getPosition()/Math.cos(omega*totalTime);
-                if(a <= 1.0 && a >= -1.0){
-                    writer.write(totalTime+";"+a+";"+omega+";"+k+"\n");
+                for(int i = 2;i < n;i++){
+                    ParticleSys2 aux = particles.get(i);
+                    if(aux.getPosition() > a){
+                        a = aux.getPosition();
+                    }
                 }
+                writer.write(totalTime+";"+a+";"+omega+";"+k+"\n");
+
             }
         }catch (IOException e) {
             e.printStackTrace();
