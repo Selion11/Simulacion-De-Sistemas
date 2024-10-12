@@ -57,23 +57,23 @@ public class system2 {
         ks.add(k3);
         ks.add(k4);
         ks.add(k5);
-        int run = 0;
+
         for(Double i: ks) {
             for (Double j : omegas) {
                 timeStep = 1/(100 * j);
-                runSystem(run,j,m,i,timeStep,n,tf);
-                run++;
+                //System.out.println("K: "+i+" Omega: "+j+" TimeStep: "+timeStep);
+                runSystem(j,m,i,timeStep,n,tf);
             }
         }
 
 
     }
 
-    private static void runSystem(int run,double omega,double m,double k,double timeStep,int n,double tf){
+    private static void runSystem(double omega,double m,double k,double timeStep,int n,double tf){
         double totalTime = 0;
-        Map<Integer,ParticleSys2> particles = new HashMap<Integer,ParticleSys2>();
+        Map<Integer,Particle> particles = new HashMap<Integer,Particle>();
         Map<Integer,Verlet> verletSystems = new HashMap<Integer,Verlet>();
-        File output = new File("TP4/outputs/System2/"+run+"_"+omega+"_"+k+".csv");
+        File output = new File("TP4/outputs/System2/"+omega+"_"+k+".csv");
 
         for(int i = 1;i <=n;i++){
             ParticleSys2 p = new ParticleSys2(0,omega,m,k,0,timeStep,i);
@@ -85,9 +85,9 @@ public class system2 {
         verletSystems.put(n,new Verlet(pn));
 
         for(int i = 2 ;i < n;i++){
-            ParticleSys2 prevAxu = particles.get(i-1);
-            ParticleSys2 actualAux = particles.get(i);
-            ParticleSys2 nextAxu = particles.get(i+1);
+            Particle prevAxu = particles.get(i-1);
+            Particle actualAux = particles.get(i);
+            Particle nextAxu = particles.get(i+1);
             Verlet aux = new Verlet(actualAux,prevAxu,nextAxu);
             verletSystems.put(i,aux);
         }
@@ -110,15 +110,15 @@ public class system2 {
                         verletSystems.get(i).runAlogrithmSys2();
                     }
                 }
-                totalTime += timeStep;
                 double a = pn.getPosition()/Math.cos(omega*totalTime);
                 for(int i = 2;i < n;i++){
-                    ParticleSys2 aux = particles.get(i);
+                    Particle aux = particles.get(i);
                     if(aux.getPosition() > a){
                         a = aux.getPosition();
                     }
                 }
                 writer.write(totalTime+";"+a+";"+omega+";"+k+"\n");
+                totalTime += timeStep;
 
             }
         }catch (IOException e) {
@@ -126,4 +126,5 @@ public class system2 {
 
         }
     }
+
 }

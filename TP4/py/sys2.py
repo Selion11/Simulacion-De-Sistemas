@@ -16,7 +16,7 @@ files100 = ["TP4/outputs/System2/8.0_100.0.csv",
             "TP4/outputs/System2/11.5_100.0.csv",
             "TP4/outputs/System2/12.0_100.0.csv"]
 
-files1000 = [  "TP4/outputs/System2/8.0_1000.0.csv",
+files1000 = ["TP4/outputs/System2/8.0_1000.0.csv",
             "TP4/outputs/System2/8.5_1000.0.csv",
             "TP4/outputs/System2/9.0_1000.0.csv",
             "TP4/outputs/System2/9.5_1000.0.csv",
@@ -26,7 +26,7 @@ files1000 = [  "TP4/outputs/System2/8.0_1000.0.csv",
             "TP4/outputs/System2/11.5_1000.0.csv",
             "TP4/outputs/System2/12.0_1000.0.csv"]
 
-files2000 = [   "TP4/outputs/System2/8.0_2000.0.csv",
+files2000 = ["TP4/outputs/System2/8.0_2000.0.csv",
             "TP4/outputs/System2/8.5_2000.0.csv",
             "TP4/outputs/System2/9.0_2000.0.csv",
             "TP4/outputs/System2/9.5_2000.0.csv",
@@ -36,7 +36,7 @@ files2000 = [   "TP4/outputs/System2/8.0_2000.0.csv",
             "TP4/outputs/System2/11.5_2000.0.csv",
             "TP4/outputs/System2/12.0_2000.0.csv"]
 
-files5000 = [   "TP4/outputs/System2/8.0_5000.0.csv",
+files5000 = [ "TP4/outputs/System2/8.0_5000.0.csv",
             "TP4/outputs/System2/8.5_5000.0.csv",
             "TP4/outputs/System2/9.0_5000.0.csv",
             "TP4/outputs/System2/9.5_5000.0.csv",
@@ -58,7 +58,7 @@ files10000 = ["TP4/outputs/System2/8.0_10000.0.csv",
             "TP4/outputs/System2/12.0_10000.0.csv"]
 
 
-# omegas = [8.0, 9.0, 10.0, 11.0, 12.0]
+# omegas = [5.0,6.0,7.0,8.0, 9.0, 10.0, 11.0, 12.0,13.0]
 omegas = [8.0,8.5, 9.0,9.5, 10.0,10.5, 11.0,11.5, 12.0]
 ks = [100.0, 1000.0, 2000.0, 5000.0, 10000.0]
 amplitudes100 = []
@@ -100,11 +100,7 @@ for i in range(len(omegas)):
     max_amplitudes10000.append(max(amplitudes10000[i])/20000)
 
     
-max_amplitudesk = []
-for k in ks:
-    f = "TP4/outputs/System2/10.0_"+str(k)+".csv"
-    df = pd.read_csv(f,delimiter=';')
-    max_amplitudesk.append(max(df['a'].tolist()))
+
     
 
 
@@ -113,6 +109,8 @@ def graphOnlyOne(maxes,omegas):
     plt.xlabel('Omega [rad/s]')
     plt.ylabel('Amplitude [m]')
     plt.savefig('TP4/outputs/System2/amplitudes_100.png')
+    for i in range(len(maxes)):
+        print("OMEGA: "+str(omegas[i]) + " MAX: " + str(maxes[i]))
 
 def graphAll(maxes1,maxes2,maxes3,maxes4,maxes5,omegas):
     plt.plot(omegas, maxes1, color='red', label='k = 100')
