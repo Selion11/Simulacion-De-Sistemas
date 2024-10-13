@@ -21,6 +21,7 @@ public class Particle {
         this.timeStep = timeStep;
         this.id=id;
         this.omega = omega;
+        this.a = 0.0;
     }
 
     public double getOmega(){return omega;}

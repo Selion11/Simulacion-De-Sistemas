@@ -59,10 +59,10 @@ public class system2 {
         omegas.add(omega9);//12
 
         ks.add(k);
-//        ks.add(k2);
-//        ks.add(k3);
-//        ks.add(k4);
-//        ks.add(k5);
+        ks.add(k2);
+        ks.add(k3);
+        ks.add(k4);
+        ks.add(k5);
 
         for(Double i: ks) {
             for (Double j : omegas) {
@@ -114,7 +114,7 @@ public class system2 {
     private static void runSystem(double k,double mass,double omega,double timeStep,int particleCant,double totalTime,double amp){
         List<Particle> particles = new ArrayList<>();
         File output = new File("TP4/outputs/System2/"+omega+"_"+k+".csv");
-        System.out.println("K: "+k+" MASS: "+mass+" TIMESTEP: "+timeStep+" OMEGA: "+omega+" TOTAL TIME: "+totalTime);
+        //System.out.println("K: "+k+" MASS: "+mass+" TIMESTEP: "+timeStep+" OMEGA: "+omega+" TOTAL TIME: "+totalTime);
         for(int i = 0; i < particleCant;i++){
             //INICIALIZO TODAS LAS PARTICULAS DEL SISTEMA
             //POS AND V iniciales = 0
@@ -127,7 +127,6 @@ public class system2 {
         //INICIALIZO EL SISTEMA CON TODAS LAS PARTICULAS
         VerletForSeveral verlet = new VerletForSeveral(particles,amp);
         double timeElapsed = timeStep;
-        int id = 0;
         try(BufferedWriter writer = new BufferedWriter(new FileWriter(output))){
             writer.write("time;a\n");
             while(timeElapsed < totalTime){
@@ -137,11 +136,10 @@ public class system2 {
                 for(Particle p: particles){
                     if(p.getPosition() > maxAmp && !Double.isInfinite(p.getPosition())){
                         maxAmp = p.getPosition();
-                        id = p.getId();
                     }
                 }
                 writer.write(timeElapsed+";"+maxAmp+"\n");
-                //System.out.println("FOR K: "+k+" OMEGA: "+omega+" MAX AMP WAS: "+maxAmp+" IN TIME: "+timeElapsed+"\n");
+                System.out.println("FOR K: "+k+" OMEGA: "+omega+" MAX AMP WAS: "+maxAmp+" IN TIME: "+timeElapsed+"\n");
                 timeElapsed+=timeStep;
             }
 

@@ -16,19 +16,23 @@ public class VerletForSeveral implements Algorithm{
         this.dt = particles.get(0).getTimeStep();
         this.amplitud = amplitud;
         this.omega = particles.get(0).getOmega();
-/*      ESTO ESTA EN EL ORIGINAL DEL SISTEMA 1
-        this.a no va cambiando por particula? Lo que hago en run algorithm no reemplaza esta linea??
-        this.a = OscillatorForce(particle.getPosition(), particle.getV(), m, k, gamma);
 
-        this.particle.setPrevPosition no esta hecho ya cuando inicializo la paritcula con prev osition en 0??*/
         double a;
 
         for(Particle p : particles){
             //System.out.println("ID: "+p.getId()+" V: "+p.getV());
-            a =  OscillatorForce(p.getPosition(), p.getV(), p.getM(), p.getK(), 100.0);
-            p.setPrevPosition( EulerPosition(p.getPosition(), p.getV(), a, -dt));
-            System.out.println("SET PREV POS: "+p.getPrevPosition());
-            p.setA(a);
+            if(p.getId() ==0){
+                a = calculateForce(p.getPosition(),particles.get(p.getId()+1).getPosition(),0,p.getK(),p.getM());
+                p.setA(a);
+                p.setPrevPosition( EulerPosition(p.getPosition(), p.getV(), a/p.getM(), -dt));
+            }else{
+                if(p.getId() != 99) {
+                    a = calculateForce(p.getPosition(), particles.get(p.getId() + 1).getPosition(), particles.get(p.getId() - 1).getPrevPosition(), p.getK(), p.getM());
+                    p.setA(a);
+                    p.setPrevPosition(EulerPosition(p.getPosition(), p.getV(), a / p.getM(), -dt));
+                }
+
+            }
         }
 
 
@@ -46,9 +50,9 @@ public class VerletForSeveral implements Algorithm{
             //CADA FOR INDIVIDUAL DEBERIA FUNCIONAR COMO UN VERLET DE SYSTEMA 1
             int pid = p.getId();
             if(pid==99){
-                p.setA(0.01);
+                //p.setA(0.01);
                 // SI ES LA ULTIMA PARTICULA UTILIZO LA CUENTA REQUERIDA EN EL PDF
-                p.setPosition(lastParticle(p.getA(),omega,time));
+                p.setPosition(lastParticle(0.01,omega,time));
             }else{
                 if(pid == 0) {
                     //SI ES LA PARTICULA CONTRA LA PARED NO TIENE PARTICULA PREVIA F = m*a -> DIVIDO LA FUERZA POR LA MASA PARA OBTENER LA CELERACION
@@ -61,7 +65,7 @@ public class VerletForSeveral implements Algorithm{
                     //n  n  c(T)
                     p.setA(amplitud);
                 }
-                double rAfter = (2.0*p.getPosition()) - p.getPrevPosition() + (Math.pow(dt,2)) *p.getA();
+                double rAfter = (2.0*p.getPosition()) - p.getPrevPosition() + (Math.pow(dt,2)/p.getM()) *p.getA();
                 p.setV ((rAfter - p.getPrevPosition())/(2.0 * dt));
                 p.setPosition(rAfter);
             }
