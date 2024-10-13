@@ -42,9 +42,9 @@ public class system1 {
 
 
         for (int i = 0; i < 5 ; i++) {
-            Particle beemanParticle = new Particle(r0, v0, m, k, gamma, timeStep);
-            Particle verletParticle = new Particle(r0, v0, m, k, gamma, timeStep);
-            Particle gearParticle = new Particle(r0, v0, m, k, gamma, timeStep);
+            Particle beemanParticle = new Particle(r0, v0, m, k, gamma, timeStep,0,0);
+            Particle verletParticle = new Particle(r0, v0, m, k, gamma, timeStep,0,0);
+            Particle gearParticle = new Particle(r0, v0, m, k, gamma, timeStep,0,0);
 
             Beeman beeman = new Beeman(beemanParticle);
             Verlet verlet = new Verlet(verletParticle);

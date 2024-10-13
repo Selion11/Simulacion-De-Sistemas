@@ -67,10 +67,6 @@ amplitudes2000 = []
 amplitudes5000 = []
 amplitudes10000 = []
 
-df = pd.read_csv("TP4/outputs/System2/8.0_100.0.csv", delimiter=';')
-amplitudes100.append(df['a'].tolist())
-print(max(amplitudes100[0]))
-
 for i in range(len(omegas)):
     df = pd.read_csv(files100[i], delimiter=';')
     amplitudes100.append(df['a'].tolist())
@@ -112,8 +108,8 @@ def graphOnlyOne(maxes,omegas,num):
     plt.xlabel('Omega [rad/s]')
     plt.ylabel('Amplitude [m]')
     plt.savefig('TP4/outputs/System2/amplitudes_'+str(num)+'.png')
-    # for i in range(len(maxes)):
-    #     print("OMEGA: "+str(omegas[i]) + " MAX: " + str(maxes[i]))
+    for i in range(len(maxes)):
+        print("OMEGA: "+str(omegas[i]) + " MAX: " + str(maxes[i]))
     plt.close()
 
 def graphAll(maxes1,maxes2,maxes3,maxes4,maxes5,omegas):
@@ -132,5 +128,7 @@ def graphKVsA(maxes,ks):
     plt.xlabel('k [kg/s^2]')
     plt.ylabel('Amplitude [m]')
     plt.savefig('TP4/outputs/System2/KVsA.png')
+
+graphOnlyOne(max_amplitudes100,omegas,100)
 
 

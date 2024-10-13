@@ -2,12 +2,13 @@ package TP4;
 
 public class ParticleSys2 {
     private double position,v,prevPosition, prevV;
-
-    public ParticleSys2(double position, double v0) {
+    private int id;
+    public ParticleSys2(double position, double v0,int id) {
         this.position = position;
         this.prevPosition = position;
         this.v = v0;
         this.prevV = v0;
+        this.id = id;
     }
 
     public double getPosition() {
@@ -17,6 +18,10 @@ public class ParticleSys2 {
     public void setV(double v) {
         this.prevV = this.v;
         this.v = v;
+    }
+
+    public int getId(){
+        return id;
     }
 
     public double getV() {

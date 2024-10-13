@@ -14,5 +14,18 @@ public interface Algorithm {
         return v + dt*a;
     }
 
+    //TODO REVISAR CUENTA
+    default double calculateForce(double curr,double next,double prev,double k){
+        double a =  -k*(curr-prev) -k*(curr-next);
+        if (Double.isInfinite(a) || Double.isNaN(a)) {
+            return 0;
+        }
+        return a;
+    }
+
+    //TODO REVISAR CUENTA
+    default double lastParticle(double amplitud, double omega,double time){
+        return amplitud * Math.sin(omega * time);
+    }
 
 }

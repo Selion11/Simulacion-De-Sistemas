@@ -7,9 +7,10 @@ import static java.lang.Math.sin;
 
 public class Particle {
     private double position,a,v,prevPosition, prevV;
-    private final double m,k,gamma,timeStep;
+    private final double m,k,gamma,timeStep,omega;
+    private final int id;
 
-    public Particle(double position, double v0, double m,double k,double gamma,double timeStep) {
+    public Particle(double position, double v0, double m,double k,double gamma,double timeStep,int id,double omega) {
         this.position = position;
         this.prevPosition = position;
         this.m = m;
@@ -18,7 +19,13 @@ public class Particle {
         this.k = k;
         this.gamma = gamma;
         this.timeStep = timeStep;
+        this.id=id;
+        this.omega = omega;
     }
+
+    public double getOmega(){return omega;}
+
+    public int getId(){return id;}
 
     public double getPosition() {
         return position;
