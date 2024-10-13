@@ -5,12 +5,22 @@ public class Sys2Verlet{
     double m,k,dt;
 
     public double firstPartcileInForce(ParticleSys2 initial,ParticleSys2 second){
-        return -k *(initial.getPosition()-second.getPosition()) - k *(initial.getPosition());
+        double a = -k *(initial.getPosition()-second.getPosition()) - k *(initial.getPosition());
+        // Check for infinite acceleration
+        if (Double.isInfinite(a) || Double.isNaN(a)) {
+            return 0;
+        }
+        return a;
     }
 
     public double systemForce(ParticleSys2 prev, ParticleSys2 curr, ParticleSys2 next){
         //System.out.println("K: "+k+" CURR_POS: "+curr.getPosition()+" NEXT_POS: "+next.getPosition()+" DT: "+dt+"\n");
-        return -k *(curr.getPosition()-prev.getPosition()) - (k *(curr.getPosition()- next.getPosition()));
+        double a = -k *(curr.getPosition()-prev.getPosition()) - (k *(curr.getPosition()- next.getPosition()));
+        // Check for infinite acceleration
+        if (Double.isInfinite(a) || Double.isNaN(a)) {
+            return 0;
+        }
+        return a;
     }
 
     public void lastParticleSys2(ParticleSys2 last,double timeElapsed,double omega,double force){
