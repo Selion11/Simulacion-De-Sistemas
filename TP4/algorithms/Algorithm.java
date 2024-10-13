@@ -17,7 +17,7 @@ public interface Algorithm {
 
     //TODO REVISAR CUENTA
     default double calculateForce(double curr,double next,double prev,double k,double m){
-        double a =  -k*(curr-prev) -k*(curr-next);
+        double a =  (-k*(curr-prev) -k*(curr-next));
         if (Double.isInfinite(a) || Double.isNaN(a)) {
             return 0;
         }

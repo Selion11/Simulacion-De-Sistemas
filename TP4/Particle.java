@@ -35,6 +35,11 @@ public class Particle {
         return m;
     }
 
+    public void setA(double a){
+        this.a = a;
+    }
+
+    public double getA(){return a;}
     public void setV(double v) {
         this.prevV = this.v;
         this.v = v;
