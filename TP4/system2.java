@@ -13,8 +13,8 @@ import static java.lang.System.exit;
 public class system2 {
     public static void main(String[] args) throws IOException {
         double mass,tf,timeStep,amp;
-        double omega,omega2,omega3,omega4,omega5,omega6,omega7,omega8,omega9;
-        double k,k2,k3,k4,k5;
+        double omega1,omega2,omega3,omega4,omega5,omega6,omega7,omega8,omega9;
+        double k1,k2,k3,k4,k5;
         int n;
         List<Double> omegas = new ArrayList<>();
         List<Double> ks = new ArrayList<>();
@@ -29,7 +29,7 @@ public class system2 {
             e.printStackTrace();
         }
 
-        k = Double.parseDouble(properties.getProperty("k"));
+        k1 = Double.parseDouble(properties.getProperty("k"));
         k2 = Double.parseDouble(properties.getProperty("k2"));
         k3 = Double.parseDouble(properties.getProperty("k3"));
         k4 = Double.parseDouble(properties.getProperty("k4"));
@@ -38,7 +38,7 @@ public class system2 {
         tf = Double.parseDouble(properties.getProperty("tf"));
         n = Integer.parseInt(properties.getProperty("n"));
         amp = Double.parseDouble(properties.getProperty("amp"));
-        omega = Double.parseDouble(properties.getProperty("omega"));
+        omega1 = Double.parseDouble(properties.getProperty("omega"));
         omega2 = Double.parseDouble(properties.getProperty("omega2"));
         omega3 = Double.parseDouble(properties.getProperty("omega3"));
         omega4 = Double.parseDouble(properties.getProperty("omega4"));
@@ -48,7 +48,7 @@ public class system2 {
         omega8 = Double.parseDouble(properties.getProperty("omega8"));
         omega9 = Double.parseDouble(properties.getProperty("omega9"));
 
-        omegas.add(omega);//8
+        omegas.add(omega1);//8
         omegas.add(omega2);//8.5
         omegas.add(omega3);//9
         omegas.add(omega4);//9.5
@@ -58,17 +58,16 @@ public class system2 {
         omegas.add(omega8);//11.5
         omegas.add(omega9);//12
 
-        ks.add(k);
-        ks.add(k2);
-        ks.add(k3);
-        ks.add(k4);
-        ks.add(k5);
+//        ks.add(k1);
+          ks.add(k2);
+//        ks.add(k3);
+//        ks.add(k4);
+//        ks.add(k5);
 
-        for(Double i: ks) {
-            for (Double j : omegas) {
-                timeStep = 1/(100 * j);
-                //System.out.println("K: "+i+" Omega: "+j+" TimeStep: "+timeStep);
-                runSystem(j,mass,i,timeStep,n,tf,amp);
+        for(Double k: ks) {
+            for (Double omega : omegas) {
+                timeStep = 1/(100 * omega);
+                runSystem(k,mass,omega,timeStep,n,tf,amp);
             }
         }
 
@@ -113,7 +112,7 @@ public class system2 {
 
     private static void runSystem(double k,double mass,double omega,double timeStep,int particleCant,double totalTime,double amp){
         List<Particle> particles = new ArrayList<>();
-        File output = new File("TP4/outputs/System2/"+omega+"_"+k+".csv");
+        File output = new File("TP4/outputs/System2/"+k+"_"+omega+".csv");
         //System.out.println("K: "+k+" MASS: "+mass+" TIMESTEP: "+timeStep+" OMEGA: "+omega+" TOTAL TIME: "+totalTime);
         for(int i = 0; i < particleCant;i++){
             //INICIALIZO TODAS LAS PARTICULAS DEL SISTEMA
@@ -129,19 +128,19 @@ public class system2 {
         double timeElapsed = timeStep;
         try(BufferedWriter writer = new BufferedWriter(new FileWriter(output))){
             writer.write("time;a\n");
+            double maxAmp = 0;
             while(timeElapsed < totalTime){
                 //MIENTRAS EL TIEMPO INTERNO DEL SISTEMA SEA MENOR AL TIMEPO DE CORRIDA DE LA SIMULACION
                 verlet.runAlgorithm2(timeElapsed);
-                double maxAmp = 0;
                 for(Particle p: particles){
                     if(p.getPosition() > maxAmp && !Double.isInfinite(p.getPosition())){
                         maxAmp = p.getPosition();
                     }
                 }
                 writer.write(timeElapsed+";"+maxAmp+"\n");
-                System.out.println("FOR K: "+k+" OMEGA: "+omega+" MAX AMP WAS: "+maxAmp+" IN TIME: "+timeElapsed+"\n");
                 timeElapsed+=timeStep;
             }
+            System.out.println("FOR K: "+k+" OMEGA: "+omega+" MAX AMP WAS: "+maxAmp+"\n");
 
         } catch (IOException e) {
             throw new RuntimeException(e);
