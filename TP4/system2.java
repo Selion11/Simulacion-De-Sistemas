@@ -1,6 +1,5 @@
 package TP4;
 
-import TP4.algorithms.MultiParticleSystem;
 import TP4.algorithms.Verlet;
 import TP4.algorithms.VerletForSeveral;
 
@@ -64,56 +63,22 @@ public class system2 {
 //        ks.add(k4);
 //        ks.add(k5);
 
-        for(Double k: ks) {
-            for (Double omega : omegas) {
-                timeStep = 1/(100 * omega);
-                runSystem(k,mass,omega,timeStep,n,tf,amp);
-            }
-        }
+//        for(Double k: ks) {
+//            for (Double omega : omegas) {
+                timeStep = 1/(100 * 10);
+                runSystem(100,mass,10,timeStep,n,tf,amp);
+//            }
+//        }
 
 
     }
 
-//    private static void runSystem(double omega,double m,double k,double timeStep,int n,double tf,double a){
-//        double totalTime = 0;
-//        File output = new File("TP4/outputs/System2/"+omega+"_"+k+".csv");
-//
-//        Function<Double, Double> positionSolution = time_input -> (a
-//                 * Math.exp(-(gamma / (2 * m)) * time_input) *
-//                 Math.cos(Math.pow((k / m) - (Math.pow(gamma, 2) / (4 * Math.pow(m, 2))), 0.5) * time_input));
-//
-//        List<ParticleSys2> particles = new ArrayList<>();
-//        for(int i = 0; i < n; i++){
-//            ParticleSys2 aux = new ParticleSys2(0.0,0.0,i);
-//            particles.add(aux);
-//        }
-//
-//        MultiParticleSystem system = new MultiParticleSystem(omega,a,k,tf,timeStep,gamma,particles,positionSolution,n);
-//        try(BufferedWriter writer = new BufferedWriter(new FileWriter(output))){
-//            writer.write("time;a\n");
-//            while(totalTime < tf) {
-//                system.advanceSystem();
-//                double max_pos = 0;
-//                for (int i = 0; i < n; i++) {
-//                    if (system.getParticlePosition(i) > max_pos) {
-//                        max_pos = system.getParticlePosition(i);
-//                    }
-//                }
-//                totalTime += timeStep;
-//                if(max_pos != 0.0) {
-//                    writer.write(totalTime + ";" + max_pos + "\n");
-//                }
-//            }
-//        }catch (Exception e){
-//            e.printStackTrace();
-//        }
-//    }
-
 
     private static void runSystem(double k,double mass,double omega,double timeStep,int particleCant,double totalTime,double amp){
         List<Particle> particles = new ArrayList<>();
-        File output = new File("TP4/outputs/System2/"+k+"_"+omega+".csv");
-        //System.out.println("K: "+k+" MASS: "+mass+" TIMESTEP: "+timeStep+" OMEGA: "+omega+" TOTAL TIME: "+totalTime);
+//        File output = new File("TP4/outputs/System2/"+k+"_"+omega+".csv");
+        File positions = new File("TP4/outputs/positions" + omega + "_" + k + ".csv");
+
         for(int i = 0; i < particleCant;i++){
             //INICIALIZO TODAS LAS PARTICULAS DEL SISTEMA
             //POS AND V iniciales = 0
@@ -124,23 +89,28 @@ public class system2 {
             particles.add(aux);
         }
         //INICIALIZO EL SISTEMA CON TODAS LAS PARTICULAS
-        VerletForSeveral verlet = new VerletForSeveral(particles,amp);
+        VerletForSeveral verlet = new VerletForSeveral(particles);
         double timeElapsed = timeStep;
-        try(BufferedWriter writer = new BufferedWriter(new FileWriter(output))){
-            writer.write("time;a\n");
+        try(
+//                BufferedWriter writer = new BufferedWriter(new FileWriter(output));
+        BufferedWriter writerPositions = new BufferedWriter(new FileWriter(positions))){
+//            writer.write("time;a\n");
+            writerPositions.write("x;y;time\n");
+
             double maxAmp = 0;
             while(timeElapsed < totalTime){
                 //MIENTRAS EL TIEMPO INTERNO DEL SISTEMA SEA MENOR AL TIMEPO DE CORRIDA DE LA SIMULACION
                 verlet.runAlgorithm2(timeElapsed);
                 for(Particle p: particles){
+                    writerPositions.write((p.getId())*0.01 + ";" + p.getPosition() + ";" + totalTime + "\n");
                     if(p.getPosition() > maxAmp && !Double.isInfinite(p.getPosition())){
                         maxAmp = p.getPosition();
                     }
                 }
-                writer.write(timeElapsed+";"+maxAmp+"\n");
+//                writer.write(timeElapsed+";"+maxAmp+"\n");
                 timeElapsed+=timeStep;
             }
-            System.out.println("FOR K: "+k+" OMEGA: "+omega+" MAX AMP WAS: "+maxAmp+"\n");
+//            System.out.println("FOR K: "+k+" OMEGA: "+omega+" MAX AMP WAS: "+maxAmp+"\n");
 
         } catch (IOException e) {
             throw new RuntimeException(e);
