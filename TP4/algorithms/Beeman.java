@@ -40,4 +40,9 @@ public class Beeman implements Algorithm{
         a = aAfter;
     }
 
+    @Override
+    public void runAlgorithm2(double time) {
+
+    }
+
 }

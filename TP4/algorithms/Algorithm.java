@@ -2,6 +2,7 @@ package TP4.algorithms;
 
 public interface Algorithm {
     public void runAlgorithm();
+    public void runAlgorithm2(double time);
     default double OscillatorForce(double r, double v, double m, double k, double gamma) {
         return (-k*r -gamma*v)/m;
     }
@@ -15,7 +16,7 @@ public interface Algorithm {
     }
 
     //TODO REVISAR CUENTA
-    default double calculateForce(double curr,double next,double prev,double k){
+    default double calculateForce(double curr,double next,double prev,double k,double m){
         double a =  -k*(curr-prev) -k*(curr-next);
         if (Double.isInfinite(a) || Double.isNaN(a)) {
             return 0;

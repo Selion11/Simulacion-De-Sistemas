@@ -113,6 +113,7 @@ public class system2 {
 
     private static void runSystem(double k,double mass,double omega,double timeStep,int particleCant,double totalTime,double amp){
         List<Particle> particles = new ArrayList<>();
+        File output = new File("TP4/outputs/System2/"+omega+"_"+k+".csv");
         for(int i = 0; i < particleCant;i++){
             //INICIALIZO TODAS LAS PARTICULAS DEL SISTEMA
             //POS AND V iniciales = 0
@@ -124,16 +125,23 @@ public class system2 {
         }
         //INICIALIZO EL SISTEMA CON TODAS LAS PARTICULAS
         VerletForSeveral verlet = new VerletForSeveral(particles,amp);
-
+        double timeElapsed = timeStep;
         double maxAmp = 0;
-        while(verlet.timePast() < totalTime){
+        while(timeElapsed < totalTime){
             //MIENTRAS EL TIEMPO INTERNO DEL SISTEMA SEA MENOR AL TIMEPO DE CORRIDA DE LA SIMULACION
-            verlet.runAlgorithm();
+            verlet.runAlgorithm2(timeElapsed);
             for(Particle p: particles){
                 if(p.getPosition() > maxAmp){
                     maxAmp = p.getPosition();
                 }
             }
+            timeElapsed+=timeStep;
+        }
+        try(BufferedWriter writer = new BufferedWriter(new FileWriter(output))){
+            writer.write("time;a\n");
+            writer.write(timeElapsed+";"+maxAmp+"\n");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
         //UNA VEZ TERMINADO EL TIMEPO VERIFICO EL MAX AMP
         System.out.println("FOR K: "+k+" OMEGA: "+omega+" MAX AMP WAS: "+maxAmp);

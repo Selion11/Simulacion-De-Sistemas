@@ -31,6 +31,11 @@ public class VerletForSeveral implements Algorithm{
 
     @Override
     public void runAlgorithm() {
+        return;
+    }
+
+    @Override
+    public void runAlgorithm2(double time) {
         double a;
         for(Particle p : particles) {
             //CADA FOR INDIVIDUAL DEBERIA FUNCIONAR COMO UN VERLET DE SYSTEMA 1
@@ -40,10 +45,11 @@ public class VerletForSeveral implements Algorithm{
                 p.setPosition(lastParticle(amplitud,omega,time));
             }else{
                 if(pid == 0) {
-                    //SI ES LA PARTICULA CONTRA LA PARED NO TIENE PARTICULA PREVIA
-                    a = calculateForce(p.getPosition(), particles.get(pid + 1).getPosition(), 0.0, p.getK());
+                    //SI ES LA PARTICULA CONTRA LA PARED NO TIENE PARTICULA PREVIA F = m*a -> DIVIDO LA FUERZA POR LA MASA PARA OBTENER LA CELERACION
+                    a = calculateForce(p.getPosition(), particles.get(pid + 1).getPosition(), 0.0, p.getK(),p.getM());
                 }else{
-                    a = calculateForce(p.getPosition(),particles.get(pid+1).getPosition(),particles.get(pid+1).getPosition(),p.getK());
+                    //SINO USO EL CALCULO DE LA FUERZA QUE DICE EN EL PDF
+                    a = calculateForce(p.getPosition(),particles.get(pid+1).getPosition(),particles.get(pid+1).getPosition(),p.getK(),p.getM());
                 }
                 double rAfter = (2.0*p.getPosition()) - p.getPrevPosition() + Math.pow(dt,2) *a;
                 p.setV ((rAfter - p.getPrevPosition())/(2.0 * dt));
@@ -51,9 +57,7 @@ public class VerletForSeveral implements Algorithm{
                 p.setPosition(rAfter);
             }
         }
-        time+= dt;
     }
 
-    public double timePast() {return time;}
 
 }

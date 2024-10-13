@@ -6,56 +6,56 @@ import pandas as pd
 # k4 = 5000
 # k5 = 10000
 
-files100 = ["TP4/outputs/System2/8.0_100.0.csv",
-            "TP4/outputs/System2/8.5_100.0.csv",
-            "TP4/outputs/System2/9.0_100.0.csv",
-            "TP4/outputs/System2/9.5_100.0.csv",
-            "TP4/outputs/System2/10.0_100.0.csv",
-            "TP4/outputs/System2/10.5_100.0.csv",
-            "TP4/outputs/System2/11.0_100.0.csv",
-            "TP4/outputs/System2/11.5_100.0.csv",
-            "TP4/outputs/System2/12.0_100.0.csv"]
+files100 = ["TP4/outputs/System2/100.0_8.0.csv",
+            "TP4/outputs/System2/100.0_8.5.csv",
+            "TP4/outputs/System2/100.0_9.0.csv",
+            "TP4/outputs/System2/100.0_9.5.csv",
+            "TP4/outputs/System2/100.0_10.0.csv",
+            "TP4/outputs/System2/100.0_10.5.csv",
+            "TP4/outputs/System2/100.0_11.0.csv",
+            "TP4/outputs/System2/100.0_11.5.csv",
+            "TP4/outputs/System2/100.0_12.0.csv"]
 
-files1000 = ["TP4/outputs/System2/8.0_1000.0.csv",
-            "TP4/outputs/System2/8.5_1000.0.csv",
-            "TP4/outputs/System2/9.0_1000.0.csv",
-            "TP4/outputs/System2/9.5_1000.0.csv",
-            "TP4/outputs/System2/10.0_1000.0.csv",
-            "TP4/outputs/System2/10.5_1000.0.csv",
-            "TP4/outputs/System2/11.0_1000.0.csv",
-            "TP4/outputs/System2/11.5_1000.0.csv",
-            "TP4/outputs/System2/12.0_1000.0.csv"]
+files1000 = ["TP4/outputs/System2/1000.0_8.0.csv",
+            "TP4/outputs/System2/1000.0_8.5.csv",
+            "TP4/outputs/System2/1000.0_9.0.csv",
+            "TP4/outputs/System2/1000.0_9.5.csv",
+            "TP4/outputs/System2/1000.0_10.0.csv",
+            "TP4/outputs/System2/1000.0_10.5.csv",
+            "TP4/outputs/System2/1000.0_11.0.csv",
+            "TP4/outputs/System2/1000.0_11.5.csv",
+            "TP4/outputs/System2/1000.0_12.0.csv"]
 
-files2000 = ["TP4/outputs/System2/8.0_2000.0.csv",
-            "TP4/outputs/System2/8.5_2000.0.csv",
-            "TP4/outputs/System2/9.0_2000.0.csv",
-            "TP4/outputs/System2/9.5_2000.0.csv",
-            "TP4/outputs/System2/10.0_2000.0.csv",
-            "TP4/outputs/System2/10.5_2000.0.csv",
-            "TP4/outputs/System2/11.0_2000.0.csv",
-            "TP4/outputs/System2/11.5_2000.0.csv",
-            "TP4/outputs/System2/12.0_2000.0.csv"]
+files2000 = ["TP4/outputs/System2/2000.0_8.0.csv",
+            "TP4/outputs/System2/2000.0_8.5.csv",
+            "TP4/outputs/System2/2000.0_9.0.csv",
+            "TP4/outputs/System2/2000.0_9.5.csv",
+            "TP4/outputs/System2/2000.0_10.0.csv",
+            "TP4/outputs/System2/2000.0_10.5.csv",
+            "TP4/outputs/System2/2000.0_11.0.csv",
+            "TP4/outputs/System2/2000.0_11.5.csv",
+            "TP4/outputs/System2/2000.0_12.0.csv"]
 
-files5000 = [ "TP4/outputs/System2/8.0_5000.0.csv",
-            "TP4/outputs/System2/8.5_5000.0.csv",
-            "TP4/outputs/System2/9.0_5000.0.csv",
-            "TP4/outputs/System2/9.5_5000.0.csv",
-            "TP4/outputs/System2/10.0_5000.0.csv",
-            "TP4/outputs/System2/10.5_5000.0.csv",
-            "TP4/outputs/System2/11.0_5000.0.csv",
-            "TP4/outputs/System2/11.5_5000.0.csv",
-            "TP4/outputs/System2/12.0_5000.0.csv"]
+files5000 = [ "TP4/outputs/System2/5000.0_8.0.csv",
+            "TP4/outputs/System2/5000.0_8.5.csv",
+            "TP4/outputs/System2/5000.0_9.0.csv",
+            "TP4/outputs/System2/5000.0_9.5.csv",
+            "TP4/outputs/System2/5000.0_10.0.csv",
+            "TP4/outputs/System2/5000.0_10.5.csv",
+            "TP4/outputs/System2/5000.0_11.0.csv",
+            "TP4/outputs/System2/5000.0_11.5.csv",
+            "TP4/outputs/System2/5000.0_12.0.csv"]
 
 
-files10000 = ["TP4/outputs/System2/8.0_10000.0.csv",
-            "TP4/outputs/System2/8.5_10000.0.csv",
-            "TP4/outputs/System2/9.0_10000.0.csv",
-            "TP4/outputs/System2/9.5_10000.0.csv",
-            "TP4/outputs/System2/10.0_10000.0.csv",
-            "TP4/outputs/System2/10.5_10000.0.csv",
-            "TP4/outputs/System2/11.0_10000.0.csv",
-            "TP4/outputs/System2/11.5_10000.0.csv",
-            "TP4/outputs/System2/12.0_10000.0.csv"]
+files10000 = ["TP4/outputs/System2/10000.0_8.0.csv",
+            "TP4/outputs/System2/10000.0_8.5.csv",
+            "TP4/outputs/System2/10000.0_9.0.csv",
+            "TP4/outputs/System2/10000.0_9.5.csv",
+            "TP4/outputs/System2/10000.0_10.0.csv",
+            "TP4/outputs/System2/10000.0_10.5.csv",
+            "TP4/outputs/System2/10000.0_11.0.csv",
+            "TP4/outputs/System2/10000.0_11.5.csv",
+            "TP4/outputs/System2/10000.0_12.0.csv"]
 
 
 # omegas = [5.0,6.0,7.0,8.0, 9.0, 10.0, 11.0, 12.0,13.0]

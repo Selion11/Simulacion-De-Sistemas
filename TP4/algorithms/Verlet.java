@@ -31,4 +31,9 @@ public class Verlet implements Algorithm{
         a = OscillatorForce(particle.getPosition(), particle.getV(), m, k, gamma);
     }
 
+    @Override
+    public void runAlgorithm2(double time) {
+
+    }
+
 }

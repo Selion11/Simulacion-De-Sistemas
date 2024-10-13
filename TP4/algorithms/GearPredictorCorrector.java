@@ -45,6 +45,11 @@ public class GearPredictorCorrector implements Algorithm {
         p.setPosition(rs[0]);
     }
 
+    @Override
+    public void runAlgorithm2(double time) {
+
+    }
+
     private double predict(double dt, double t0, double t1, double t2, double t3, double t4, double t5) {
 
         double tt1, tt2, tt3, tt4, tt5;
