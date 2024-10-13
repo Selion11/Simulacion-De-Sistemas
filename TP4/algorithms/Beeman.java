@@ -40,8 +40,4 @@ public class Beeman implements Algorithm{
         a = aAfter;
     }
 
-
-
-
-
 }

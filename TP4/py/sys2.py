@@ -67,6 +67,10 @@ amplitudes2000 = []
 amplitudes5000 = []
 amplitudes10000 = []
 
+df = pd.read_csv("TP4/outputs/System2/8.0_100.0.csv", delimiter=';')
+amplitudes100.append(df['a'].tolist())
+print(max(amplitudes100[0]))
+
 for i in range(len(omegas)):
     df = pd.read_csv(files100[i], delimiter=';')
     amplitudes100.append(df['a'].tolist())
@@ -93,24 +97,24 @@ max_amplitudes2000 = []
 max_amplitudes5000 = []
 max_amplitudes10000 = []
 for i in range(len(omegas)):
-    max_amplitudes100.append(max(amplitudes100[i])/20000)
-    max_amplitudes1000.append(max(amplitudes1000[i])/20000)
-    max_amplitudes2000.append(max(amplitudes2000[i])/20000)
-    max_amplitudes5000.append(max(amplitudes5000[i])/20000)
-    max_amplitudes10000.append(max(amplitudes10000[i])/20000)
+    max_amplitudes100.append(max(amplitudes100[i]))
+    # max_amplitudes1000.append(max(amplitudes1000[i])/200000)
+    # max_amplitudes2000.append(max(amplitudes2000[i])/400000)
+    # max_amplitudes5000.append(max(amplitudes5000[i])/500000)
+    # max_amplitudes10000.append(max(amplitudes10000[i])/2000000)
+    #print("MAXES: " + str(max(amplitudes100[i]))+ " OMEGA: " + str(omegas[i]) + "\n")
 
     
 
-    
 
-
-def graphOnlyOne(maxes,omegas):
+def graphOnlyOne(maxes,omegas,num):
     plt.plot(omegas, maxes, color='red', marker='o',label='k = 100')
     plt.xlabel('Omega [rad/s]')
     plt.ylabel('Amplitude [m]')
-    plt.savefig('TP4/outputs/System2/amplitudes_100.png')
-    for i in range(len(maxes)):
-        print("OMEGA: "+str(omegas[i]) + " MAX: " + str(maxes[i]))
+    plt.savefig('TP4/outputs/System2/amplitudes_'+str(num)+'.png')
+    # for i in range(len(maxes)):
+    #     print("OMEGA: "+str(omegas[i]) + " MAX: " + str(maxes[i]))
+    plt.close()
 
 def graphAll(maxes1,maxes2,maxes3,maxes4,maxes5,omegas):
     plt.plot(omegas, maxes1, color='red', label='k = 100')
@@ -129,4 +133,4 @@ def graphKVsA(maxes,ks):
     plt.ylabel('Amplitude [m]')
     plt.savefig('TP4/outputs/System2/KVsA.png')
 
-graphOnlyOne(max_amplitudes100,omegas)
+

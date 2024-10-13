@@ -14,9 +14,5 @@ public interface Algorithm {
         return v + dt*a;
     }
 
-    default double GroupOscillatorForce(double k, double y, double prevY,double nextY) {
-        return -k * (y - prevY) - k * (y - nextY);
-    }
-
 
 }
