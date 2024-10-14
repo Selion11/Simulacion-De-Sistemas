@@ -109,7 +109,7 @@ from matplotlib.animation import FuncAnimation
 
 
 # # Lee los datos
-file = "../outputs/positions10.0_100.0.csv"
+file = "TP4/outputs/positions10.0_100.0.csv"
 # directory_path = "../times/system_with_big_particle.txt"
 
 times = []
@@ -156,6 +156,8 @@ for i in range(len(timeElapsed)):
 fig, ax = plt.subplots()
 ax.set_xlim(0, 0.1)  # Ajusta según los límites de tu simulación
 ax.set_ylim(-5, 5)  # Ajusta según los límites de tu simulación
+ax.set_xlabel("X [m]")
+ax.set_ylabel("Y[m]")
 particles, = ax.plot([], [], 'bo')  # Inicializar las partículas como puntos azules
 
 # Función de inicialización
@@ -174,4 +176,10 @@ def update(frame):
 ani = FuncAnimation(fig, update, frames=range(n_frames), init_func=init, blit=True, repeat=False)
 
 # Mostrar la animación
-plt.show()
+writers = animation.FFMpegWriter(fps=100)
+
+# # Guardar la animación como GIF (opcional)
+# # anim.save('./output_animation_system_with_obstacle.mp4', writer=writers)
+# anim.save('./simulation.mp4', writer=writers)
+
+ani.save('TP4/output_animation.mp4', writer=writers)

@@ -10,11 +10,10 @@ public class VerletForSeveral implements Algorithm{
     private double amplitud;
     private double omega;
 
-    public VerletForSeveral(List<Particle> particles,double amplitud) {
+    public VerletForSeveral(List<Particle> particles) {
         //INICIALIZO EL SISTEMA
         this.particles = particles;
         this.dt = particles.get(0).getTimeStep();
-        this.amplitud = amplitud;
         this.omega = particles.get(0).getOmega();
 
         double a;

@@ -12,7 +12,6 @@ import static java.lang.System.exit;
 public class system2 {
     public static void main(String[] args) throws IOException {
         double mass,tf,timeStep,amp;
-        double omega1,omega2,omega3,omega4,omega5,omega6,omega7,omega8,omega9;
         double k1,k2,k3,k4,k5;
         int n;
         List<Double> omegas = new ArrayList<>();
@@ -37,36 +36,89 @@ public class system2 {
         tf = Double.parseDouble(properties.getProperty("tf"));
         n = Integer.parseInt(properties.getProperty("n"));
         amp = Double.parseDouble(properties.getProperty("amp"));
-        omega1 = Double.parseDouble(properties.getProperty("omega"));
-        omega2 = Double.parseDouble(properties.getProperty("omega2"));
-        omega3 = Double.parseDouble(properties.getProperty("omega3"));
-        omega4 = Double.parseDouble(properties.getProperty("omega4"));
-        omega5 = Double.parseDouble(properties.getProperty("omega5"));
-        omega6 = Double.parseDouble(properties.getProperty("omega6"));
-        omega7 = Double.parseDouble(properties.getProperty("omega7"));
-        omega8 = Double.parseDouble(properties.getProperty("omega8"));
-        omega9 = Double.parseDouble(properties.getProperty("omega9"));
 
-        omegas.add(omega1);//8
-        omegas.add(omega2);//8.5
-        omegas.add(omega3);//9
-        omegas.add(omega4);//9.5
-        omegas.add(omega5);//10
-        omegas.add(omega6);//10.5
-        omegas.add(omega7);//11
-        omegas.add(omega8);//11.5
-        omegas.add(omega9);//12
+        Map<Double,List<Double>> values = new HashMap<>();
 
-//        ks.add(k1);
-          ks.add(k2);
-//        ks.add(k3);
-//        ks.add(k4);
-//        ks.add(k5);
+        List<Double> omegas1 = new ArrayList<>();
+        omegas1.add(8.0);
+        omegas1.add(8.5);
+        omegas1.add(9.0);
+        omegas1.add(9.5);
+        omegas1.add(10.0);
+        omegas1.add(10.5);
+        omegas1.add(11.0);
+        omegas1.add(11.5);
+        omegas1.add(12.0);
 
 //        for(Double k: ks) {
 //            for (Double omega : omegas) {
-                timeStep = 1/(100 * 10);
+                timeStep = 1/(100.0 * 10);
                 runSystem(100,mass,10,timeStep,n,tf,amp);
+//            }
+//        }
+        List<Double> omegas2 = new ArrayList<>();
+        omegas2.add(28.0);
+        omegas2.add(28.5);
+        omegas2.add(29.0);
+        omegas2.add(29.5);
+        omegas2.add(30.0);
+        omegas2.add(30.5);
+        omegas2.add(31.0);
+        omegas2.add(31.5);
+        omegas2.add(32.0);
+
+
+        List<Double> omegas3 = new ArrayList<>();
+        omegas3.add(42.0);
+        omegas3.add(42.5);
+        omegas3.add(43.0);
+        omegas3.add(43.5);
+        omegas3.add(44.0);
+        omegas3.add(44.5);
+        omegas3.add(45.0);
+        omegas3.add(45.5);
+        omegas3.add(46.0);
+
+        List<Double> omegas4 = new ArrayList<>();
+        omegas4.add(68.0);
+        omegas4.add(68.5);
+        omegas4.add(69.0);
+        omegas4.add(69.5);
+        omegas4.add(70.0);
+        omegas4.add(70.5);
+        omegas4.add(71.0);
+        omegas4.add(71.5);
+        omegas4.add(72.0);
+
+        List<Double> omegas5 = new ArrayList<>();
+        omegas5.add(98.0);
+        omegas5.add(98.5);
+        omegas5.add(99.0);
+        omegas5.add(99.5);
+        omegas5.add(100.0);
+        omegas5.add(100.5);
+        omegas5.add(101.0);
+        omegas5.add(101.5);
+        omegas5.add(102.0);
+
+
+
+        ks.add(k1);
+        ks.add(k2);
+        ks.add(k3);
+        ks.add(k4);
+        ks.add(k5);
+
+        values.put(k1,omegas1);
+        values.put(k2,omegas2);
+        values.put(k3,omegas3);
+        values.put(k4,omegas4);
+        values.put(k5,omegas5);
+
+//        for(Double k: ks) {
+//            for (Double omega : values.get(k)) {
+//                timeStep = 1/(100 * omega);
+//                runSystem(k,mass,omega,timeStep,n,tf,amp);
 //            }
 //        }
 
@@ -77,7 +129,7 @@ public class system2 {
     private static void runSystem(double k,double mass,double omega,double timeStep,int particleCant,double totalTime,double amp){
         List<Particle> particles = new ArrayList<>();
 //        File output = new File("TP4/outputs/System2/"+k+"_"+omega+".csv");
-        File positions = new File("TP4/outputs/positions" + omega + "_" + k + ".csv");
+        File positions = new File("TP4/positions" + omega + "_" + k + ".csv");
 
         for(int i = 0; i < particleCant;i++){
             //INICIALIZO TODAS LAS PARTICULAS DEL SISTEMA
@@ -102,7 +154,9 @@ public class system2 {
                 //MIENTRAS EL TIEMPO INTERNO DEL SISTEMA SEA MENOR AL TIMEPO DE CORRIDA DE LA SIMULACION
                 verlet.runAlgorithm2(timeElapsed);
                 for(Particle p: particles){
-                    writerPositions.write((p.getId())*0.01 + ";" + p.getPosition() + ";" + totalTime + "\n");
+                    if(p.getId()== 50) {
+                        writerPositions.write((p.getId()) * 0.001 + ";" + p.getPosition() + ";" + timeElapsed + "\n");
+                    }
                     if(p.getPosition() > maxAmp && !Double.isInfinite(p.getPosition())){
                         maxAmp = p.getPosition();
                     }

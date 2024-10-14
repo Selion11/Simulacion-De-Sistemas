@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 
-file = "../outputs/positions10.0_100.0.csv"
+file = "TP4/positions10.0_100.0.csv"
 
 df = pd.read_csv(file, delimiter=';')
 
@@ -17,15 +17,14 @@ y = df['y'].tolist()
 # Gráfico
 plt.figure(figsize=(8, 6))
 plt.plot(t, np.abs(y), 'b', label='|y(t)|', linewidth=2)
+plt.xlim(0,100)
 
 # Etiquetas y título
 plt.xlabel('Tiempo (s)', fontsize=14)
 plt.ylabel('|y| (m)', fontsize=14)
 plt.title('Oscilador amortiguado', fontsize=16)
 
-# Parámetros en el gráfico
-plt.text(102, 0.5, f'k = {100} kg/s²\nω = {10} rad/s', fontsize=12, ha='left', va='center')
 
 # Mostrar el gráfico
 plt.grid(True)
-plt.show()
+plt.savefig('TP4/outputs/System2/AvsT.png')
