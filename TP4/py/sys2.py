@@ -6,25 +6,25 @@ import pandas as pd
 # k4 = 5000
 # k5 = 25000
 
-files100 = ["TP4/outputs/System2/100.0_8.0.csv",
-            "TP4/outputs/System2/100.0_8.5.csv",
-            "TP4/outputs/System2/100.0_9.0.csv",
-            "TP4/outputs/System2/100.0_9.5.csv",
-            "TP4/outputs/System2/100.0_10.0.csv",
-            "TP4/outputs/System2/100.0_10.5.csv",
-            "TP4/outputs/System2/100.0_11.0.csv",
-            "TP4/outputs/System2/100.0_11.5.csv",
-            "TP4/outputs/System2/100.0_12.0.csv"]
+# files100 = ["TP4/outputs/System2/100.0_8.0.csv",
+#             "TP4/outputs/System2/100.0_8.5.csv",
+#             "TP4/outputs/System2/100.0_9.0.csv",
+#             "TP4/outputs/System2/100.0_9.5.csv",
+#             "TP4/outputs/System2/100.0_10.0.csv",
+#             "TP4/outputs/System2/100.0_10.5.csv",
+#             "TP4/outputs/System2/100.0_11.0.csv",
+#             "TP4/outputs/System2/100.0_11.5.csv",
+#             "TP4/outputs/System2/100.0_12.0.csv"]
 
-files2500 = ["TP4/outputs/System2/2500.0_20.0.csv",
-            "TP4/outputs/System2/2500.0_25.0.csv",
-            "TP4/outputs/System2/2500.0_30.0.csv",
-            "TP4/outputs/System2/2500.0_35.0.csv",
-            "TP4/outputs/System2/2500.0_40.0.csv",
-            "TP4/outputs/System2/2500.0_45.0.csv",
-            "TP4/outputs/System2/2500.0_50.0.csv",
-            "TP4/outputs/System2/2500.0_55.0.csv",
-            "TP4/outputs/System2/2500.0_60.0.csv"]
+files2500 = ["../outputs/System2/2500.0_20.0.csv",
+            "../outputs/System2/2500.0_25.0.csv",
+            "../outputs/System2/2500.0_30.0.csv",
+            "../outputs/System2/2500.0_35.0.csv",
+            "../outputs/System2/2500.0_40.0.csv",
+            "../outputs/System2/2500.0_45.0.csv",
+            "../outputs/System2/2500.0_50.0.csv",
+            "../outputs/System2/2500.0_55.0.csv",
+            "../outputs/System2/2500.0_60.0.csv"]
 
 # files2000 = ["TP4/outputs/System2/2000.0_8.0.csv",
 #             "TP4/outputs/System2/2000.0_8.5.csv",
@@ -67,9 +67,9 @@ amplitudes2000 = []
 amplitudes5000 = []
 amplitudes10000 = []
 
-for i in range(len(omegas)):
-    df = pd.read_csv(files100[i], delimiter=';')
-    amplitudes100.append(df['a'].tolist())
+# for i in range(len(omegas)):
+#     df = pd.read_csv(files100[i], delimiter=';')
+#     amplitudes100.append(df['a'].tolist())
     
 for i in range(len(omegas)):
     df = pd.read_csv(files2500[i], delimiter=';')
@@ -93,7 +93,7 @@ max_amplitudes2000 = []
 max_amplitudes5000 = []
 max_amplitudes10000 = []
 for i in range(len(omegas)):
-    max_amplitudes100.append(max(amplitudes100[i]))
+    # max_amplitudes100.append(max(amplitudes100[i]))
     max_amplitudes2500.append(max(amplitudes2500[i]))
     # max_amplitudes2000.append(max(amplitudes2000[i]))
     # max_amplitudes5000.append(max(amplitudes5000[i]))

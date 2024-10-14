@@ -44,9 +44,9 @@ plt.plot(error, beeman_mse,color='blue')
 plt.plot(error, verlet_mse, color='green')
 
 # Agregar etiquetas de ejes y título
-plt.xlabel('Delta T [s]')
+plt.xlabel('Delta T (s)')
 plt.xticks(error, labels=ticks)
-plt.ylabel('ECM')
+plt.ylabel('ECM (m²)')
 plt.yscale('log')
 plt.grid(True)
 plt.legend()

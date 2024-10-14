@@ -2,13 +2,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 
-file = "TP4/outputs/System2/100.0_10.0.csv"
+file = "../outputs/positions10.0_100.0.csv"
 
 df = pd.read_csv(file, delimiter=';')
 
 # Access each column as a Pandas Series
 t = df['time'].tolist()
-y = df['a'].tolist()
+y = df['y'].tolist()
 
 
 # Calcular el desplazamiento en el tiempo
