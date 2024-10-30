@@ -1,14 +1,14 @@
 package TP5.Jugador;
 
 public class JugadorAzul extends Jugador {
-    public JugadorAzul(float x, float y, float velocidadMaxima, float radio) {
+    public JugadorAzul(double x, double y, double velocidadMaxima, double radio) {
         super(x, y, velocidadMaxima, radio);
     }
 
-    public void perseguirJugadorRojo(Jugador jugadorRojo, float deltaTiempo) {
-        float direccionX = jugadorRojo.getPosX() - this.posX;
-        float direccionY = jugadorRojo.getPosY() - this.posY;
-        float magnitud = (float) Math.sqrt(direccionX * direccionX + direccionY * direccionY);
+    public boolean perseguirJugadorRojo(Jugador jugadorRojo, double deltaTiempo) {
+        double direccionX = jugadorRojo.getPosX() - this.posX;
+        double direccionY = jugadorRojo.getPosY() - this.posY;
+        double magnitud = Math.sqrt(direccionX * direccionX + direccionY * direccionY);
 
         if (magnitud > 0) {
             this.velX = (direccionX / magnitud) * this.velocidadMaxima;
@@ -16,6 +16,11 @@ public class JugadorAzul extends Jugador {
         }
 
         this.actualizarPosicion(deltaTiempo);
+
+        double d = Math.sqrt(Math.pow(this.posX - jugadorRojo.posX,2) + Math.pow(this.posY - jugadorRojo.posY,2));
+
+        return d <= this.radio + jugadorRojo.radio;
     }
+
 }
 

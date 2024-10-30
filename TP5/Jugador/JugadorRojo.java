@@ -1,13 +1,13 @@
 package TP5.Jugador;
 public class JugadorRojo extends Jugador {
 
-    public JugadorRojo(float posX, float posY, float radio, float velocidadMaxima, float objetivoX, float objetivoY) {
+    public JugadorRojo(double posX, double posY, double radio, double velocidadMaxima) {
         super(posX, posY, radio, velocidadMaxima);
     }
 
-    public void calcularVelocidadElusion(float objetivoTemporalX, float objetivoTemporalY) {
-        float deltaX = objetivoTemporalX - this.posX;
-        float deltaY = objetivoTemporalY - this.posY;
+    public void calcularVelocidadElusion(double objetivoTemporalX, double objetivoTemporalY) {
+        double deltaX = objetivoTemporalX - this.posX;
+        double deltaY = objetivoTemporalY - this.posY;
         this.actualizarVelocidad(deltaX, deltaY);
     }
 

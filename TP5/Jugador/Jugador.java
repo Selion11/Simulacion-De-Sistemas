@@ -3,12 +3,12 @@ package TP5.Jugador;
 import java.util.Vector;
 
 public class Jugador {
-    protected float posX, posY;
-    protected float velX, velY;
-    protected float radio;
-    protected float velocidadMaxima;
+    protected double posX, posY;
+    protected double velX, velY;
+    protected double radio;
+    protected double velocidadMaxima;
 
-    public Jugador(float posX, float posY, float radio, float velocidadMaxima) {
+    public Jugador(double posX, double posY, double radio, double velocidadMaxima) {
         this.posX = posX;
         this.posY = posY;
         this.radio = radio;
@@ -17,13 +17,13 @@ public class Jugador {
         this.velY = 0;
     }
 
-    public void actualizarPosicion(float deltaTiempo) {
+    public void actualizarPosicion(double deltaTiempo) {
         this.posX += this.velX * deltaTiempo;
         this.posY += this.velY * deltaTiempo;
     }
 
-    public void actualizarVelocidad(float nuevaVelX, float nuevaVelY) {
-        float magnitud = (float) Math.sqrt(nuevaVelX * nuevaVelX + nuevaVelY * nuevaVelY);
+    public void actualizarVelocidad(double nuevaVelX, double nuevaVelY) {
+        double magnitud =  Math.sqrt(nuevaVelX * nuevaVelX + nuevaVelY * nuevaVelY);
         if (magnitud > this.velocidadMaxima) {
             this.velX = (nuevaVelX / magnitud) * this.velocidadMaxima;
             this.velY = (nuevaVelY / magnitud) * this.velocidadMaxima;
@@ -33,11 +33,11 @@ public class Jugador {
         }
     }
 
-    public float getPosX() { return posX; }
-    public float getPosY() { return posY; }
-    public float getVelX() { return velX; }
-    public float getVelY() { return velY; }
-    public float getRadio() { return radio; }
+    public double getPosX() { return posX; }
+    public double getPosY() { return posY; }
+    public double getVelX() { return velX; }
+    public double getVelY() { return velY; }
+    public double getRadio() { return radio; }
 
-    public float getVelocidadMaxima() { return velocidadMaxima; }
+    public double getVelocidadMaxima() { return velocidadMaxima; }
 }
