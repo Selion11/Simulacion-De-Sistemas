@@ -10,13 +10,16 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Random;
 
-public class tryMaradoniano {
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.*;
+
+public class TryMaradoniano {
     public static void main(String[] args) {
-        double vmaxrojo, vmaxazul,treacazul,treacrojo,n,largo, ancho,radio,rojoxinicial,rojoyinicial,objetivoinicialx,objetivoinicialy,dt ;
+        double vmaxRojo, vmaxAzul, treacAzul, treacRojo, n, largo, ancho, radio, rojoXInicial, rojoYInicial, dt;
         double totalTime = 0;
 
         Properties properties = new Properties();
-
         try {
             FileInputStream config = new FileInputStream("TP4/configs/conf.config");
             properties.load(config);
@@ -24,49 +27,76 @@ public class tryMaradoniano {
             e.printStackTrace();
         }
 
-        vmaxrojo = Double.parseDouble(properties.getProperty("vmaxrojo"));
-        vmaxazul = Double.parseDouble(properties.getProperty("vmaxazul"));
-        treacazul = Double.parseDouble(properties.getProperty("treacazul"));
-        treacrojo = Double.parseDouble(properties.getProperty("treacrojo"));
+        vmaxRojo = Double.parseDouble(properties.getProperty("vmaxrojo"));
+        vmaxAzul = Double.parseDouble(properties.getProperty("vmaxazul"));
+        treacAzul = Double.parseDouble(properties.getProperty("treacazul"));
+        treacRojo = Double.parseDouble(properties.getProperty("treacrojo"));
         n = Double.parseDouble(properties.getProperty("n"));
         largo = Double.parseDouble(properties.getProperty("largo"));
         ancho = Double.parseDouble(properties.getProperty("ancho"));
         radio = Double.parseDouble(properties.getProperty("radio"));
-        rojoxinicial = Double.parseDouble(properties.getProperty("rojoxinicial"));
-        rojoyinicial = Double.parseDouble(properties.getProperty("rojoyinicial"));
-        objetivoinicialx = Double.parseDouble(properties.getProperty("objetivoinicialx"));
-        objetivoinicialy = Double.parseDouble(properties.getProperty("objetivoinicialy"));
+        rojoXInicial = Double.parseDouble(properties.getProperty("rojoxinicial"));
+        rojoYInicial = Double.parseDouble(properties.getProperty("rojoyinicial"));
         dt = Double.parseDouble(properties.getProperty("dt"));
 
-
-        JugadorRojo jugadorRojo = new JugadorRojo(rojoxinicial,rojoyinicial,radio,vmaxrojo);
-
-        List<JugadorAzul> jugadoresAzules = new ArrayList<>();
-
-        Random random = new Random();
-        double x,y;
-
-        // TODO: No esta implementado para que no caigan dos azules en el mismo lugar o esten bajo el mismo radio
-        for (int i = 0; i < n; i++) {
-            x = random.nextDouble(1,99);
-            y = random.nextDouble(1,34);
-            jugadoresAzules.add(new JugadorAzul(x,y, vmaxazul,radio));
-        }
+        // Inicializar jugador rojo y lista de jugadores azules
+        JugadorRojo jugadorRojo = new JugadorRojo(rojoXInicial, rojoYInicial, radio, vmaxRojo);
+        List<JugadorAzul> jugadoresAzules = generarJugadoresAzules(n, vmaxAzul, radio, largo, ancho);
 
         boolean tackled = false;
-        while (!tackled && !jugadorRojo.hizoTry()){
+        while (!tackled && !jugadorRojo.hizoTry()) {
 
-            Utils.calcularVectorObjetivo(jugadorRojo,jugadoresAzules,totalTime);
+            Utils.calcularVectorObjetivo(jugadorRojo, jugadoresAzules, dt);
+            Utils.actualizarPosicion(jugadorRojo, dt);
 
-            for (JugadorAzul ja:
-                 jugadoresAzules) {
-                tackled = ja.perseguirJugadorRojo(jugadorRojo,totalTime);
-                if (tackled){
+            // Actualizar la posición de cada jugador azul y verificar colisiones
+            for (JugadorAzul jugadorAzul : jugadoresAzules) {
+                jugadorAzul.perseguirJugadorRojo(jugadorRojo, dt);
+                Utils.actualizarPosicion(jugadorAzul, dt);
+                if (Utils.detectarColision(jugadorRojo, jugadorAzul)) {
+                    tackled = true;
                     break;
                 }
             }
 
             totalTime += dt;
         }
+
+        if (jugadorRojo.hizoTry()) {
+            System.out.println("¡Try logrado en tiempo: " + totalTime + " segundos!");
+        } else {
+            System.out.println("Jugador rojo fue detenido en tiempo: " + totalTime + " segundos.");
+        }
+    }
+
+    private static List<JugadorAzul> generarJugadoresAzules(double cantidad, double vmax, double radio, double largo, double ancho) {
+        List<JugadorAzul> jugadoresAzules = new ArrayList<>();
+        Random random = new Random();
+
+        for (int i = 0; i < cantidad; i++) {
+            double x, y;
+            boolean posicionValida;
+
+            do {
+                x = random.nextDouble() * (largo - 2 * radio) + radio; // Genera dentro del campo y evita bordes
+                y = random.nextDouble() * (ancho - 2 * radio) + radio;
+                posicionValida = true;
+
+                // Verificar que no haya superposición inicial con otros jugadores
+                for (JugadorAzul ja : jugadoresAzules) {
+                    double distX = x - ja.getPosX();
+                    double distY = y - ja.getPosY();
+                    double distancia = Math.sqrt(distX * distX + distY * distY);
+
+                    if (distancia < 2 * radio) {
+                        posicionValida = false;
+                        break;
+                    }
+                }
+            } while (!posicionValida);
+
+            jugadoresAzules.add(new JugadorAzul(x, y, radio, vmax));
+        }
+        return jugadoresAzules;
     }
 }

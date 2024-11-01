@@ -136,4 +136,18 @@ public class Utils {
 
         return Optional.empty();
     }
+
+    // Actualizar la posición del jugador según su velocidad y el tiempo transcurrido
+    public static void actualizarPosicion(Jugador jugador, double deltaTiempo) {
+        jugador.setPosX(jugador.getPosX() + jugador.getVelX() * deltaTiempo);
+        jugador.setPosY(jugador.getPosY() + jugador.getVelY() * deltaTiempo);
+    }
+
+    // Verificar si dos jugadores colisionaron (sus radios se superponen)
+    public static boolean detectarColision(Jugador jugador1, Jugador jugador2) {
+        double distX = jugador1.getPosX() - jugador2.getPosX();
+        double distY = jugador1.getPosY() - jugador2.getPosY();
+        double distancia = Math.sqrt(distX * distX + distY * distY);
+        return distancia < (jugador1.getRadio() + jugador2.getRadio());
+    }
 }
