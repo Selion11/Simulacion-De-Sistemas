@@ -3,8 +3,7 @@ package TP5;
 import TP5.Jugador.JugadorAzul;
 import TP5.Jugador.JugadorRojo;
 
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -46,30 +45,58 @@ public class tryMaradoniano {
         JugadorRojo jugadorRojo = new JugadorRojo(rojoXInicial, rojoYInicial, radio, vmaxRojo,m,treacRojo);
         List<JugadorAzul> jugadoresAzules = generarJugadoresAzules(n, vmaxAzul, radio, largo, ancho,m,treacAzul);
 
-        boolean tackled = false;
-        while (!tackled && !jugadorRojo.hizoTry()) {
+        File output = new File("TP4/outputs/output.csv");
 
-            Utils.calcularVectorObjetivo(jugadorRojo, jugadoresAzules, dt);
-            Utils.actualizarPosicion(jugadorRojo, dt);
+        try {
+            output.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-            // Actualizar la posición de cada jugador azul y verificar colisiones
-            for (JugadorAzul jugadorAzul : jugadoresAzules) {
-                jugadorAzul.perseguirJugadorRojo(jugadorRojo, dt);
-                Utils.actualizarPosicion(jugadorAzul, dt);
-                if (Utils.detectarColision(jugadorRojo, jugadorAzul)) {
-                    tackled = true;
-                    break;
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(output))) {
+            writer.write("x;y;vx;vy;tiempo");
+
+            boolean tackled = false;
+            while (!tackled && !jugadorRojo.hizoTry()) {
+                writePlayer(totalTime, writer, jugadorRojo.getPosX(), jugadorRojo.getPosY(), jugadorRojo.getVelX(), jugadorRojo.getVelY());
+
+                for (JugadorAzul j:
+                        jugadoresAzules) {
+                    writePlayer(totalTime, writer, j.getPosX(), j.getPosY(), j.getVelX(), j.getVelY());
                 }
+
+                Utils.calcularVectorObjetivo(jugadorRojo, jugadoresAzules, dt);
+                Utils.actualizarPosicion(jugadorRojo, dt);
+
+                // Actualizar la posición de cada jugador azul y verificar colisiones
+                for (JugadorAzul jugadorAzul : jugadoresAzules) {
+                    jugadorAzul.perseguirJugadorRojo(jugadorRojo, dt);
+                    Utils.actualizarPosicion(jugadorAzul, dt);
+                    if (Utils.detectarColision(jugadorRojo, jugadorAzul)) {
+                        tackled = true;
+                        break;
+                    }
+                }
+
+                totalTime += dt;
             }
+        }catch (IOException e) {
+            e.printStackTrace();
 
-            totalTime += dt;
         }
+    }
 
-        if (jugadorRojo.hizoTry()) {
-            System.out.println("¡Try logrado en tiempo: " + totalTime + " segundos!");
-        } else {
-            System.out.println("Jugador rojo fue detenido en tiempo: " + totalTime + " segundos.");
-        }
+    private static void writePlayer(double totalTime, BufferedWriter writer, double posX, double posY, double velX, double velY) throws IOException {
+        writer.write(String.valueOf(posX));
+        writer.write(';');
+        writer.write(String.valueOf(posY));
+        writer.write(';');
+        writer.write(String.valueOf(velX));
+        writer.write(';');
+        writer.write(String.valueOf(velY));
+        writer.write(';');
+        writer.write(String.valueOf(totalTime));
+        writer.write('\n');
     }
 
     private static List<JugadorAzul> generarJugadoresAzules(double cantidad, double vmax, double radio, double largo, double ancho,double weight,double tau) {
