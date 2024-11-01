@@ -25,6 +25,9 @@ public class Utils {
             direccionLargoX /= magnitudLargo;
             direccionLargoY /= magnitudLargo;
         }
+        
+        double direccionElusionX = 0;
+        double direccionElusionY = 0;
 
         // Encontrar la primera colisión con un jugador azul
         JugadorAzul jugadorCercano = null;
@@ -61,8 +64,6 @@ public class Utils {
         }
 
         // Lógica de evasión contra el jugador azul más cercano
-        double direccionElusionX = 0, direccionElusionY = 0;
-
         if (jugadorCercano != null && tiempoColisionOpt.isPresent()) {
             double distX = jugadorRojo.getPosX() - jugadorCercano.getPosX();
             double distY = jugadorRojo.getPosY() - jugadorCercano.getPosY();
@@ -98,9 +99,11 @@ public class Utils {
         double direccionFinalX = sa * direccionElusionX + (1 - sa) * direccionLargoX;
         double direccionFinalY = sa * direccionElusionY + (1 - sa) * direccionLargoY;
 
-        // Actualizar la velocidad del jugador rojo con la dirección del nuevo vector
+        // Guardar el objetivo temporal en el jugador rojo
         jugadorRojo.setTarget(direccionFinalX, direccionFinalY);
+
     }
+
 
     public static double calcularSigmoid(double x) {
         return 1.0 / (1.0 + Math.exp(A * (x + B)));
