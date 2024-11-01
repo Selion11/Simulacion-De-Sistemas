@@ -1,8 +1,8 @@
 package TP5.Jugador;
 
 public class JugadorAzul extends Jugador {
-    public JugadorAzul(double x, double y, double velocidadMaxima, double radio) {
-        super(x, y, velocidadMaxima, radio);
+    public JugadorAzul(double x, double y, double radio,double velocidadMaxima,double weight,double tau) {
+        super(x, y, velocidadMaxima, radio,weight,tau);
     }
 
     public boolean perseguirJugadorRojo(Jugador jugadorRojo, double deltaTiempo) {

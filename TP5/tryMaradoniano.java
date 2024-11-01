@@ -14,9 +14,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.*;
 
-public class TryMaradoniano {
+public class tryMaradoniano {
     public static void main(String[] args) {
-        double vmaxRojo, vmaxAzul, treacAzul, treacRojo, n, largo, ancho, radio, rojoXInicial, rojoYInicial, dt;
+        double vmaxRojo, vmaxAzul, treacAzul, treacRojo, n, largo, ancho, radio, rojoXInicial, rojoYInicial, dt,weight;
         double totalTime = 0;
 
         Properties properties = new Properties();
@@ -38,10 +38,11 @@ public class TryMaradoniano {
         rojoXInicial = Double.parseDouble(properties.getProperty("rojoxinicial"));
         rojoYInicial = Double.parseDouble(properties.getProperty("rojoyinicial"));
         dt = Double.parseDouble(properties.getProperty("dt"));
+        weight = Double.parseDouble(properties.getProperty("weight"));
 
         // Inicializar jugador rojo y lista de jugadores azules
-        JugadorRojo jugadorRojo = new JugadorRojo(rojoXInicial, rojoYInicial, radio, vmaxRojo);
-        List<JugadorAzul> jugadoresAzules = generarJugadoresAzules(n, vmaxAzul, radio, largo, ancho);
+        JugadorRojo jugadorRojo = new JugadorRojo(rojoXInicial, rojoYInicial, radio, vmaxRojo,weight,treacRojo);
+        List<JugadorAzul> jugadoresAzules = generarJugadoresAzules(n, vmaxAzul, radio, largo, ancho,weight,treacAzul);
 
         boolean tackled = false;
         while (!tackled && !jugadorRojo.hizoTry()) {
@@ -69,7 +70,7 @@ public class TryMaradoniano {
         }
     }
 
-    private static List<JugadorAzul> generarJugadoresAzules(double cantidad, double vmax, double radio, double largo, double ancho) {
+    private static List<JugadorAzul> generarJugadoresAzules(double cantidad, double vmax, double radio, double largo, double ancho,double weight,double tau) {
         List<JugadorAzul> jugadoresAzules = new ArrayList<>();
         Random random = new Random();
 
@@ -95,7 +96,7 @@ public class TryMaradoniano {
                 }
             } while (!posicionValida);
 
-            jugadoresAzules.add(new JugadorAzul(x, y, radio, vmax));
+            jugadoresAzules.add(new JugadorAzul(x, y, radio, vmax,weight,tau));
         }
         return jugadoresAzules;
     }

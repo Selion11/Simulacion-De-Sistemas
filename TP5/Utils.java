@@ -150,4 +150,36 @@ public class Utils {
         double distancia = Math.sqrt(distX * distX + distY * distY);
         return distancia < (jugador1.getRadio() + jugador2.getRadio());
     }
+
+    private double playerDistance(Jugador p1,Jugador p2){
+        double x = Math.pow(p1.getPosX() - p2.getPosX(),2);
+        double y = Math.pow(p1.getPosY() - p2.getPosY(),2);
+        double r = Math.sqrt(x + y);
+        return r - (p1.getRadio()*2);
+    }
+
+    //
+    private Double[] calculateNormal(Jugador p1,Jugador p2){
+
+    }
+
+    public Double[] granularForces(Jugador p1,Jugador p2) {
+        Double[] force = new Double[2];
+        double xComponent = 0;
+        double yComponent = 0;
+            //normal es pos relativa dividido la distancia
+
+
+        return force;
+    }
+
+    public Double[] wishForce(double tempX, double tempY,double maxV, double xVel,double yVel,double w,double tau){
+        Double[] force = new Double[2];//0 x component | 1 y component
+        double constant = (w/tau);
+        double xComponent = constant*(maxV*tempX-xVel );
+        double yComponent = constant*(maxV*tempY-yVel);
+        force[0] = xComponent;
+        force[1] = yComponent;
+        return force;
+    }
 }
