@@ -6,7 +6,6 @@ import TP5.Jugador.JugadorRojo;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Vector;
 
 public class Utils {
 
@@ -146,11 +145,6 @@ public class Utils {
         return Optional.empty();
     }
 
-    // Actualizar la posición del jugador según su velocidad y el tiempo transcurrido
-    public static void actualizarPosicion(Jugador jugador, double deltaTiempo) {
-        jugador.setPosX(jugador.getPosX() + jugador.getVelX() * deltaTiempo);
-        jugador.setPosY(jugador.getPosY() + jugador.getVelY() * deltaTiempo);
-    }
 
     // Verificar si dos jugadores colisionaron (sus radios se superponen)
     public static boolean detectarColision(Jugador jugador1, Jugador jugador2) {
@@ -166,7 +160,7 @@ public class Utils {
      * @param p2: Particula 2
      * @return: retorna la distancia entre las particulas en formato double
      */
-    private double playerDistance(Jugador p1,Jugador p2){
+    static private double playerDistance(Jugador p1,Jugador p2){
         double x = Math.pow(p1.getPosX() - p2.getPosX(),2);
         double y = Math.pow(p1.getPosY() - p2.getPosY(),2);
         return Math.sqrt(x + y);
@@ -178,7 +172,7 @@ public class Utils {
      * @param p2: PArtiucla hacia la cual se calcula la normal
      * @return: Retorna un Double[] con la componente x de la fuerza en [0] y la componente Y de la misma en [1]
      */
-    private Double[] calculateNormal(Jugador p1,Jugador p2){
+    static private Double[] calculateNormal(Jugador p1,Jugador p2){
         Double[] normal = new Double[2];
         double distace = playerDistance(p1,p2);
         double xComponent = (p2.getPosX() - p1.getPosX())/distace;
@@ -190,12 +184,12 @@ public class Utils {
 
     /**
      * Variable de contacto debe utilizarse en los calculos de la fuerza granular, fuerza del sistema y para saber si dos particulas estan en contacto (caso en el que el valor es <0)
-     * @param distance: Distancia en las particulas
-     * @param radius: Radio de una particula
+     * @param p1: Jugador 1
+     * @param p2: Jugador 2
      * @return: retorna un double que es <0 si estan en contacto las particulas y >0 si no lo estan
      */
-    public double contactVariable(double distance,double radius){
-        return distance -(radius*2);
+    static public double contactVariable(Jugador p1,Jugador p2){
+        return playerDistance(p1,p2) -(p1.getRadio()*2);
     }
 
     /**
@@ -206,19 +200,17 @@ public class Utils {
      * @param kt: k en la direccion tangencial
      * @return: decuelve un Double[] donde [0] es la componente en x y [1] la componente en y
      */
-    public Double[] sistForce(Jugador p1,Jugador[] inContact,double kn,double kt){
+    public static Double[] calculateAcceleration(Jugador p1,List<JugadorAzul> inContact, double kn, double kt){
         Double[] ans = new Double[2];
         Double[] wish = wishForce(p1.getTargetX(), p1.getTargetY(), p1.getVelocidadMaxima(),p1.getVelX(), p1.getVelY(),p1.getWeight(),p1.getTau());
         Double[] granular = new Double[2];
         granular[0] = 0.0;
         granular[1] = 0.0;
-        if(inContact != null){//Si hay p[articulas en contacto para calcular la fuerza granular de las mismas
+        if(!inContact.isEmpty()){//Si hay particulas en contacto para calcular la fuerza granular de las mismas
             for(Jugador j: inContact){
                 //Contact variable siempre va a dar <0 pq es lo que se deberia usar para llenar la lista inContact
-                double contactVariable = contactVariable(playerDistance(p1,j),(p1.getRadio()*2));
-                Double[] aux1 = new Double[2];
-                Double[] aux2 = granularForce(p1,j,contactVariable,kn,kt);aux1[0] = aux2[0];
-                aux1[1] = aux2[1];
+                double contactVariable = contactVariable(p1,j);
+                Double[] aux1 = granularForce(p1,j,contactVariable,kn,kt);
                 granular[0] += aux1[0];
                 granular[1] += aux1[1];
             }
@@ -239,7 +231,7 @@ public class Utils {
      * @param kt: k en la direccion tangencial
      * @return: Retorna un Double[] con la componente x de la fuerza en [0] y la componente Y de la misma en [1]
      */
-    private Double[] granularForce(Jugador p1,Jugador p2,double contactVariable,double kn,double kt) {
+    static private Double[] granularForce(Jugador p1,Jugador p2,double contactVariable,double kn,double kt) {
         Double[] normal = calculateNormal(p1,p2);
         Double[] tanget = new Double[2];
         tanget[0] = -normal[1];
@@ -274,7 +266,7 @@ public class Utils {
      * @param tau: Coeficiente del tiempo de reaccion
      * @return: retorna un Double[] con la componente x en [0] y la componente y en [1]
      */
-    private Double[] wishForce(double tempX, double tempY,double maxV, double xVel,double yVel,double w,double tau){
+    static private Double[] wishForce(double tempX, double tempY,double maxV, double xVel,double yVel,double w,double tau){
         Double[] force = new Double[2];//0 x component | 1 y component
         double constant = (w/tau);
         double xComponent = constant*(maxV*tempX-xVel );

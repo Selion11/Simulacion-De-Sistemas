@@ -26,21 +26,6 @@ public class Jugador {
         this.oldAcceleration = new Acceleration();
     }
 
-//    public void actualizarPosicion(double deltaTiempo) {
-//        this.posX += this.velX * deltaTiempo;
-//        this.posY += this.velY * deltaTiempo;
-//    }
-//
-//    public void actualizarVelocidad(double nuevaVelX, double nuevaVelY) {
-//        double magnitud =  Math.sqrt(nuevaVelX * nuevaVelX + nuevaVelY * nuevaVelY);
-//        if (magnitud > this.velocidadMaxima) {
-//            this.velX = (nuevaVelX / magnitud) * this.velocidadMaxima;
-//            this.velY = (nuevaVelY / magnitud) * this.velocidadMaxima;
-//        } else {
-//            this.velX = nuevaVelX;
-//            this.velY = nuevaVelY;
-//        }
-//    }
 
     /**
      * @param currentAccY: aceleracion actual componente en y

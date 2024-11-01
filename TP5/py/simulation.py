@@ -45,11 +45,11 @@ def animate(i, x,y, tiempo, ax):
 
 
 # Lee los datos
-file = "../output/output.txt"
+file = "./TP5/output/output.csv"
 
 df = pd.read_csv(file, delimiter=';')
 
-timeElapsed = df['time'].tolist()
+timeElapsed = df['tiempo'].tolist()
 raw_x_positions = df['x'].tolist()
 raw_y_positions = df['y'].tolist()
 
@@ -90,7 +90,7 @@ anim = fa(fig, animate, frames=len(seconds), fargs=(x_positions,y_positions,seco
 
 # Guardar la animación como GIF (opcional)
 # anim.save('./output_animation_system_with_obstacle.mp4', writer=writers)
-anim.save('./output/simulation.mp4', writer=writers)
+anim.save('./TP5/output/simulation.mp4', writer=writers)
 
 # anim.save('./output_animation_system_with_big_particle.mp4', writer=writers)
 
