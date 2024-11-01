@@ -15,6 +15,7 @@ public class JugadorAzul extends Jugador {
             this.velY = (direccionY / magnitud) * this.velocidadMaxima;
         }
 
+        //Fijense si aca no habria que usar el beeman para actualizar la posicion Ojo con eso
         this.actualizarPosicion(deltaTiempo);
 
         double d = Math.sqrt(Math.pow(this.posX - jugadorRojo.posX,2) + Math.pow(this.posY - jugadorRojo.posY,2));
