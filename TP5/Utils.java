@@ -160,26 +160,71 @@ public class Utils {
     private double playerDistance(Jugador p1,Jugador p2){
         double x = Math.pow(p1.getPosX() - p2.getPosX(),2);
         double y = Math.pow(p1.getPosY() - p2.getPosY(),2);
-        double r = Math.sqrt(x + y);
-        return r - (p1.getRadio()*2);
+        return Math.sqrt(x + y);
     }
 
-    //
+    //Returns Normal from p1 to p2
     private Double[] calculateNormal(Jugador p1,Jugador p2){
-
+        Double[] normal = new Double[2];
+        double distace = playerDistance(p1,p2);
+        double xComponent = (p2.getPosX() - p1.getPosX())/distace;
+        double yComponent = (p2.getPosY() - p1.getPosY())/distace;
+        normal[0] = xComponent;
+        normal[1] = yComponent;
+        return normal;
     }
 
-    public Double[] granularForces(Jugador p1,Jugador p2) {
-        Double[] force = new Double[2];
-        double xComponent = 0;
-        double yComponent = 0;
-            //normal es pos relativa dividido la distancia
+    //calculate sistemForce for p1
+    public Double[] sistForce(Jugador p1,Jugador[] inContact,double kn,double kt){
+        //TODO revisar el paso de parametros
+        Double[] ans = new Double[2];
+        Double[] wish = wishForce(p1.getTempX(), p1.getTempY(), p1.getVelocidadMaxima(),p1.getVelX(), p1.getVelY(),p1.getWeight(),p1.getTau());
+        Double[] granular = new Double[2];
+        granular[0] = 0.0;
+        granular[1] = 1.0;
+        for(Jugador j: inContact){
+            double contactVariable = playerDistance(p1,j)-(p1.getRadio()*2);
+            Double[] aux1 = new Double[2];
+            if(contactVariable < 0){
+                Double[] aux2 = granularForce(p1,j,contactVariable,kn,kt);
+                aux1[0] = aux2[0];
+                aux1[1] = aux2[1];
+            }else{ Double[] aux = granularForce(p1,j,contactVariable,kn,kt);}
+            granular[0] += aux1[0];
+            granular[1] += aux1[1];
+        }
 
+        ans[0] = (wish[0]+granular[0])/p1.getWeight();
+        ans[1] = (wish[1]+granular[1])/p1.getWeight();
+
+        return ans;
+    }
+
+    private Double[] granularForce(Jugador p1,Jugador p2,double contactVariable,double kn,double kt) {
+        Double[] normal = calculateNormal(p1,p2);
+        Double[] tanget = new Double[2];
+        tanget[0] = -normal[1];
+        tanget[1] = normal[0];
+
+        Double[] forceN = new Double[2];
+        double ncte = -contactVariable*kn;
+        forceN[0] = normal[0] * ncte;
+        forceN[1] = normal[1] * ncte;
+
+        Double[] forceT = new Double[2];
+        double tcte = p1.getVelX()*tanget[0] + p1.getVelY()*tanget[1];
+        tcte *= kt*contactVariable;
+        forceT[0] = tcte*tanget[0];
+        forceT[1] = tcte*tanget[1];
+
+        Double[] force = new Double[2];
+        force[0] = forceT[0]+forceN[0];
+        force[1] = forceT[1]+forceN[1];
 
         return force;
     }
 
-    public Double[] wishForce(double tempX, double tempY,double maxV, double xVel,double yVel,double w,double tau){
+    private Double[] wishForce(double tempX, double tempY,double maxV, double xVel,double yVel,double w,double tau){
         Double[] force = new Double[2];//0 x component | 1 y component
         double constant = (w/tau);
         double xComponent = constant*(maxV*tempX-xVel );
