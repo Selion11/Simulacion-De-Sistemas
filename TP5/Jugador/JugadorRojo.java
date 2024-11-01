@@ -5,12 +5,6 @@ public class JugadorRojo extends Jugador {
         super(posX, posY, radio, velocidadMaxima,weight,tau);
     }
 
-    public void calcularVelocidadElusion(double objetivoTemporalX, double objetivoTemporalY) {
-        double deltaX = objetivoTemporalX - this.posX;
-        double deltaY = objetivoTemporalY - this.posY;
-        this.actualizarVelocidad(deltaX, deltaY);
-    }
-
     public boolean hizoTry() {
         return this.posX <= 0;
     }

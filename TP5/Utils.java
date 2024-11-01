@@ -99,7 +99,7 @@ public class Utils {
         double direccionFinalY = sa * direccionElusionY + (1 - sa) * direccionLargoY;
 
         // Actualizar la velocidad del jugador rojo con la dirección del nuevo vector
-        jugadorRojo.calcularVelocidadElusion(direccionFinalX, direccionFinalY);
+        jugadorRojo.setTarget(direccionFinalX, direccionFinalY);
     }
 
     public static double calcularSigmoid(double x) {
@@ -176,9 +176,8 @@ public class Utils {
 
     //calculate sistemForce for p1
     public Double[] sistForce(Jugador p1,Jugador[] inContact,double kn,double kt){
-        //TODO revisar el paso de parametros
         Double[] ans = new Double[2];
-        Double[] wish = wishForce(p1.getTempX(), p1.getTempY(), p1.getVelocidadMaxima(),p1.getVelX(), p1.getVelY(),p1.getWeight(),p1.getTau());
+        Double[] wish = wishForce(p1.getTargetX(), p1.getTargetY(), p1.getVelocidadMaxima(),p1.getVelX(), p1.getVelY(),p1.getWeight(),p1.getTau());
         Double[] granular = new Double[2];
         granular[0] = 0.0;
         granular[1] = 1.0;

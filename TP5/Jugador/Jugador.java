@@ -5,6 +5,8 @@ import java.util.Vector;
 public class Jugador {
     protected double posX, posY;
     protected double velX, velY;
+
+    protected double targetX, targetY;
     protected double radio;
     protected double velocidadMaxima;
     protected double weight;
@@ -44,6 +46,20 @@ public class Jugador {
     public double getRadio() { return radio; }
     public void setPosX(double posX) { this.posX = posX; }
     public void setPosY(double posY) { this.posY = posY; }
+
+    public double getTargetX() {
+        return targetX;
+    }
+
+    public double getTargetY() {
+        return targetY;
+    }
+
+    public void setTarget(double x, double y){
+        targetX = x;
+        targetY = y;
+    }
+
     public double getVelocidadMaxima() { return velocidadMaxima; }
     public double getWeight(){ return weight; }
     public double getTau() { return tau; }
