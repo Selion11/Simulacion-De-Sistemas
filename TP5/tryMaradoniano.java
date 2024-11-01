@@ -16,7 +16,7 @@ import java.util.*;
 
 public class tryMaradoniano {
     public static void main(String[] args) {
-        double vmaxRojo, vmaxAzul, treacAzul, treacRojo, n, largo, ancho, radio, rojoXInicial, rojoYInicial, dt,weight;
+        double vmaxRojo, vmaxAzul, treacAzul, treacRojo, n, largo, ancho, radio, rojoXInicial, rojoYInicial, dt,m,kt,kn;
         double totalTime = 0;
 
         Properties properties = new Properties();
@@ -38,11 +38,13 @@ public class tryMaradoniano {
         rojoXInicial = Double.parseDouble(properties.getProperty("rojoxinicial"));
         rojoYInicial = Double.parseDouble(properties.getProperty("rojoyinicial"));
         dt = Double.parseDouble(properties.getProperty("dt"));
-        weight = Double.parseDouble(properties.getProperty("weight"));
+        m = Double.parseDouble(properties.getProperty("m"));
+        kn = Double.parseDouble(properties.getProperty("kn"));
+        kt = Double.parseDouble(properties.getProperty("kt"));
 
         // Inicializar jugador rojo y lista de jugadores azules
-        JugadorRojo jugadorRojo = new JugadorRojo(rojoXInicial, rojoYInicial, radio, vmaxRojo,weight,treacRojo);
-        List<JugadorAzul> jugadoresAzules = generarJugadoresAzules(n, vmaxAzul, radio, largo, ancho,weight,treacAzul);
+        JugadorRojo jugadorRojo = new JugadorRojo(rojoXInicial, rojoYInicial, radio, vmaxRojo,m,treacRojo);
+        List<JugadorAzul> jugadoresAzules = generarJugadoresAzules(n, vmaxAzul, radio, largo, ancho,m,treacAzul);
 
         boolean tackled = false;
         while (!tackled && !jugadorRojo.hizoTry()) {
