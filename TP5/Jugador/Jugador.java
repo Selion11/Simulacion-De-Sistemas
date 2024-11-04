@@ -19,8 +19,8 @@ public class Jugador {
         this.posY = posY;
         this.radio = radio;
         this.velocidadMaxima = velocidadMaxima;
-        this.velX = 0;
-        this.velY = 0;
+        this.velX = velocidadMaxima;
+        this.velY = velocidadMaxima;
         this.weight = weight;
         this.tau = tau;
         this.oldAcceleration = new Acceleration();

@@ -38,14 +38,14 @@ def plot_particle_interactions(x,y, ax):
 
 def animate(i, x,y, tiempo, ax):
     print(i)
-    plot_particle_interactions(x,y, ax)
+    plot_particle_interactions(x[i],y[i], ax)
     ax.text(0.5, 1.05, f'Tiempo: {tiempo[i]}', 
         horizontalalignment='center', verticalalignment='center', 
         transform=ax.transAxes, fontsize=12)
 
 
 # Lee los datos
-file = "./TP5/output/output.csv"
+file = "../output/output.csv"
 
 df = pd.read_csv(file, delimiter=';')
 
@@ -78,21 +78,21 @@ for i in range(len(timeElapsed)):
 # Crear la figura y el eje
 fig, ax = plt.subplots()
 
-writers = animation.FFMpegWriter(fps=60)
+writers = animation.FFMpegWriter(fps=10)
 
+print(x_positions)
 
 
 # Crear la animación
-anim = fa(fig, animate, frames=len(seconds), fargs=(x_positions,y_positions,seconds, ax), interval=1, blit=False)
+anim = fa(fig, animate, frames=len(seconds), fargs=(x_positions,y_positions,seconds, ax), interval=100, blit=False)
 
 # Mostrar la animación en pantalla
 # plt.show()
 
-# Guardar la animación como GIF (opcional)
-# anim.save('./output_animation_system_with_obstacle.mp4', writer=writers)
-anim.save('./TP5/output/simulation.mp4', writer=writers)
+# Guardar la animación como Mp4 (opcional)
 
-# anim.save('./output_animation_system_with_big_particle.mp4', writer=writers)
+anim.save('../output/simulation.mp4', writer=writers)
+
 
 
 

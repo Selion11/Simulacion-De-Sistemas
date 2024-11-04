@@ -79,7 +79,8 @@ public class tryMaradoniano {
                 Utils.calcularVectorObjetivo(jugadorRojo, jugadoresAzules, dt);
                 Double[] redA = Utils.calculateAcceleration(jugadorRojo,new ArrayList<>(),kn,kt);
                 jugadorRojo.beemanIntegration(redA[0],redA[1],dt);
-                if(jugadorRojo.getPosY() >= 70){
+
+                if(jugadorRojo.getPosY() >= 70 || jugadorRojo.getPosY() <= 0){
                     tackled = true;
                     break;
                 }
