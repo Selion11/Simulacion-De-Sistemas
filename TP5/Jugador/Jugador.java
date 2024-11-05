@@ -1,9 +1,8 @@
 package TP5.Jugador;
-
-import java.util.Vector;
 import TP5.helpers.Acceleration;
+import TP5.helpers.Sistema;
 
-public class Jugador {
+public abstract class Jugador {
     protected double posX, posY;
     protected double velX, velY;
 
@@ -14,17 +13,19 @@ public class Jugador {
     protected double tau;
     public Acceleration oldAcceleration;
 
-    public Jugador(double posX, double posY, double radio, double velocidadMaxima,double weight,double tau) {
+    public Jugador(double posX, double posY, double radio, double velocidadMaxima, double velX, double velY, double weight,double tau) {
         this.posX = posX;
         this.posY = posY;
         this.radio = radio;
         this.velocidadMaxima = velocidadMaxima;
-        this.velX = velocidadMaxima;
-        this.velY = velocidadMaxima;
+        this.velX = velX;
+        this.velY = velY;
         this.weight = weight;
         this.tau = tau;
         this.oldAcceleration = new Acceleration();
     }
+
+    public abstract void calcularVectorObjetivo(Sistema sistema);
 
 
     /**

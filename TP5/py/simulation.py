@@ -1,98 +1,52 @@
 import matplotlib.pyplot as plt
-import os
-import math
-import numpy as np
-import matplotlib.animation as animation
-from matplotlib.animation import FuncAnimation as fa
-from matplotlib.patches import Circle
 import pandas as pd
+import matplotlib.animation as animation
+from matplotlib.patches import Circle
 
+# Configuración de campo de juego
+largo_campo = 100
+ancho_campo = 70
 
-largo = 100
-ancho = 70 
+# Leer archivo CSV
+file_path = '..\output\output.csv'  # Reemplaza con la ruta de tu archivo
+df = pd.read_csv(file_path, delimiter=';')
 
-def plot_particle_interactions(x,y, ax):
+# Separar las posiciones y velocidades de cada jugador en listas por cada instante de tiempo
+time_steps = df['tiempo'].unique()
+players_data = {time: df[df['tiempo'] == time] for time in time_steps}
 
-    ax.clear()
-
-    # Jugador Atacante
-    radius = 1
-
-    circle = Circle((x[0], y[0]),radius, edgecolor='red', facecolor='red')  
-    ax.add_patch(circle) 
-    radius = 1
-
-    # Defensores
-    for i in range(1, len(x)):
-        circle = Circle((x[i], y[i]), radius, edgecolor='blue', facecolor='lightblue')  # Create a circle
-        ax.add_patch(circle)  # Add the circle to the plot
-
-    
-
-    # Customize the plot
-    ax.set_xlim(0, largo)
-    ax.set_ylim(0, ancho)
-    ax.set_xlabel("X (m)")
-    ax.set_ylabel("Y (m)")
-    ax.set_aspect('equal', adjustable='box')
-
-def animate(i, x,y, tiempo, ax):
-    print(i)
-    plot_particle_interactions(x[i],y[i], ax)
-    ax.text(0.5, 1.05, f'Tiempo: {tiempo[i]}', 
-        horizontalalignment='center', verticalalignment='center', 
-        transform=ax.transAxes, fontsize=12)
-
-
-# Lee los datos
-file = "../output/output.csv"
-
-df = pd.read_csv(file, delimiter=';')
-
-timeElapsed = df['tiempo'].tolist()
-raw_x_positions = df['x'].tolist()
-raw_y_positions = df['y'].tolist()
-
-
-seconds = []
-x_positions = []
-y_positions = []
-auxY = []
-auxX = []
-lastTime = 0
-for i in range(len(timeElapsed)):
-    
-    if(timeElapsed[i] != lastTime):
-        x_positions.append(auxX)
-        y_positions.append(auxY)
-        auxY = []
-        auxX = []
-        lastTime = timeElapsed[i]
-        seconds.append(lastTime)
-    
-    auxY.append(raw_y_positions[i])
-    auxX.append(raw_x_positions[i]) 
-
-       
-
-# Crear la figura y el eje
+# Configuración de la animación
 fig, ax = plt.subplots()
+ax.set_xlim(0, largo_campo)
+ax.set_ylim(0, ancho_campo)
+ax.set_aspect('equal')
+ax.set_title("Simulación de Movimiento de Jugadores")
+ax.set_xlabel("X (m)")
+ax.set_ylabel("Y (m)")
 
-writers = animation.FFMpegWriter(fps=10)
+# Función para actualizar la animación en cada cuadro
+def animate(i):
+    ax.clear()
+    ax.set_xlim(0, largo_campo)
+    ax.set_ylim(0, ancho_campo)
+    
+    # Extraer datos de jugadores en el instante actual
+    current_time = time_steps[i]
+    current_data = players_data[current_time]
 
-print(x_positions)
+    # Dibujar jugadores
+    for idx, player in current_data.iterrows():
+        color = 'red' if idx == 0 else 'blue'  # Rojo para el jugador rojo, azul para los azules
+        circle = Circle((player['x'], player['y']), 1, color=color)  # Radio 1 (ajustar según sea necesario)
+        ax.add_patch(circle)
+        
+    # Mostrar el tiempo actual en la animación
+    ax.text(0.5, 1.05, f'Tiempo: {current_time:.2f} s', ha='center', transform=ax.transAxes)
 
+# Crear animación
+ani = animation.FuncAnimation(fig, animate, frames=len(time_steps), interval=100)
 
-# Crear la animación
-anim = fa(fig, animate, frames=len(seconds), fargs=(x_positions,y_positions,seconds, ax), interval=100, blit=False)
+# Guardar animación (opcional)
+# ani.save('simulacion.mp4', writer='ffmpeg', fps=10)
 
-# Mostrar la animación en pantalla
-# plt.show()
-
-# Guardar la animación como Mp4 (opcional)
-
-anim.save('../output/simulation.mp4', writer=writers)
-
-
-
-
+plt.show()

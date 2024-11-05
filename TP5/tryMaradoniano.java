@@ -1,8 +1,10 @@
 package TP5;
 
+import TP5.Jugador.Jugador;
 import TP5.Jugador.JugadorAzul;
 import TP5.Jugador.JugadorRojo;
 import TP5.helpers.Acceleration;
+import TP5.helpers.Sistema;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -16,89 +18,78 @@ import java.util.*;
 
 public class tryMaradoniano {
     public static void main(String[] args) {
-        double vmaxRojo, vmaxAzul, treacAzul, treacRojo, n, largo, ancho, radio, rojoXInicial, rojoYInicial, dt,m,kt,kn,dt2;
-        double totalTime = 0;
-
+        // Configuración de propiedades y variables iniciales
         Properties properties = new Properties();
-        try {
-            FileInputStream config = new FileInputStream("TP5/configs/config.config");
+        double totalTime = 0, auxTime = 0;
+
+        try (FileInputStream config = new FileInputStream("TP5/configs/config.config")) {
             properties.load(config);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        vmaxRojo = Double.parseDouble(properties.getProperty("vmaxrojo"));
-        vmaxAzul = Double.parseDouble(properties.getProperty("vmaxazul"));
-        treacAzul = Double.parseDouble(properties.getProperty("treacazul"));
-        treacRojo = Double.parseDouble(properties.getProperty("treacrojo"));
-        n = Double.parseDouble(properties.getProperty("n"));
-        largo = Double.parseDouble(properties.getProperty("largo"));
-        ancho = Double.parseDouble(properties.getProperty("ancho"));
-        radio = Double.parseDouble(properties.getProperty("radio"));
-        rojoXInicial = Double.parseDouble(properties.getProperty("rojoxinicial"));
-        rojoYInicial = Double.parseDouble(properties.getProperty("rojoyinicial"));
-        dt = Double.parseDouble(properties.getProperty("dt"));
-        m = Double.parseDouble(properties.getProperty("m"));
-        kn = Double.parseDouble(properties.getProperty("kn"));
-        kt = Double.parseDouble(properties.getProperty("kt"));
-        dt2 = Double.parseDouble(properties.getProperty("dt2"));
+        // Variables del sistema
+        double vmaxRojo = Double.parseDouble(properties.getProperty("vmaxrojo"));
+        double vmaxAzul = Double.parseDouble(properties.getProperty("vmaxazul"));
+        double treacAzul = Double.parseDouble(properties.getProperty("treacazul"));
+        double treacRojo = Double.parseDouble(properties.getProperty("treacrojo"));
+        double n = Double.parseDouble(properties.getProperty("n"));
+        double largo = Double.parseDouble(properties.getProperty("largo"));
+        double ancho = Double.parseDouble(properties.getProperty("ancho"));
+        double radio = Double.parseDouble(properties.getProperty("radio"));
+        double rojoXInicial = Double.parseDouble(properties.getProperty("rojoxinicial"));
+        double rojoYInicial = Double.parseDouble(properties.getProperty("rojoyinicial"));
+        double dt = Double.parseDouble(properties.getProperty("dt"));
+        double m = Double.parseDouble(properties.getProperty("m"));
+        double kn = Double.parseDouble(properties.getProperty("kn"));
+        double kt = Double.parseDouble(properties.getProperty("kt"));
+        double dt2 = Double.parseDouble(properties.getProperty("dt2"));
 
-        // Inicializar jugador rojo y lista de jugadores azules
-        JugadorRojo jugadorRojo = new JugadorRojo(rojoXInicial, rojoYInicial, radio, vmaxRojo,m,treacRojo);
-        List<JugadorAzul> jugadoresAzules = generarJugadoresAzules(n, vmaxAzul, radio, largo, ancho,m,treacAzul);
+        // Inicialización de los jugadores
+        JugadorRojo jugadorRojo = new JugadorRojo(rojoXInicial, rojoYInicial, radio, vmaxRojo, -vmaxRojo, 0, m, treacRojo, 20.0);
+        List<JugadorAzul> jugadoresAzules = generarJugadoresAzules(n, vmaxAzul, radio, largo, ancho, m, treacAzul);
+        Sistema sistema = new Sistema(jugadorRojo, jugadoresAzules);
 
+        // Archivo de salida
         File output = new File("TP5/output/output.csv");
-
         try {
             output.createNewFile();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+        // Escritura de los datos de simulación
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(output))) {
             writer.write("x;y;vx;vy;tiempo\n");
-
             boolean tackled = false;
-            double auxTime = 0;
-            writePlayer(totalTime, writer, jugadorRojo.getPosX(), jugadorRojo.getPosY(), jugadorRojo.getVelX(), jugadorRojo.getVelY());
+            writeState(writer, totalTime, jugadorRojo, jugadoresAzules);
 
-            for (JugadorAzul j : jugadoresAzules) {
-                writePlayer(totalTime, writer, j.getPosX(), j.getPosY(), j.getVelX(), j.getVelY());
-            }
+            // Bucle de simulación
             while (!tackled && !jugadorRojo.hizoTry()) {
-
-                if(auxTime >= dt2) {
-                    writePlayer(totalTime, writer, jugadorRojo.getPosX(), jugadorRojo.getPosY(), jugadorRojo.getVelX(), jugadorRojo.getVelY());
-
-                    for (JugadorAzul j : jugadoresAzules) {
-                        writePlayer(totalTime, writer, j.getPosX(), j.getPosY(), j.getVelX(), j.getVelY());
-                    }
+                if (auxTime >= dt2) {
+                    writeState(writer, totalTime, jugadorRojo, jugadoresAzules);
                     auxTime = 0;
                 }
 
-                Utils.calcularVectorObjetivo(jugadorRojo, jugadoresAzules, dt);
-                Double[] redA = Utils.calculateAcceleration(jugadorRojo,new ArrayList<>(),kn,kt);
-                jugadorRojo.beemanIntegration(redA[0],redA[1],dt);
+                // Calcular el vector objetivo y aceleración del jugador rojo
+                jugadorRojo.calcularVectorObjetivo(sistema);
+                Double[] redA = Utils.calculateAcceleration(jugadorRojo, new ArrayList<>(), kn, kt);
+                jugadorRojo.beemanIntegration(redA[0], redA[1], dt);
 
-                if(jugadorRojo.getPosY() >= 70 || jugadorRojo.getPosY() <= 0){
+                // Verificar colisión con las paredes
+                if (jugadorRojo.getPosY() >= 70 || jugadorRojo.getPosY() <= 0) {
                     tackled = true;
                     break;
                 }
-                // Actualizar la posición de cada jugador azul y verificar colisiones
-                for (JugadorAzul jugadorAzul : jugadoresAzules) {
-                    List<JugadorAzul> inContact = new ArrayList<>();
-                    for(JugadorAzul j: jugadoresAzules) {
-                        if(j.getId() != jugadorAzul.getId()){
-                            double cv = Utils.contactVariable(j,jugadorAzul);
-                            if(cv < 0){
-                                inContact.add(j);
-                            }
-                        }
 
-                    }
-                    jugadorAzul.setTarget(jugadorRojo.getPosX(), jugadorAzul.getPosY());
-                    Double[] accel = Utils.calculateAcceleration(jugadorAzul,inContact,kn,kt);
-                    jugadorAzul.beemanIntegration(accel[0],accel[1],dt);
+                // Calcular el vector objetivo y actualizar los jugadores azules
+                for (JugadorAzul jugadorAzul : jugadoresAzules) {
+                    List<JugadorAzul> inContact = filtrarJugadoresEnContacto(jugadorAzul, jugadoresAzules);
+                    jugadorAzul.calcularVectorObjetivo(sistema);
+                    Double[] azulA = Utils.calculateAcceleration(jugadorAzul, inContact, kn, kt);
+                    jugadorAzul.beemanIntegration(azulA[0], azulA[1], dt);
+
+                    // Verificar colisión con el jugador rojo
                     if (Utils.detectarColision(jugadorRojo, jugadorAzul)) {
                         tackled = true;
                         break;
@@ -108,29 +99,37 @@ public class tryMaradoniano {
                 totalTime += dt;
                 auxTime += dt;
             }
-            System.out.println("TACKLED: "+tackled);
-            writePlayer(totalTime, writer, jugadorRojo.getPosX(), jugadorRojo.getPosY(), jugadorRojo.getVelX(), jugadorRojo.getVelY());
 
-            for (JugadorAzul j : jugadoresAzules) {
-                writePlayer(totalTime, writer, j.getPosX(), j.getPosY(), j.getVelX(), j.getVelY());
-            }
-        }catch (IOException e) {
+            // Escribir el estado final
+            writeState(writer, totalTime, jugadorRojo, jugadoresAzules);
+            System.out.println("TACKLED: " + tackled);
+
+        } catch (IOException e) {
             e.printStackTrace();
-
         }
     }
 
-    private static void writePlayer(double totalTime, BufferedWriter writer, double posX, double posY, double velX, double velY) throws IOException {
-        writer.write(String.valueOf(posX));
-        writer.write(';');
-        writer.write(String.valueOf(posY));
-        writer.write(';');
-        writer.write(String.valueOf(velX));
-        writer.write(';');
-        writer.write(String.valueOf(velY));
-        writer.write(';');
-        writer.write(String.valueOf(totalTime));
-        writer.write('\n');
+    // Método para escribir el estado del jugador rojo y los jugadores azules en el archivo
+    private static void writeState(BufferedWriter writer, double time, JugadorRojo rojo, List<JugadorAzul> azules) throws IOException {
+        writePlayer(writer, time, rojo);
+        for (JugadorAzul azul : azules) {
+            writePlayer(writer, time, azul);
+        }
+    }
+
+    private static void writePlayer(BufferedWriter writer, double time, Jugador jugador) throws IOException {
+        writer.write(jugador.getPosX() + ";" + jugador.getPosY() + ";" + jugador.getVelX() + ";" + jugador.getVelY() + ";" + time + "\n");
+    }
+
+    // Filtrar jugadores en contacto con un jugador azul específico
+    private static List<JugadorAzul> filtrarJugadoresEnContacto(JugadorAzul jugador, List<JugadorAzul> jugadoresAzules) {
+        List<JugadorAzul> inContact = new ArrayList<>();
+        for (JugadorAzul j : jugadoresAzules) {
+            if (j.getId() != jugador.getId() && Utils.contactVariable(j, jugador) < 0) {
+                inContact.add(j);
+            }
+        }
+        return inContact;
     }
 
     private static List<JugadorAzul> generarJugadoresAzules(double cantidad, double vmax, double radio, double largo, double ancho,double weight,double tau) {
@@ -142,7 +141,7 @@ public class tryMaradoniano {
             boolean posicionValida;
 
             do {
-                x = random.nextDouble() * (largo - 2 * radio) + radio; // Genera dentro del campo y evita bordes
+                x = random.nextDouble() * (0.7*largo - 2 * radio) + radio; // Genera dentro del campo y evita bordes
                 y = random.nextDouble() * (ancho - 2 * radio) + radio;
                 posicionValida = true;
 
@@ -159,7 +158,7 @@ public class tryMaradoniano {
                 }
             } while (!posicionValida);
 
-            jugadoresAzules.add(new JugadorAzul(x, y, radio, vmax,weight,tau,i));
+            jugadoresAzules.add(new JugadorAzul(x, y, radio, vmax, 0, 0, weight,tau,i));
         }
         return jugadoresAzules;
     }
