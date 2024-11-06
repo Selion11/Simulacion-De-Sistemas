@@ -13,11 +13,11 @@ public class Utils {
 
     // Controla la pendiente de la función
     // Si el jugador hace cambios de dirección abruptos, reducir un poco A.
-    private static final double A = 10;
+    private static final double A = 100;
 
     // Controla el desplazamiento para asegurar s_a(0) = 0.99
     // Si el jugador reacciona demasiado tarde, prueba con valores de B más bajos.
-    private static final double B = -10;
+    private static final double B = -100;
 
     public static double calcularSigmoid(double tiempoColision) {
         return 1.0 / (1.0 + Math.exp(A * (tiempoColision + B)));
@@ -67,8 +67,8 @@ public class Utils {
         double distace = playerDistance(p1,p2);
         double xComponent = (p2.getPosX() - p1.getPosX())/distace;
         double yComponent = (p2.getPosY() - p1.getPosY())/distace;
-        normal[0] = xComponent;
-        normal[1] = yComponent;
+        normal[0] = yComponent;
+        normal[1] = -xComponent;
         return normal;
     }
 

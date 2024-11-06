@@ -20,6 +20,11 @@ public class JugadorAzul extends Jugador {
 
         double[] direccionRojo = Utils.calcularDireccion(this.getPosX(), this.getPosY(), jugadorRojo.getPosX(), jugadorRojo.getPosY());
 
+        double magnitude = Math.sqrt(Math.pow(direccionRojo[0], 2) + Math.pow(direccionRojo[1], 2));
+        if (magnitude != 0) { // Evitar división por cero
+            direccionRojo[0] /= magnitude;
+            direccionRojo[1] /= magnitude;
+        }
         this.setTarget(direccionRojo[0], direccionRojo[1]);
     }
 }
