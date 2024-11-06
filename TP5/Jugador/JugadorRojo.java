@@ -17,62 +17,13 @@ public class JugadorRojo extends Jugador {
         return this.posX <= 0;
     }
 
-//    @Override
-//    public void calcularVectorObjetivo(Sistema sistema) {
-//        double[] direccionIngoal = {-1, 0};
-//
-//        double menorTiempoColision = Double.MAX_VALUE;
-//        double[] objetivoEvasion = null;
-//
-//        // Paso 1: Predecir el tiempo de colisión con cada jugador azul
-//        for (JugadorAzul jugadorAzul : sistema.getJugadoresAzules()) {
-//            double tiempoColision = predecirTiempoColision(jugadorAzul);
-//            if (tiempoColision > 0 && tiempoColision < menorTiempoColision) {
-//                menorTiempoColision = tiempoColision;
-//                objetivoEvasion = calcularObjetivoEvasion(jugadorAzul);  // Objetivo de evasión para el jugador azul
-//            }
-//        }
-//
-//        System.out.println("Tiempo de colisión con jugador azul: " + menorTiempoColision);
-//
-//        // Paso 2: Predecir el tiempo de colisión con la pared inferior
-//        double tiempoColisionParedInferior = predecirTiempoColisionParedInferior();
-//        if (tiempoColisionParedInferior > 0 && tiempoColisionParedInferior < menorTiempoColision) {
-//            menorTiempoColision = tiempoColisionParedInferior;
-//            objetivoEvasion = calcularObjetivoEvasionParedInferior();
-//        }
-//
-//        // Paso 3: Predecir el tiempo de colisión con la pared superior
-//        double tiempoColisionParedSuperior = predecirTiempoColisionParedSuperior();
-//        if (tiempoColisionParedSuperior > 0 && tiempoColisionParedSuperior < menorTiempoColision) {
-//            menorTiempoColision = tiempoColisionParedSuperior;
-//            objetivoEvasion = calcularObjetivoEvasionParedSuperior();
-//        }
-//
-//        // Paso 4: Calcular la dirección de evasión si se ha definido un objetivo de evasión
-//        double[] direccionEvasion = direccionIngoal;  // Por defecto es hacia el ingoal
-//        if (objetivoEvasion != null) {
-//            direccionEvasion = Utils.calcularDireccion(this.getPosX(), this.getPosY(), objetivoEvasion[0], objetivoEvasion[1]);
-//        }
-//
-//        System.out.println("Dirección de evasión: " + Arrays.toString(direccionEvasion));
-//
-//        // Paso 5: Calcular el factor sigmoidal s_a(d_c) usando la distancia al punto de colisión
-//        double sa = Utils.calcularSigmoid(menorTiempoColision);
-//
-//        // Paso 6: Calcular la dirección final (n_i^t) como combinación ponderada de la dirección al ingoal y la de evasión
-//        double direccionFinalX = sa * direccionEvasion[0] + (1 - sa) * direccionIngoal[0];
-//        double direccionFinalY = sa * direccionEvasion[1] + (1 - sa) * direccionIngoal[1];
-//
-//        // Paso 7: Actualizar el objetivo temporal del jugador rojo (g_i^t)
-//        this.setTarget(direccionFinalX, direccionFinalY);
-//    }
-
         @Override
         public void calcularVectorObjetivo(Sistema sistema) {
             JugadorAzul jugadorMasCercano = null;
             JugadorAzul segundoJugadorMasCercano = null;
             double menorDistancia = Double.MAX_VALUE;
+            double[] direccionIngoal = {-1, 0};
+
 
             for (JugadorAzul jugadorAzul : sistema.getJugadoresAzules()) {
                 if(jugadorAzul.getPosX() < this.getPosX()){
@@ -87,6 +38,11 @@ public class JugadorRojo extends Jugador {
                         jugadorMasCercano = jugadorAzul;
                     }
                 }
+            }
+
+            if (jugadorMasCercano == null){
+                this.setTarget(direccionIngoal[0], direccionIngoal[1]);
+                return;
             }
 
             double dx = this.getPosX() - jugadorMasCercano.getPosX();
@@ -104,14 +60,61 @@ public class JugadorRojo extends Jugador {
             double[] opcion2 = { sentido*(-dx), sentido*dy};
             double[] opcionFinal = null;
 
-            if(distanciaParedInferior() < DA) {
-                opcionFinal = opcion2;
-            } else if (distanciaParedSuperior() < DA) {
+            if (checkOutOfBounds(opcion1) || checkGoesBackwards(opcion1)){
+                if (checkOutOfBounds(opcion2) || checkGoesBackwards(opcion2)){
+                    opcionFinal = direccionIngoal;
+                }else{
+                    opcionFinal = opcion2;
+                }
+            }else if (checkOutOfBounds(opcion2) || checkGoesBackwards(opcion2)){
                 opcionFinal = opcion1;
-            } else {
+            }else {
+                if(distanciaParedInferior() < DA) {
+                    opcionFinal = opcion2;
+                } else if (distanciaParedSuperior() < DA) {
+                    opcionFinal = opcion1;
+                } else {
+                    double distancia1 = Math.sqrt(Math.pow(segundoJugadorMasCercano.getPosX() - (this.posX + opcion1[0]), 2) + Math.pow(segundoJugadorMasCercano.getPosY() - (this.posY + opcion1[1]), 2));
+                    double distancia2 = Math.sqrt(Math.pow(segundoJugadorMasCercano.getPosX() - (this.posX + opcion2[0]), 2) + Math.pow(segundoJugadorMasCercano.getPosY() - (this.posY + opcion2[1]), 2));
 
+                    if (distancia1 >= distancia2){
+                        opcionFinal = opcion1;
+                    }else {
+                        opcionFinal = opcion2;
+                    }
+                }
             }
+
+
+
+            System.out.println("Dirección de evasión: " + Arrays.toString(opcionFinal));
+
+            double menorTiempoColision = predecirTiempoColision(jugadorMasCercano);
+
+            // Paso 5: Calcular el factor sigmoidal s_a(d_c) usando la distancia al punto de colisión
+            double sa = Utils.calcularSigmoid(menorTiempoColision);
+
+            double magnitude = Math.sqrt(Math.pow(opcionFinal[0], 2) + Math.pow(opcionFinal[1], 2));
+            if (magnitude != 0) { // Evitar división por cero
+                opcionFinal[0] /= magnitude;
+                opcionFinal[1] /= magnitude;
+            }
+
+            // Paso 6: Calcular la dirección final (n_i^t) como combinación ponderada de la dirección al ingoal y la de evasión
+            double direccionFinalX = sa * opcionFinal[0] + (1 - sa) * direccionIngoal[0];
+            double direccionFinalY = sa * opcionFinal[1] + (1 - sa) * direccionIngoal[1];
+
+            // Paso 7: Actualizar el objetivo temporal del jugador rojo (g_i^t)
+            this.setTarget(direccionFinalX, direccionFinalY);
         }
+
+    private boolean checkGoesBackwards(double[] opcion) {
+        return (this.posX + opcion[0]) > this.posX;
+    }
+
+    private boolean checkOutOfBounds(double[] opcion) {
+        return (this.posX + opcion[0]) > 100 || (this.posY + opcion[1]) < 0 || (this.posY + opcion[1]) > 70;
+    }
 
 
     private double predecirTiempoColision(JugadorAzul jugadorAzul) {
@@ -156,14 +159,14 @@ public class JugadorRojo extends Jugador {
         return 70 - this.getPosY();
     }
 
-    private int countAzulesEnArea(Sistema sistema, double[] vector) {
-        int count = 0;
-        for(JugadorAzul j : sistema.getJugadoresAzules()) {
-            //aqui debbo implementar la logica para saber si el jugador se encuentra en el rectanulo.
-            if()
-        }
-
-    }
+//    private int countAzulesEnArea(Sistema sistema, double[] vector) {
+//        int count = 0;
+//        for(JugadorAzul j : sistema.getJugadoresAzules()) {
+//            //aqui debbo implementar la logica para saber si el jugador se encuentra en el rectanulo.
+//            if()
+//        }
+//
+//    }
 
 
 }

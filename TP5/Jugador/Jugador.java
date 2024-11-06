@@ -47,9 +47,21 @@ public abstract class Jugador {
 
         // Beeman integration for velocity
         // v(t + Δt) = v(t) + (1/3)a(t + Δt)Δt + (5/6)a(t)Δt - (1/6)a(t-Δt)Δt
-        velX = oldVelX + (1.0/3.0) * currentAccX * dt + (5.0/6.0) * currentAccX * dt - (1.0/6.0) * oldAcceleration.getX() * dt;
+        double auxVelX = oldVelX + (1.0/3.0) * currentAccX * dt + (5.0/6.0) * currentAccX * dt - (1.0/6.0) * oldAcceleration.getX() * dt;
 
-        velY = oldVelY + (1.0/3.0) * currentAccY * dt + (5.0/6.0) * currentAccY * dt - (1.0/6.0) * oldAcceleration.getY() * dt;
+        double auxVelY = oldVelY + (1.0/3.0) * currentAccY * dt + (5.0/6.0) * currentAccY * dt - (1.0/6.0) * oldAcceleration.getY() * dt;
+
+        if (auxVelX >= velocidadMaxima){
+            velX = velocidadMaxima;
+        }else {
+            velX =auxVelX;
+        }
+
+        if (auxVelY >= velocidadMaxima){
+            velY = velocidadMaxima;
+        }else {
+            velY =auxVelY;
+        }
 
         // Actualizo la accel vieja a ser la que se acaba de usar para integrar
         oldAcceleration.setX(currentAccX);
