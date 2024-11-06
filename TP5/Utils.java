@@ -17,10 +17,9 @@ public class Utils {
 
     // Controla el desplazamiento para asegurar s_a(0) = 0.99
     // Si el jugador reacciona demasiado tarde, prueba con valores de B más bajos.
-    private static final double B = -0.5;
+    private static final double B = -1;
 
     public static double calcularSigmoid(double tiempoColision) {
-        System.out.println("Valor Sa: " + 1.0 / (1.0 + Math.exp(A * (tiempoColision + B))));
         return 1.0 / (1.0 + Math.exp(A * (tiempoColision + B)));
     }
 

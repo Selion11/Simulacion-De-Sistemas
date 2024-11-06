@@ -48,5 +48,4 @@ ani = animation.FuncAnimation(fig, animate, frames=len(time_steps), interval=100
 
 # Guardar animación (opcional)
 # ani.save('simulacion.mp4', writer='ffmpeg', fps=10)
-
 plt.show()
