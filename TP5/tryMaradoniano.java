@@ -59,7 +59,7 @@ public class tryMaradoniano {
                 writer.write("x;y;vx;vy;tiempo;tackled;run;n\n");
                 for (int i = 0; i < 2; i++) {
                     // Inicialización de los jugadores
-                    JugadorRojo jugadorRojo = new JugadorRojo(rojoXInicial, rojoYInicial, radio, vmaxRojo, -vmaxRojo, 0, m, treacRojo, 10.0);
+                    JugadorRojo jugadorRojo = new JugadorRojo(rojoXInicial, rojoYInicial, radio, vmaxRojo, -vmaxRojo, 0, m, treacRojo, 10.0,2*Math.PI/3);
                     List<JugadorAzul> jugadoresAzules = generarJugadoresAzules(n, vmaxAzul, radio, largo, ancho, m, treacAzul);
                     Sistema sistema = new Sistema(jugadorRojo, jugadoresAzules);
                     boolean tackled = false;

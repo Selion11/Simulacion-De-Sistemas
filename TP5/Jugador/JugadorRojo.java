@@ -7,10 +7,13 @@ import java.util.Arrays;
 public class JugadorRojo extends Jugador {
 
     private double DA; //avoidance distance parameter
+    private double anguloDeElusion; //avoidance angle
 
-    public JugadorRojo(double posX, double posY, double radio, double velocidadMaxima, double velX, double velY, double weight,double tau,double DA) {
+
+    public JugadorRojo(double posX, double posY, double radio, double velocidadMaxima, double velX, double velY, double weight,double tau,double DA, double anguloDeElusion) {
         super(posX, posY, radio, velocidadMaxima,velX, velY, weight,tau);
         this.DA = DA;
+        this.anguloDeElusion = anguloDeElusion;
     }
 
     public boolean hizoTry() {
@@ -56,8 +59,8 @@ public class JugadorRojo extends Jugador {
                 sentido = -1;
             }
 
-            double[] opcion1 = { sentido*dx, sentido*(-dy)};
-            double[] opcion2 = { sentido*(-dx), sentido*dy};
+            double[] opcion1 = { Math.cos(2*anguloDeElusion - Math.PI)*sentido*dx, Math.cos(2*anguloDeElusion - Math.PI)*sentido*(-dy)};
+            double[] opcion2 = { Math.cos(2*anguloDeElusion - Math.PI)*sentido*(-dx), Math.cos(2*anguloDeElusion - Math.PI)*sentido*dy};
             double[] opcionFinal = null;
 
             if (checkOutOfBounds(opcion1) || checkGoesBackwards(opcion1)){
@@ -159,14 +162,7 @@ public class JugadorRojo extends Jugador {
         return 70 - this.getPosY();
     }
 
-//    private int countAzulesEnArea(Sistema sistema, double[] vector) {
-//        int count = 0;
-//        for(JugadorAzul j : sistema.getJugadoresAzules()) {
-//            //aqui debbo implementar la logica para saber si el jugador se encuentra en el rectanulo.
-//            if()
-//        }
-//
-//    }
+
 
 
 }
