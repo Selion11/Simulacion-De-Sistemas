@@ -13,11 +13,11 @@ public class Utils {
 
     // Controla la pendiente de la función
     // Si el jugador hace cambios de dirección abruptos, reducir un poco A.
-    private static final double A = 100;
+    private static final double A = 2000;
 
     // Controla el desplazamiento para asegurar s_a(0) = 0.99
     // Si el jugador reacciona demasiado tarde, prueba con valores de B más bajos.
-    private static final double B = -100;
+    private static final double B = 0.08;
 
     public static double calcularSigmoid(double tiempoColision) {
         return 1.0 / (1.0 + Math.exp(A * (tiempoColision + B)));
@@ -65,8 +65,8 @@ public class Utils {
     static private Double[] calculateNormal(Jugador p1,Jugador p2){
         Double[] normal = new Double[2];
         double distace = playerDistance(p1,p2);
-        double xComponent = (p2.getPosX() - p1.getPosX())/distace;
-        double yComponent = (p2.getPosY() - p1.getPosY())/distace;
+        double xComponent = (p2.getPosY() - p1.getPosY())/distace;
+        double yComponent = -(p2.getPosX() - p1.getPosX())/distace;
         normal[0] = yComponent;
         normal[1] = -xComponent;
         return normal;
@@ -123,24 +123,11 @@ public class Utils {
      */
     static private Double[] granularForce(Jugador p1,Jugador p2,double contactVariable,double kn,double kt) {
         Double[] normal = calculateNormal(p1,p2);
-        Double[] tanget = new Double[2];
-        tanget[0] = -normal[1];
-        tanget[1] = normal[0];
 
         Double[] forceN = new Double[2];
         double ncte = -contactVariable*kn;
         forceN[0] = normal[0] * ncte;
         forceN[1] = normal[1] * ncte;
-
-//        Double[] forceT = new Double[2];
-//        double tcte = p1.getVelX()*tanget[0] + p1.getVelY()*tanget[1];
-//        tcte *= kt*contactVariable;
-//        forceT[0] = tcte*tanget[0];
-//        forceT[1] = tcte*tanget[1];
-
-        Double[] force = new Double[2];
-        force[0] =forceN[0];// forceT[0]+
-        force[1] = forceN[1];//forceT[1]+
 
         return forceN;
     }
