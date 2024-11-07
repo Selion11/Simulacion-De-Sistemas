@@ -44,82 +44,88 @@ public class tryMaradoniano {
         double kn = Double.parseDouble(properties.getProperty("kn"));
         double kt = Double.parseDouble(properties.getProperty("kt"));
         double dt2 = Double.parseDouble(properties.getProperty("dt2"));
-        // Archivo de salida
-        File output = new File("TP5/output/output.csv");
-        try {
-            output.createNewFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        while(n <= 100) {
+            // Archivo de salida
+            File output = new File("TP5/output/output_" + n+ ".csv");
+            try {
+                output.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
 
-        // Escritura de los datos de simulación
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(output))) {
-            writer.write("x;y;vx;vy;tiempo;run;tackled\n");
-            for (int i = 0; i < 500; i++) {
-                // Inicialización de los jugadores
-                JugadorRojo jugadorRojo = new JugadorRojo(rojoXInicial, rojoYInicial, radio, vmaxRojo, -vmaxRojo, 0, m, treacRojo, 10.0);
-                List<JugadorAzul> jugadoresAzules = generarJugadoresAzules(n, vmaxAzul, radio, largo, ancho, m, treacAzul);
-                Sistema sistema = new Sistema(jugadorRojo, jugadoresAzules);
-                boolean tackled = false;
-                writeState(writer, totalTime, jugadorRojo, jugadoresAzules,i,tackled);
+            // Escritura de los datos de simulación
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(output))) {
+                writer.write("x;y;vx;vy;tiempo;tackled;run;n\n");
+                for (int i = 0; i < 2; i++) {
+                    // Inicialización de los jugadores
+                    JugadorRojo jugadorRojo = new JugadorRojo(rojoXInicial, rojoYInicial, radio, vmaxRojo, -vmaxRojo, 0, m, treacRojo, 10.0);
+                    List<JugadorAzul> jugadoresAzules = generarJugadoresAzules(n, vmaxAzul, radio, largo, ancho, m, treacAzul);
+                    Sistema sistema = new Sistema(jugadorRojo, jugadoresAzules);
+                    boolean tackled = false;
+                    writeState(writer, totalTime, jugadorRojo, jugadoresAzules, i, tackled,n);
 
-                // Bucle de simulación
-                while (!tackled && !jugadorRojo.hizoTry()) {
-                    if (auxTime >= dt2) {
-                        writeState(writer, totalTime, jugadorRojo, jugadoresAzules,i,tackled);
-                        auxTime = 0;
-                    }
+                    // Bucle de simulación
+                    while (!tackled && !jugadorRojo.hizoTry()) {
+                        if (auxTime >= dt2) {
+                            writeState(writer, totalTime, jugadorRojo, jugadoresAzules, i, tackled,n);
+                            auxTime = 0;
+                        }
 
-                    // Calcular el vector objetivo y aceleración del jugador rojo
-                    jugadorRojo.calcularVectorObjetivo(sistema);
-                    Double[] redA = Utils.calculateAcceleration(jugadorRojo, new ArrayList<>(), kn, kt);
-                    jugadorRojo.beemanIntegration(redA[0], redA[1], dt);
+                        // Calcular el vector objetivo y aceleración del jugador rojo
+                        jugadorRojo.calcularVectorObjetivo(sistema);
+                        Double[] redA = Utils.calculateAcceleration(jugadorRojo, new ArrayList<>(), kn, kt);
+                        jugadorRojo.beemanIntegration(redA[0], redA[1], dt);
 
-                    // Verificar colisión con las paredes
-                    if (jugadorRojo.getPosY() >= 70 || jugadorRojo.getPosY() <= 0) {
-                        tackled = true;
-                        break;
-                    }
-
-                    // Calcular el vector objetivo y actualizar los jugadores azules
-                    for (JugadorAzul jugadorAzul : jugadoresAzules) {
-                        List<JugadorAzul> inContact = filtrarJugadoresEnContacto(jugadorAzul, jugadoresAzules);
-                        jugadorAzul.calcularVectorObjetivo(sistema);
-                        Double[] azulA = Utils.calculateAcceleration(jugadorAzul, inContact, kn, kt);
-                        jugadorAzul.beemanIntegration(azulA[0], azulA[1], dt);
-
-                        // Verificar colisión con el jugador rojo
-                        if (Utils.detectarColision(jugadorRojo, jugadorAzul)) {
+                        // Verificar colisión con las paredes
+                        if (jugadorRojo.getPosY() >= 70 || jugadorRojo.getPosY() <= 0) {
                             tackled = true;
                             break;
                         }
+
+                        // Calcular el vector objetivo y actualizar los jugadores azules
+                        for (JugadorAzul jugadorAzul : jugadoresAzules) {
+                            List<JugadorAzul> inContact = filtrarJugadoresEnContacto(jugadorAzul, jugadoresAzules);
+                            jugadorAzul.calcularVectorObjetivo(sistema);
+                            Double[] azulA = Utils.calculateAcceleration(jugadorAzul, inContact, kn, kt);
+                            jugadorAzul.beemanIntegration(azulA[0], azulA[1], dt);
+
+                            // Verificar colisión con el jugador rojo
+                            if (Utils.detectarColision(jugadorRojo, jugadorAzul)) {
+                                tackled = true;
+                                break;
+                            }
+                        }
+
+                        totalTime += dt;
+                        auxTime += dt;
                     }
 
-                    totalTime += dt;
-                    auxTime += dt;
+                    // Escribir el estado final
+                    writeState(writer, totalTime, jugadorRojo, jugadoresAzules, i, tackled,n);
+                    System.out.println("TACKLED: " + tackled);
+
                 }
-
-                // Escribir el estado final
-                writeState(writer, totalTime, jugadorRojo, jugadoresAzules,i,tackled);
-                System.out.println("TACKLED: " + tackled);
-
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+            n += 15;
+            if(n == 105){
+                n -= 5;
+            }
         }
     }
 
     // Método para escribir el estado del jugador rojo y los jugadores azules en el archivo
-    private static void writeState(BufferedWriter writer, double time, JugadorRojo rojo, List<JugadorAzul> azules,int i,boolean t) throws IOException {
-        writePlayer(writer, time, rojo,i,t);
+    private static void writeState(BufferedWriter writer, double time, JugadorRojo rojo, List<JugadorAzul> azules,int i,boolean t,double np) throws IOException {
+        writePlayer(writer, time, rojo,i,t,np);
         for (JugadorAzul azul : azules) {
-            writePlayer(writer, time, azul,i,!t);
+            writePlayer(writer, time, azul,i,false,np);
         }
     }
 
-    private static void writePlayer(BufferedWriter writer, double time, Jugador jugador,int i,boolean t) throws IOException {
-        writer.write(jugador.getPosX() + ";" + jugador.getPosY() + ";" + jugador.getVelX() + ";" + jugador.getVelY() + ";" + time + ";" + i +  ";" + t + "\n");
+    private static void writePlayer(BufferedWriter writer, double time, Jugador jugador,int i,boolean t,double np) throws IOException {
+        writer.write(jugador.getPosX() + ";" + jugador.getPosY() + ";" + jugador.getVelX() + ";" + jugador.getVelY() + ";" + time + ";" + t +  ";" + i + ";" + np + "\n");
     }
 
     // Filtrar jugadores en contacto con un jugador azul específico
