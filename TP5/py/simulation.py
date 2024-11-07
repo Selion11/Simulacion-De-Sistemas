@@ -9,7 +9,7 @@ ancho_campo = 70
 radio = 0.2
 
 # Leer archivo CSV
-file_path = '../output/output.csv'  # Reemplaza con la ruta de tu archivo
+file_path = './TP5/output/output.csv'  # Reemplaza con la ruta de tu archivo
 df = pd.read_csv(file_path, delimiter=';')
 
 # Separar las posiciones y velocidades de cada jugador en listas por cada instante de tiempo
@@ -51,5 +51,5 @@ def animate(i):
 ani = animation.FuncAnimation(fig, animate, frames=len(time_steps), interval=100)
 
 # Guardar animación (opcional)
-ani.save('simulacion.mp4', writer='ffmpeg', fps=10)
+#ani.save('simulacion.mp4', writer='ffmpeg', fps=10)
 plt.show()

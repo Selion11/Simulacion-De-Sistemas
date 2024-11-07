@@ -132,15 +132,15 @@ public class Utils {
         forceN[0] = normal[0] * ncte;
         forceN[1] = normal[1] * ncte;
 
-        Double[] forceT = new Double[2];
-        double tcte = p1.getVelX()*tanget[0] + p1.getVelY()*tanget[1];
-        tcte *= kt*contactVariable;
-        forceT[0] = tcte*tanget[0];
-        forceT[1] = tcte*tanget[1];
+//        Double[] forceT = new Double[2];
+//        double tcte = p1.getVelX()*tanget[0] + p1.getVelY()*tanget[1];
+//        tcte *= kt*contactVariable;
+//        forceT[0] = tcte*tanget[0];
+//        forceT[1] = tcte*tanget[1];
 
         Double[] force = new Double[2];
-        force[0] = forceT[0]+forceN[0];
-        force[1] = forceT[1]+forceN[1];
+        force[0] =forceN[0];// forceT[0]+
+        force[1] = forceN[1];//forceT[1]+
 
         return forceN;
     }
