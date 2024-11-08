@@ -10,20 +10,36 @@ def calculate_distance(x2, y2):
     return math.sqrt(delta_x ** 2 + delta_y ** 2)
 
 
+#COn 90 "./TP5/output/output_15.0_1.5707963267948966.csv"
+#COn 130 "./TP5/output/output_15.0_2.268928028.csv"
+#COn 60 "./TP5/output/output_15.0_1.0471975511965976.csv"
+#Con 110 "./TP5/output/output_15.0_1.919862177.csv"
+#Con 45 "./TP5/output/output_15.0_0.7853981633974483.csv"
+
+
 # Directorio base
 ##CAMBIAR ACA EL NOMBRE DEL PRIMERO ARCHIVO AGREGANDOLE EL NOMBRE DEL ARCHIVO DE N = 15 con el angulo optimo
-outputFiles = ["./TP5/output/output_15.0.csv","./TP5/output/output_30.0.csv",
-               "./TP5/output/output_45.0.csv","./TP5/output/output_60.0.csv",
-               "./TP5/output/output_75.0.csv","./TP5/output/output_90.0.csv",
-               "./TP5/output/output_100.0.csv"]
+# outputFiles = ["./TP5/output/output_15.0_1.0471975511965976.csv","./TP5/output/output_30.0.csv",
+#                "./TP5/output/output_45.0.csv","./TP5/output/output_60.0.csv",
+#                "./TP5/output/output_75.0.csv","./TP5/output/output_90.0.csv",
+#                "./TP5/output/output_100.0.csv"]
+
+outputFiles = ["./TP5/output/output_15.0_1.5707963267948966.csv","./TP5/output/output_15.0_2.268928028.csv",
+               "./TP5/output/output_15.0_1.0471975511965976.csv","./TP5/output/output_15.0_1.919862177.csv",
+               "./TP5/output/output_15.0_0.7853981633974483.csv",#"./TP5/output/output_15.0_1.0471975511965976.csv"
+               ]
+
 
 totalData = {}
 proportions = {}
 distanceRun = {}
+angle_values = [90,45,60,110,130,120]
 
-for file in outputFiles:
+for i in range(len(outputFiles)):
+    file = outputFiles[i]
     # Extract 'n' value from the filename (assuming it's the last number before the file extension)
-    n_value = float(file.split('_')[-1].replace('.csv', ''))
+    #n_value = float(file.split('_')[-1].replace('.csv', ''))
+    n_value = angle_values[i]
 
 
     # Read the CSV file
@@ -72,8 +88,9 @@ def plotTryPercent(proportions):
     plt.xticks(list(proportions.keys()), rotation=45)  # Rotate x-axis labels for readability
 
     # Show the plot
-    plt.tight_layout()  # Adjust layout to prevent clipping
-    plt.show()
+    plt.tight_layout()
+    plt.savefig("plotTry60.png")# Adjust layout to prevent clipping
+    #plt.show()
     
 def plotAvgDistance(distanceRun):
     plt.figure(figsize=(10, 6))
@@ -88,11 +105,11 @@ def plotAvgDistance(distanceRun):
     plt.xticks(list(distanceRun.keys()), rotation=45)  # Rotate x-axis labels for readability
 
     # Show the plot
-    plt.tight_layout()  # Adjust layout to prevent clipping
-    plt.show()
+    plt.tight_layout()
+    plt.savefig("plotDist60.png")# Adjust layout to prevent clipping
+    # plt.show()
     
     
-#plotTryPercent(proportions)
+plotTryPercent(proportions)
 plotAvgDistance(distanceRun)
-    
 
