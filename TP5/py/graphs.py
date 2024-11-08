@@ -19,101 +19,101 @@ def calculate_distance(x2, y2):
 
 # Directorio base
 ##CAMBIAR ACA EL NOMBRE DEL PRIMERO ARCHIVO AGREGANDOLE EL NOMBRE DEL ARCHIVO DE N = 15 con el angulo optimo
-# outputFiles = ["./TP5/output/output_15.0_1.0471975511965976.csv","./TP5/output/output_30.0.csv",
-#                "./TP5/output/output_45.0.csv","./TP5/output/output_60.0.csv",
-#                "./TP5/output/output_75.0.csv","./TP5/output/output_90.0.csv",
-#                "./TP5/output/output_100.0.csv"]
+outputFiles = ["./TP5/output/output_15.0_2.0943951023931953.csv","./TP5/output/output_30.0.csv",
+               "./TP5/output/output_45.0.csv","./TP5/output/output_60.0.csv",
+               "./TP5/output/output_75.0.csv","./TP5/output/output_90.0.csv",
+               "./TP5/output/output_100.0.csv"]
 
-outputFiles = ["./TP5/output/output_15.0_1.5707963267948966.csv","./TP5/output/output_15.0_2.268928028.csv",
-               "./TP5/output/output_15.0_1.0471975511965976.csv","./TP5/output/output_15.0_1.919862177.csv",
-               "./TP5/output/output_15.0_0.7853981633974483.csv",#"./TP5/output/output_15.0_1.0471975511965976.csv"
-               ]
+# outputFiles = ["./TP5/output/output_15.0_0.7853981633974483.csv","./TP5/output/output_15.0_1.0471975511965976.csv",
+#                "./TP5/output/output_15.0_1.5707963267948966.csv","./TP5/output/output_15.0_1.919862177.csv",
+#                "./TP5/output/output_15.0_2.0943951023931953.csv","./TP5/output/output_15.0_2.268928028.csv"]
 
 
 totalData = {}
 proportions = {}
 distanceRun = {}
-angle_values = [90,45,60,110,130,120]
+angle_values = [45,60,90,110,120,130]
+nvalues = [15,30,45,60,75,90,100]
+distanceStdDev = {}
 
 for i in range(len(outputFiles)):
     file = outputFiles[i]
-    # Extract 'n' value from the filename (assuming it's the last number before the file extension)
-    #n_value = float(file.split('_')[-1].replace('.csv', ''))
-    n_value = angle_values[i]
+    n_value = nvalues[i]
 
-
-    # Read the CSV file
     df = pd.read_csv(file, delimiter=';')
-
-    # Group data by 'run'
     grupos_por_run = {run: grupo for run, grupo in df.groupby('run')}
-
-    # Store the 'grupos_por_run' dictionary under the corresponding 'n' value
     totalData[n_value] = grupos_por_run
-    
-    # Calculate the number of runs for this 'n'
-    num_runs = len(grupos_por_run)
 
-    # Calculate the proportion of 'Tackled' == True for this 'n'
     tackled_true_count = 0
-    total_distance = 0
-    for run, data in grupos_por_run.items():
-        tackled_true_count += data['tackled'].sum()  # Sum of True values (True = 1, False = 0)
+    distances = []  # Lista para almacenar las distancias de cada run
 
-        # Calculate the distance for each tackled position
+    for run, data in grupos_por_run.items():
+        tackled_true_count += data['tackled'].sum()
+
         tackled_positions = data[data['tackled'] == True]
         for _, row in tackled_positions.iterrows():
-            total_distance += calculate_distance(row['x'], row['y'])
-            
-    proportion_tackled_true = tackled_true_count / num_runs
-    proportions[n_value] = 1 - proportion_tackled_true  # Store the result in the dictionary
+            distance = calculate_distance(row['x'], row['y'])
+            distances.append(distance)
+
+    proportion_tackled_true = tackled_true_count / len(grupos_por_run)
+    proportions[n_value] = 1 - proportion_tackled_true
     
-    # Calculate the average distance for this n value
-    avg_distance = total_distance / num_runs
+    # Cálculo de la distancia promedio y del desvío estándar para este n_value
+    avg_distance = np.mean(distances)
+    std_dev_distance = np.std(distances, ddof=1)  # Desvío estándar muestral
+
     distanceRun[n_value] = avg_distance
+    distanceStdDev[n_value] = std_dev_distance  # Almacena el desvío estándar para el gráfico
     
-
-for n_value, runs_dict in totalData.items():
-    num_runs = len(runs_dict)  # Count the number of runs for each n
-    print(f"n = {n_value}: {num_runs} runs")
     
-def plotTryPercent(proportions):
+def plotTryPercent(proportions,labels=None):
     plt.figure(figsize=(10, 6))
-    plt.bar(proportions.keys(), proportions.values(), color='blue')
-
-    # Add labels and title
-    #plt.xlabel('Jugadores enemigos')
-    plt.xlabel('Ángulo de Elusion [°]')
-    plt.ylabel('Llegadas al ingol [%]')
-    plt.title('Promedio de llegadas al ingol')
-    plt.xticks(list(proportions.keys()), rotation=45)  # Rotate x-axis labels for readability
+    x_values = list(proportions.keys())
+    y_values = list(proportions.values())
+    
+    # Scatter plot and line plot
+    plt.scatter(x_values, y_values, color='blue')
+    plt.plot(x_values, y_values, color='blue', linestyle='--', linewidth=1)
+    
+    # Annotate each point with its value and label
+    for i, (x, y) in enumerate(zip(x_values, y_values)):
+        label_text = f'{labels[i]}: ({y:.2f}%)' if labels else f'({y:.2f}%)'
+        plt.text(x, y, label_text, ha='right', va='bottom', fontsize=10, color='black')
+    
+    # Labels and title
+    plt.xlabel('Cantidad de oponentes', fontsize=14)
+    plt.ylabel('Llegadas al ingoal [%]', fontsize=14)
+    plt.xticks(x_values, rotation=45)  # Rotate x-axis labels for readability
 
     # Show the plot
     plt.tight_layout()
-    plt.savefig("plotTryAngles.png")# Adjust layout to prevent clipping
-    #plt.show()
-    
-def plotAvgDistance(distanceRun):
-    plt.figure(figsize=(10, 6))
-    plt.scatter(distanceRun.keys(), distanceRun.values(), color='blue', marker='o')
-    
-    plt.plot(list(distanceRun.keys()), list(distanceRun.values()), color='blue', linestyle='--', linewidth=1)
-    desvio_standard = np.std(distanceRun, ddof=1)  # Desvío estándar muestral
-    plt.errorbar(x=len(distanceRun) / 2, y=distanceRun, yerr=desvio_standard, fmt='o', color='red', 
-             capsize=5, label=f'Media ± Desvío estándar ({desvio_standard:.2f})')
-
-    # Add labels and title
-    plt.xlabel('Jugadores enemigos')
-    plt.ylabel('Distancia[m]')
-    plt.title('Distancia promedio antes del tacle')
-    plt.xticks(list(distanceRun.keys()), rotation=45)  # Rotate x-axis labels for readability
-
-    # Show the plot
-    plt.tight_layout()
-    plt.savefig("plotDist60.png")# Adjust layout to prevent clipping
+    plt.savefig("plotTryAngles.png")  # Save plot
     # plt.show()
     
+def plotAvgDistance(distanceRun, distanceStdDev):
+    plt.figure(figsize=(10, 6))
     
-plotTryPercent(proportions)
-plotAvgDistance(distanceRun)
+    # Convert dict keys and values to lists
+    x_values = list(distanceRun.keys())
+    y_values = list(distanceRun.values())
+    y_err_values = list(distanceStdDev.values())
+    
+    # Plot the average distance with error bars representing the standard deviation
+    plt.errorbar(
+        x_values, 
+        y_values, 
+        yerr=y_err_values, 
+        fmt='o', color='blue', capsize=5, label='Distancia promedio ± Desvío estándar'
+    )
 
+    plt.xlabel('Cantidad de oponentes', fontsize=14)    
+    plt.ylabel('Distancia [m]', fontsize=14)
+    plt.xticks(x_values, rotation=45)
+    plt.legend()
+    plt.tight_layout()
+    plt.savefig("plotDistPlayers.png")  # Save the plot
+    # plt.show()
+    
+
+#plotTryPercent(proportions)
+plotAvgDistance(distanceRun, distanceStdDev)
