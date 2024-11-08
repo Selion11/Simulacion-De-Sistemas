@@ -82,14 +82,15 @@ def plotTryPercent(proportions):
     plt.bar(proportions.keys(), proportions.values(), color='blue')
 
     # Add labels and title
-    plt.xlabel('Jugadores enemigos')
+    #plt.xlabel('Jugadores enemigos')
+    plt.xlabel('Ángulo de Elusion [°]')
     plt.ylabel('Llegadas al ingol [%]')
     plt.title('Promedio de llegadas al ingol')
     plt.xticks(list(proportions.keys()), rotation=45)  # Rotate x-axis labels for readability
 
     # Show the plot
     plt.tight_layout()
-    plt.savefig("plotTry60.png")# Adjust layout to prevent clipping
+    plt.savefig("plotTryAngles.png")# Adjust layout to prevent clipping
     #plt.show()
     
 def plotAvgDistance(distanceRun):
@@ -97,6 +98,9 @@ def plotAvgDistance(distanceRun):
     plt.scatter(distanceRun.keys(), distanceRun.values(), color='blue', marker='o')
     
     plt.plot(list(distanceRun.keys()), list(distanceRun.values()), color='blue', linestyle='--', linewidth=1)
+    desvio_standard = np.std(distanceRun, ddof=1)  # Desvío estándar muestral
+    plt.errorbar(x=len(distanceRun) / 2, y=distanceRun, yerr=desvio_standard, fmt='o', color='red', 
+             capsize=5, label=f'Media ± Desvío estándar ({desvio_standard:.2f})')
 
     # Add labels and title
     plt.xlabel('Jugadores enemigos')

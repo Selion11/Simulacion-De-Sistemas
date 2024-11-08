@@ -52,8 +52,9 @@ public class tryMaradoniano {
         angles.add(Math.PI/3);//60
         angles.add(1.919862177);//110 en rads
         angles.add(2.268928028);//130 en rads
+        angles.add(2*(Math.PI/3));
 
-        double optimo =  2*(Math.PI/3);
+        double optimo =  Math.PI/3;
 
 
        for(double a: angles){
@@ -126,7 +127,7 @@ public class tryMaradoniano {
 
         n+= 15;
 
-        while(n <= 100) {
+       /*while(n <= 100) {
             File output = new File("TP5/output/output_" + n + ".csv");
 
             try {
@@ -196,7 +197,7 @@ public class tryMaradoniano {
             if(n == 105){
                 n -= 5;
             }
-        }
+       }*/
     }
 
     // Método para escribir el estado del jugador rojo y los jugadores azules en el archivo
