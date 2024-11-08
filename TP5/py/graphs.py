@@ -11,6 +11,7 @@ def calculate_distance(x2, y2):
 
 
 # Directorio base
+##CAMBIAR ACA EL NOMBRE DEL PRIMERO ARCHIVO AGREGANDOLE EL NOMBRE DEL ARCHIVO DE N = 15 con el angulo optimo
 outputFiles = ["./TP5/output/output_15.0.csv","./TP5/output/output_30.0.csv",
                "./TP5/output/output_45.0.csv","./TP5/output/output_60.0.csv",
                "./TP5/output/output_75.0.csv","./TP5/output/output_90.0.csv",
